@@ -1,0 +1,701 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>BOSS AI Operating System - Playful Interactive Authentication</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;600;700&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['"Plus Jakarta Sans"', 'sans-serif'],
+            mono: ['"JetBrains Mono"', 'monospace'],
+          },
+          colors: {
+            boss: {
+              void: '#020306',
+              surface: '#070a12',
+              glass: 'rgba(10, 15, 26, 0.65)',
+              glassBorder: 'rgba(56, 189, 248, 0.14)',
+              cyan: '#06b6d4',
+              cyanGlow: 'rgba(6, 182, 212, 0.35)',
+              violet: '#8b5cf6',
+              violetGlow: 'rgba(139, 92, 246, 0.35)',
+              textMuted: '#64748b',
+              textLight: '#cbd5e1',
+            }
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    body {
+      background-color: #020306;
+      color: #f8fafc;
+      overflow: hidden;
+      user-select: none;
+    }
+
+    /* Cinematic background ambient gradients */
+    .ambient-radial-1 {
+      background: radial-gradient(circle at 35% 45%, rgba(139, 92, 246, 0.12) 0%, rgba(6, 182, 212, 0.05) 30%, transparent 70%);
+    }
+    .ambient-radial-2 {
+      background: radial-gradient(circle at 75% 55%, rgba(6, 182, 212, 0.08) 0%, rgba(139, 92, 246, 0.04) 35%, transparent 65%);
+    }
+
+    /* Smoked glass effects */
+    .boss-glass {
+      background: rgba(8, 12, 22, 0.72);
+      backdrop-filter: blur(28px);
+      -webkit-backdrop-filter: blur(28px);
+      border: 1px solid rgba(56, 189, 248, 0.15);
+      box-shadow: 0 30px 60px -15px rgba(0, 0, 0, 0.8),
+                  inset 0 1px 0 rgba(255, 255, 255, 0.08),
+                  0 0 30px rgba(6, 182, 212, 0.05);
+    }
+
+    .boss-input {
+      background: rgba(4, 7, 14, 0.6);
+      border: 1px solid rgba(255, 255, 255, 0.09);
+      transition: all 0.25s ease;
+    }
+    .boss-input:focus {
+      border-color: rgba(6, 182, 212, 0.6);
+      background: rgba(6, 11, 24, 0.75);
+      box-shadow: 0 0 20px rgba(6, 182, 212, 0.15), inset 0 0 10px rgba(6, 182, 212, 0.05);
+      outline: none;
+    }
+
+    /* Core animations */
+    @keyframes slowOrbitClockwise {
+      from { transform: rotate(0deg); }
+      to { transform: rotate(360deg); }
+    }
+    @keyframes slowOrbitCounter {
+      from { transform: rotate(360deg); }
+      to { transform: rotate(0deg); }
+    }
+    @keyframes coreBreathe {
+      0%, 100% { transform: scale(1); filter: drop-shadow(0 0 25px rgba(6,182,212,0.25)) drop-shadow(0 0 45px rgba(139,92,246,0.2)); }
+      50% { transform: scale(1.035); filter: drop-shadow(0 0 38px rgba(6,182,212,0.4)) drop-shadow(0 0 65px rgba(139,92,246,0.32)); }
+    }
+    @keyframes wavePulse {
+      0%, 100% { height: 8px; opacity: 0.55; }
+      50% { height: 26px; opacity: 0.95; }
+    }
+
+    .orbit-cw {
+      animation: slowOrbitClockwise 42s linear infinite;
+    }
+    .orbit-ccw {
+      animation: slowOrbitCounter 56s linear infinite;
+    }
+    .orbit-fast {
+      animation: slowOrbitClockwise 24s linear infinite;
+    }
+    .core-breathe {
+      animation: coreBreathe 7s ease-in-out infinite;
+    }
+
+    /* Playful dodge transitions */
+    #dodge-btn {
+      transition: transform 0.42s cubic-bezier(0.18, 0.89, 0.32, 1.28),
+                  background 0.3s ease,
+                  box-shadow 0.3s ease,
+                  border-color 0.3s ease;
+      will-change: transform;
+    }
+
+    /* Dot grid */
+    .bg-grid {
+      background-size: 32px 32px;
+      background-image: radial-gradient(rgba(255, 255, 255, 0.045) 1px, transparent 1px);
+    }
+  </style>
+</head>
+<body class="relative w-screen h-screen flex flex-col justify-between overflow-hidden bg-[#020306] font-sans antialiased text-slate-100">
+
+  <!-- Ambient visual layers -->
+  <div class="absolute inset-0 bg-grid opacity-65 pointer-events-none"></div>
+  <div class="absolute inset-0 ambient-radial-1 pointer-events-none"></div>
+  <div class="absolute inset-0 ambient-radial-2 pointer-events-none"></div>
+
+  <!-- Noise vignette -->
+  <div class="absolute inset-0 bg-gradient-to-t from-[#020306] via-transparent to-[#020306]/80 pointer-events-none"></div>
+
+  <!-- Top Global Bar (Desktop macOS window header style) -->
+  <header class="relative z-30 flex items-center justify-between px-8 py-4 border-b border-white/[0.04] bg-[#03060d]/40 backdrop-blur-md">
+    <div class="flex items-center space-x-6">
+      <!-- Traffic lights -->
+      <div class="flex items-center space-x-2">
+        <span class="w-3 h-3 rounded-full bg-[#ef4444]/80 border border-[#f87171]/40"></span>
+        <span class="w-3 h-3 rounded-full bg-[#eab308]/80 border border-[#fde047]/40"></span>
+        <span class="w-3 h-3 rounded-full bg-[#22c55e]/80 border border-[#86efac]/40"></span>
+      </div>
+
+      <!-- App identity pill -->
+      <div class="flex items-center space-x-2.5 px-3 py-1 rounded-full bg-white/[0.03] border border-white/[0.06] text-xs font-mono text-slate-400">
+        <span class="w-2 h-2 rounded-full bg-cyan-400 animate-ping"></span>
+        <span class="text-white font-medium tracking-wide">BOSS</span>
+        <span class="text-slate-600">/</span>
+        <span class="text-cyan-300/80">AUTH_GATEWAY // v0.1.0</span>
+      </div>
+    </div>
+
+    <div class="flex items-center space-x-6 text-xs font-mono text-slate-400">
+      <div class="flex items-center space-x-2">
+        <span class="text-slate-500">SECURITY:</span>
+        <span class="text-emerald-400 flex items-center space-x-1">
+          <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path></svg>
+          <span>LOCAL ENCLAVE ISOLATED</span>
+        </span>
+      </div>
+      <div class="h-3 w-px bg-white/10"></div>
+      <div class="flex items-center space-x-1 text-slate-500">
+        <span>PEER_NET:</span>
+        <span class="text-slate-300">OFFLINE READY</span>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main 16:9 Stage Area (Split into Left Holographic Core + Right Interactive Auth Card) -->
+  <main class="relative z-20 flex-1 grid grid-cols-12 items-center px-12 lg:px-20 max-w-7xl mx-auto w-full py-4">
+
+    <!-- LEFT / CENTER-LEFT: Holographic BOSS Core (Subtle Anchor & Sentient Reaction Center) -->
+    <div class="col-span-12 lg:col-span-5 flex flex-col items-center justify-center relative select-none py-6 lg:py-0">
+      
+      <!-- Core Telemetry Watermark Coordinates -->
+      <div class="absolute -top-6 left-2 font-mono text-[10px] text-cyan-400/40 tracking-widest uppercase flex items-center space-x-3">
+        <span>SYS.LOC: [0x7F.0001_LOCAL]</span>
+        <span class="inline-block w-1.5 h-1.5 rounded-full bg-cyan-400/60"></span>
+        <span id="core-state-indicator">ORBITAL_IDLE // BREATHING</span>
+      </div>
+
+      <!-- Holographic Sphere & Orbit System -->
+      <div id="boss-core-container" class="relative w-[340px] h-[340px] flex items-center justify-center transition-all duration-700">
+        
+        <!-- Outer tick-mark boundary ring -->
+        <svg class="absolute inset-0 w-full h-full orbit-cw opacity-35" viewBox="0 0 340 340" fill="none">
+          <circle cx="170" cy="170" r="162" stroke="#06b6d4" stroke-width="1" stroke-dasharray="2 12" opacity="0.6"/>
+          <circle cx="170" cy="170" r="150" stroke="#8b5cf6" stroke-width="0.75" stroke-dasharray="8 24" opacity="0.4"/>
+          <!-- Axis tick marks -->
+          <line x1="170" y1="2" x2="170" y2="12" stroke="#06b6d4" stroke-width="2"/>
+          <line x1="170" y1="328" x2="170" y2="338" stroke="#06b6d4" stroke-width="2"/>
+          <line x1="2" y1="170" x2="12" y2="170" stroke="#8b5cf6" stroke-width="2"/>
+          <line x1="328" y1="170" x2="338" y2="170" stroke="#8b5cf6" stroke-width="2"/>
+        </svg>
+
+        <!-- Segmented middle orbit ring -->
+        <svg class="absolute inset-4 w-[308px] h-[308px] orbit-ccw opacity-50" viewBox="0 0 308 308" fill="none">
+          <circle cx="154" cy="154" r="140" stroke="#06b6d4" stroke-width="1.5" stroke-dasharray="40 16 90 24" opacity="0.75"/>
+          <!-- Traveling telemetry node -->
+          <circle cx="294" cy="154" r="3.5" fill="#ffffff" filter="drop-shadow(0 0 8px #06b6d4)"/>
+          <circle cx="154" cy="14" r="2.5" fill="#a78bfa" filter="drop-shadow(0 0 6px #8b5cf6)"/>
+        </svg>
+
+        <!-- 3D Tilted Elliptical Paths -->
+        <div class="absolute inset-0 flex items-center justify-center pointer-events-none">
+          <div class="w-[320px] h-[130px] rounded-[100%] border border-cyan-400/25 rotate-[-28deg] shadow-[0_0_20px_rgba(6,182,212,0.15)]"></div>
+          <div class="absolute w-[310px] h-[110px] rounded-[100%] border border-violet-400/30 rotate-[34deg] shadow-[0_0_20px_rgba(139,92,246,0.15)]"></div>
+        </div>
+
+        <!-- Inner Luminous Halo -->
+        <div class="absolute w-52 h-52 rounded-full border border-cyan-300/35 bg-gradient-to-tr from-cyan-500/10 via-transparent to-violet-500/15 backdrop-blur-[2px] shadow-[inset_0_0_35px_rgba(6,182,212,0.25)]"></div>
+
+        <!-- Translucent Smoked Glass Sphere & Core Waveform -->
+        <div id="central-sphere" class="relative w-40 h-40 rounded-full bg-gradient-to-b from-[#0e1628]/90 via-[#070b14]/95 to-[#020409] border border-cyan-400/40 flex items-center justify-center core-breathe shadow-[0_0_50px_rgba(6,182,212,0.25),inset_0_2px_12px_rgba(255,255,255,0.2)]">
+          <!-- Glass Specular Highlight -->
+          <div class="absolute top-2 left-6 w-16 h-8 rounded-full bg-gradient-to-b from-white/25 to-transparent rotate-[-30deg] blur-[1px]"></div>
+          
+          <!-- Central Speech/Thought Waveform (Idle Breathing Harmonic) -->
+          <div id="core-waveform" class="flex items-center space-x-1.5 z-10">
+            <span class="w-1 rounded-full bg-cyan-400/80 shadow-[0_0_8px_#06b6d4]" style="height: 10px; animation: wavePulse 2.4s ease-in-out infinite;"></span>
+            <span class="w-1 rounded-full bg-cyan-300 shadow-[0_0_10px_#06b6d4]" style="height: 18px; animation: wavePulse 2.1s ease-in-out infinite 0.2s;"></span>
+            <span class="w-1.5 rounded-full bg-white shadow-[0_0_12px_#ffffff]" style="height: 28px; animation: wavePulse 1.9s ease-in-out infinite 0.4s;"></span>
+            <span class="w-1 rounded-full bg-violet-300 shadow-[0_0_10px_#8b5cf6]" style="height: 18px; animation: wavePulse 2.3s ease-in-out infinite 0.15s;"></span>
+            <span class="w-1 rounded-full bg-violet-400/80 shadow-[0_0_8px_#8b5cf6]" style="height: 10px; animation: wavePulse 2.5s ease-in-out infinite 0.35s;"></span>
+          </div>
+
+          <!-- Micro Pulse Ring -->
+          <div id="core-pulse-wave" class="absolute inset-0 rounded-full border border-cyan-400/0 transition-all duration-500"></div>
+        </div>
+
+        <!-- Floating playful remark bubble from BOSS -->
+        <div id="boss-whisper" class="absolute -bottom-10 opacity-0 transform translate-y-2 transition-all duration-300 bg-[#09101d]/90 border border-cyan-400/30 px-3.5 py-1.5 rounded-full text-xs font-mono text-cyan-300 flex items-center space-x-2 shadow-[0_0_20px_rgba(6,182,212,0.25)]">
+          <span class="w-1.5 h-1.5 rounded-full bg-cyan-400 animate-pulse"></span>
+          <span id="whisper-text">Catch me if you can.</span>
+        </div>
+      </div>
+
+      <!-- Core Branding & Philosophy Mantra below sphere -->
+      <div class="mt-8 text-center">
+        <h2 class="text-xl font-bold tracking-[0.35em] text-white/90 drop-shadow-[0_0_15px_rgba(255,255,255,0.3)]">B O S S</h2>
+        <p class="text-[11px] font-mono tracking-[0.25em] text-cyan-400/80 mt-1 uppercase">THINK &gt; BUILD &gt; SOLVE &gt; TOGETHER</p>
+        <p class="text-xs text-slate-400 mt-2 max-w-xs mx-auto font-light">The local-first neural operating system designed for uncompromising engineers.</p>
+      </div>
+    </div>
+
+    <!-- RIGHT: Interactive Smoked Glass Authentication Chamber -->
+    <div class="col-span-12 lg:col-span-7 flex justify-center lg:justify-end py-4">
+      <div class="w-full max-w-md boss-glass rounded-3xl p-8 sm:p-9 relative overflow-hidden">
+        
+        <!-- Subtle Top Ambient Accent Light inside card -->
+        <div class="absolute -top-24 left-1/2 -translate-x-1/2 w-64 h-32 bg-gradient-to-b from-cyan-500/20 to-transparent blur-3xl pointer-events-none"></div>
+
+        <!-- Mode Navigation Tabs: Sign In / Create Account / Local First -->
+        <div class="flex items-center justify-between p-1 bg-black/40 rounded-xl border border-white/[0.07] mb-6">
+          <button id="tab-signin" onclick="switchAuthMode('signin')" class="flex-1 py-2 rounded-lg text-xs font-medium tracking-wide transition-all duration-200 bg-cyan-500/15 text-cyan-300 border border-cyan-400/30 shadow-[0_0_12px_rgba(6,182,212,0.15)]">
+            Sign In
+          </button>
+          <button id="tab-signup" onclick="switchAuthMode('signup')" class="flex-1 py-2 rounded-lg text-xs font-medium tracking-wide transition-all duration-200 text-slate-400 hover:text-slate-200 border border-transparent">
+            Create Account
+          </button>
+          <button id="tab-local" onclick="switchAuthMode('local')" class="flex-1 py-2 rounded-lg text-xs font-medium tracking-wide transition-all duration-200 text-slate-400 hover:text-emerald-400 border border-transparent flex items-center justify-center space-x-1">
+            <span class="w-1.5 h-1.5 rounded-full bg-emerald-400/70"></span>
+            <span>Local Enclave</span>
+          </button>
+        </div>
+
+        <!-- Header Greetings -->
+        <div class="mb-6">
+          <div class="flex items-center justify-between">
+            <h1 id="auth-title" class="text-2xl font-bold text-white tracking-tight">Welcome back.</h1>
+            <span class="px-2.5 py-0.5 rounded text-[10px] font-mono uppercase tracking-widest bg-cyan-950/60 border border-cyan-500/30 text-cyan-300">Auth Gate</span>
+          </div>
+          <p id="auth-subtitle" class="text-sm text-slate-400 mt-1 font-light">Let's get you back to building.</p>
+        </div>
+
+        <!-- Authentication Form Container -->
+        <form id="auth-form" onsubmit="event.preventDefault(); handleAuthSubmit();" class="space-y-4">
+          
+          <!-- Name Field (Visible for Registration only) -->
+          <div id="field-name-container" class="hidden space-y-1.5">
+            <label class="block text-xs font-mono text-slate-400 uppercase tracking-wider">Full Name / Alias</label>
+            <div class="relative">
+              <input id="input-name" type="text" placeholder="Bhanu Pratap" class="boss-input w-full px-4 py-3 rounded-xl text-sm text-white placeholder-slate-600">
+            </div>
+          </div>
+
+          <!-- Email Field -->
+          <div id="field-email-container" class="space-y-1.5">
+            <div class="flex items-center justify-between">
+              <label class="block text-xs font-mono text-slate-400 uppercase tracking-wider">Developer Email</label>
+              <span id="email-tip" class="text-[10px] font-mono text-slate-500">demo: dev@boss.ai</span>
+            </div>
+            <div class="relative">
+              <input id="input-email" type="email" placeholder="dev@bhanu.local" class="boss-input w-full px-4 py-3 rounded-xl text-sm text-white placeholder-slate-600 font-mono text-xs">
+              <div class="absolute right-3.5 top-1/2 -translate-y-1/2 text-slate-500">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.75" d="M16 12a4 4 0 10-8 0 4 4 0 008 0zm0 0v1.5a2.5 2.5 0 005 0V12a9 9 0 10-9 9m4.5-1.206a8.959 8.959 0 01-4.5 1.207"></path></svg>
+              </div>
+            </div>
+          </div>
+
+          <!-- Password Field -->
+          <div id="field-password-container" class="space-y-1.5">
+            <div class="flex items-center justify-between">
+              <label class="block text-xs font-mono text-slate-400 uppercase tracking-wider">Master Password</label>
+              <a href="#" onclick="alert('Local recovery keys are kept in your encrypted keychain (~/.boss/keys).'); return false;" class="text-[10px] text-cyan-400/80 hover:text-cyan-300 transition-colors">Forgot?</a>
+            </div>
+            <div class="relative">
+              <input id="input-password" type="password" placeholder="••••••••••••" class="boss-input w-full px-4 py-3 rounded-xl text-sm text-white placeholder-slate-600 font-mono text-xs">
+              <button type="button" onclick="togglePasswordVisibility()" class="absolute right-3.5 top-1/2 -translate-y-1/2 text-slate-500 hover:text-slate-300">
+                <svg id="eye-icon" class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.75" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.75" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path></svg>
+              </button>
+            </div>
+          </div>
+
+          <!-- Confirm Password (Registration only) -->
+          <div id="field-confirm-container" class="hidden space-y-1.5">
+            <label class="block text-xs font-mono text-slate-400 uppercase tracking-wider">Confirm Password</label>
+            <div class="relative">
+              <input id="input-confirm" type="password" placeholder="••••••••••••" class="boss-input w-full px-4 py-3 rounded-xl text-sm text-white placeholder-slate-600 font-mono text-xs">
+            </div>
+          </div>
+
+          <!-- Interactive Playful Playground Stage for the Sign In Button -->
+          <div class="pt-3">
+            <div id="dodge-stage" class="relative w-full h-14 flex items-center justify-center">
+              
+              <!-- The Primary Action Button (Equipped with subtle sentient evasion physics) -->
+              <button
+                id="dodge-btn"
+                type="submit"
+                class="relative px-8 py-3.5 w-full rounded-xl bg-gradient-to-r from-cyan-500 to-violet-600 text-white font-medium text-sm tracking-wide shadow-[0_0_25px_rgba(6,182,212,0.35),inset_0_1px_1px_rgba(255,255,255,0.35)] border border-cyan-300/40 hover:brightness-110 active:scale-95 transition-transform flex items-center justify-center space-x-2.5 z-10"
+              >
+                <span id="btn-text" class="transition-all duration-200">SIGN IN</span>
+                <span id="btn-icon" class="text-cyan-200">
+                  <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
+                </span>
+              </button>
+
+              <!-- Subtle particle burst trail element -->
+              <div id="dodge-particles" class="absolute pointer-events-none opacity-0 transition-opacity duration-300">
+                <span class="inline-block w-1.5 h-1.5 rounded-full bg-cyan-400 shadow-[0_0_8px_#06b6d4]"></span>
+                <span class="inline-block w-2 h-2 rounded-full bg-violet-400 shadow-[0_0_8px_#8b5cf6] ml-2"></span>
+              </div>
+            </div>
+
+            <!-- Contextual Evasion Counter / Accessibility Override message -->
+            <div class="flex items-center justify-between text-[11px] font-mono text-slate-500 mt-2 px-1">
+              <span id="evasion-tip">Security protocol: credentials verified locally</span>
+              <button type="button" id="bypass-dodge-btn" onclick="resetButtonToCenter(true)" class="hidden text-cyan-400/80 hover:text-cyan-300 underline underline-offset-2">
+                Pin button
+              </button>
+            </div>
+          </div>
+        </form>
+
+        <!-- Divider with clean typography -->
+        <div class="relative my-6 text-center">
+          <div class="absolute inset-0 flex items-center"><div class="w-full border-t border-white/[0.08]"></div></div>
+          <span class="relative px-3 bg-[#080d18] text-[10px] font-mono uppercase tracking-widest text-slate-500">OR CONTINUE WITH</span>
+        </div>
+
+        <!-- Social / Developer Auth Providers -->
+        <div class="grid grid-cols-2 gap-3">
+          <button type="button" onclick="mockSocialLogin('GitHub')" class="flex items-center justify-center space-x-2 py-2.5 px-4 rounded-xl bg-white/[0.03] hover:bg-white/[0.06] border border-white/[0.08] hover:border-white/20 text-xs text-slate-300 transition-all">
+            <svg class="w-4 h-4 text-white" fill="currentColor" viewBox="0 0 24 24"><path fill-rule="evenodd" clip-rule="evenodd" d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.53 1.032 1.53 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z"></path></svg>
+            <span>GitHub</span>
+          </button>
+          <button type="button" onclick="mockSocialLogin('Google')" class="flex items-center justify-center space-x-2 py-2.5 px-4 rounded-xl bg-white/[0.03] hover:bg-white/[0.06] border border-white/[0.08] hover:border-white/20 text-xs text-slate-300 transition-all">
+            <svg class="w-4 h-4" viewBox="0 0 24 24"><path fill="#EA4335" d="M12 5c1.6 0 3 .6 4.1 1.7l3.1-3.1C17.3 1.8 14.8 1 12 1 7.5 1 3.7 3.6 1.9 7.3l3.7 2.9C6.5 7.3 9 5 12 5z"/><path fill="#4285F4" d="M23.5 12.3c0-.8-.1-1.6-.2-2.3H12v4.5h6.5c-.3 1.5-1.1 2.8-2.4 3.7l3.7 2.9c2.2-2 3.7-5 3.7-8.8z"/><path fill="#FBBC05" d="M5.6 14.8c-.2-.7-.4-1.5-.4-2.3s.2-1.6.4-2.3L1.9 7.3C.7 9.7 0 12 0 12s.7 2.3 1.9 4.7l3.7-2.9z"/><path fill="#34A853" d="M12 23c3.2 0 6-1.1 8-3l-3.7-2.9c-1.1.7-2.5 1.2-4.3 1.2-3 0-5.5-2.3-6.4-5.2L1.9 16c1.8 3.7 5.6 7 10.1 7z"/></svg>
+            <span>Google</span>
+          </button>
+        </div>
+
+        <!-- Legitimate First-Class Local Development Pathway -->
+        <div class="mt-6 pt-5 border-t border-white/[0.06]">
+          <button 
+            type="button" 
+            onclick="continueLocally()" 
+            class="group w-full py-2.5 px-4 rounded-xl bg-emerald-950/20 hover:bg-emerald-900/30 border border-emerald-500/20 hover:border-emerald-500/40 text-left flex items-center justify-between transition-all"
+          >
+            <div class="flex items-center space-x-3">
+              <div class="w-7 h-7 rounded-lg bg-emerald-500/15 border border-emerald-500/30 flex items-center justify-center text-emerald-400">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
+              </div>
+              <div>
+                <p class="text-xs font-medium text-emerald-300 group-hover:text-emerald-200">CONTINUE LOCALLY</p>
+                <p class="text-[10px] text-emerald-400/60">Zero cloud sync • Offline model pipeline</p>
+              </div>
+            </div>
+            <span class="text-xs text-emerald-400 group-hover:translate-x-0.5 transition-transform">→</span>
+          </button>
+          <p class="text-[10px] text-center text-slate-500 mt-2 font-light">No account required for local offline development.</p>
+        </div>
+
+      </div>
+    </div>
+  </main>
+
+  <!-- Bottom Global Terminal & System Footer -->
+  <footer class="relative z-30 px-8 py-3 border-t border-white/[0.04] bg-[#03060d]/60 backdrop-blur-md flex flex-col sm:flex-row items-center justify-between text-xs text-slate-500 font-mono">
+    <div class="flex items-center space-x-4 mb-2 sm:mb-0">
+      <span class="flex items-center space-x-2">
+        <span class="w-1.5 h-1.5 rounded-full bg-cyan-400"></span>
+        <span class="text-slate-400">BHANU OPEN SOURCE SYSTEM</span>
+      </span>
+      <span class="text-slate-600">|</span>
+      <span>PHASE 2.3 — PLAYFUL INTERACTIVE AUTH</span>
+    </div>
+
+    <div class="flex items-center space-x-6 text-[11px]">
+      <span class="text-slate-400 hover:text-slate-300 transition-colors">PRESS [TAB] TO FOCUS FORM</span>
+      <span class="text-slate-600">•</span>
+      <span class="text-cyan-400/80">LOCAL FIRST • PRIVATE • BUILT FOR DEVELOPERS</span>
+    </div>
+  </footer>
+
+  <!-- Notification / Success Modal Overlay (Simulating Seamless Transition to Home) -->
+  <div id="success-overlay" class="fixed inset-0 z-50 bg-[#020306]/90 backdrop-blur-2xl flex items-center justify-center opacity-0 pointer-events-none transition-opacity duration-700">
+    <div class="text-center space-y-4 max-w-sm px-6">
+      <div class="w-16 h-16 rounded-full bg-cyan-500/10 border border-cyan-400/50 mx-auto flex items-center justify-center text-cyan-300 shadow-[0_0_30px_rgba(6,182,212,0.4)]">
+        <svg class="w-8 h-8 animate-bounce" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+      </div>
+      <h3 class="text-2xl font-bold tracking-tight text-white">You're in.</h3>
+      <p id="success-message" class="text-sm text-slate-400 font-mono">Neural socket initialized. Launching BOSS workspace...</p>
+      <div class="w-32 h-1 bg-white/10 rounded-full mx-auto overflow-hidden">
+        <div class="w-full h-full bg-gradient-to-r from-cyan-400 to-violet-500 animate-pulse"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Interactive Client Script: Sentient Button Avoidance & Auth Logic -->
+  <script>
+    let currentMode = 'signin'; // 'signin' | 'signup' | 'local'
+    let dodgeCount = 0;
+    const maxDodgesBeforeTired = 4;
+    let isButtonPinned = false;
+
+    const phrases = [
+      "Not yet 😏",
+      "Catch me.",
+      "Almost...",
+      "Credentials first!",
+      "Too slow!",
+      "Nice try."
+    ];
+
+    const dodgeBtn = document.getElementById('dodge-btn');
+    const dodgeStage = document.getElementById('dodge-stage');
+    const btnText = document.getElementById('btn-text');
+    const bossWhisper = document.getElementById('boss-whisper');
+    const whisperText = document.getElementById('whisper-text');
+    const evasionTip = document.getElementById('evasion-tip');
+    const bypassBtn = document.getElementById('bypass-dodge-btn');
+    const coreStateIndicator = document.getElementById('core-state-indicator');
+    const coreWaveform = document.getElementById('core-waveform');
+    const corePulseWave = document.getElementById('core-pulse-wave');
+
+    // Check if form is currently valid
+    function isFormFilled() {
+      const email = document.getElementById('input-email').value.trim();
+      const pass = document.getElementById('input-password').value.trim();
+      if (currentMode === 'signin') {
+        return email.length > 3 && pass.length >= 4;
+      } else if (currentMode === 'signup') {
+        const name = document.getElementById('input-name').value.trim();
+        const conf = document.getElementById('input-confirm').value.trim();
+        return name.length > 1 && email.length > 3 && pass.length >= 4 && pass === conf;
+      }
+      return true;
+    }
+
+    // Proximity trigger: detect cursor approaching the button when input is empty
+    dodgeStage.addEventListener('mousemove', function(e) {
+      if (isButtonPinned) return;
+      if (isFormFilled()) {
+        resetButtonToCenter();
+        return;
+      }
+
+      const rect = dodgeBtn.getBoundingClientRect();
+      const btnCenterX = rect.left + rect.width / 2;
+      const btnCenterY = rect.top + rect.height / 2;
+      const distance = Math.hypot(e.clientX - btnCenterX, e.clientY - btnCenterY);
+
+      // Trigger dodge when cursor comes within 70px of the button center
+      if (distance < 75) {
+        performPlayfulDodge();
+      }
+    });
+
+    // Touch device support: touching the button without credentials triggers evasion
+    dodgeBtn.addEventListener('touchstart', function(e) {
+      if (!isFormFilled() && !isButtonPinned) {
+        e.preventDefault();
+        performPlayfulDodge();
+      }
+    });
+
+    function performPlayfulDodge() {
+      if (isButtonPinned) return;
+
+      dodgeCount++;
+
+      // After a few fun evasions, settle down for usability
+      if (dodgeCount >= maxDodgesBeforeTired) {
+        settlePlayfulBehavior();
+        return;
+      }
+
+      // Calculate safe offsets within the card bounds (-120px to 120px horizontal, -20px to 20px vertical)
+      const directions = [
+        { x: -95, y: -16, rot: -3 },
+        { x: 95, y: 16, rot: 4 },
+        { x: -75, y: 18, rot: -2 },
+        { x: 80, y: -18, rot: 3 },
+      ];
+      const move = directions[dodgeCount % directions.length];
+
+      // Shift button
+      dodgeBtn.style.transform = `translate(${move.x}px, ${move.y}px) rotate(${move.rot}deg)`;
+      
+      // Update playful text
+      const randomPhrase = phrases[dodgeCount % phrases.length];
+      btnText.textContent = randomPhrase;
+      whisperText.textContent = randomPhrase;
+
+      // Show BOSS Core reaction
+      triggerCoreCuriousReaction();
+
+      // Show floating remark bubble near core
+      bossWhisper.classList.remove('opacity-0', 'translate-y-2');
+      bossWhisper.classList.add('opacity-100', 'translate-y-0');
+
+      evasionTip.textContent = `BOSS evaded: ${dodgeCount}/${maxDodgesBeforeTired} attempts`;
+      bypassBtn.classList.remove('hidden');
+
+      clearTimeout(window.whisperTimer);
+      window.whisperTimer = setTimeout(() => {
+        bossWhisper.classList.add('opacity-0', 'translate-y-2');
+        bossWhisper.classList.remove('opacity-100', 'translate-y-0');
+      }, 2500);
+    }
+
+    function settlePlayfulBehavior() {
+      isButtonPinned = true;
+      resetButtonToCenter();
+      btnText.textContent = currentMode === 'signup' ? 'CREATE ACCOUNT' : 'SIGN IN';
+      whisperText.textContent = "Okay, I'll stop running.";
+      evasionTip.textContent = "Button pinned. Please enter your credentials.";
+      bypassBtn.classList.add('hidden');
+    }
+
+    function resetButtonToCenter(manualOverride = false) {
+      dodgeBtn.style.transform = 'translate(0px, 0px) rotate(0deg)';
+      if (manualOverride) {
+        isButtonPinned = true;
+        btnText.textContent = currentMode === 'signup' ? 'CREATE ACCOUNT' : 'SIGN IN';
+        evasionTip.textContent = "Button manual override active.";
+        bypassBtn.classList.add('hidden');
+      } else if (isFormFilled()) {
+        btnText.textContent = currentMode === 'signup' ? 'CREATE ACCOUNT' : 'SIGN IN';
+        evasionTip.textContent = "Credentials entered. Ready to connect.";
+        triggerCoreReadyReaction();
+      }
+    }
+
+    // Re-center when user types valid details
+    document.getElementById('input-email').addEventListener('input', checkInputState);
+    document.getElementById('input-password').addEventListener('input', checkInputState);
+    document.getElementById('input-name').addEventListener('input', checkInputState);
+    document.getElementById('input-confirm').addEventListener('input', checkInputState);
+
+    function checkInputState() {
+      if (isFormFilled()) {
+        resetButtonToCenter();
+        triggerCoreReadyReaction();
+      }
+    }
+
+    // Core reactive states
+    function triggerCoreCuriousReaction() {
+      coreStateIndicator.textContent = "ALERT // PLAYFUL EVASION ACTIVE";
+      coreStateIndicator.classList.add('text-violet-300');
+      
+      // Pulse ring expansion
+      corePulseWave.className = "absolute inset-0 rounded-full border border-violet-400/80 scale-125 opacity-0 transition-all duration-700";
+      setTimeout(() => {
+        corePulseWave.className = "absolute inset-0 rounded-full border border-cyan-400/0 scale-100 opacity-100 transition-none";
+      }, 700);
+    }
+
+    function triggerCoreReadyReaction() {
+      coreStateIndicator.textContent = "SYNCHRONIZED // CREDENTIALS VALID";
+      coreStateIndicator.classList.remove('text-violet-300');
+      coreStateIndicator.classList.add('text-emerald-400');
+    }
+
+    // Switch between Sign In / Create Account / Local First tabs
+    function switchAuthMode(mode) {
+      currentMode = mode;
+      isButtonPinned = false;
+      dodgeCount = 0;
+      resetButtonToCenter();
+
+      const tabSignIn = document.getElementById('tab-signin');
+      const tabSignUp = document.getElementById('tab-signup');
+      const tabLocal = document.getElementById('tab-local');
+      const fieldName = document.getElementById('field-name-container');
+      const fieldConfirm = document.getElementById('field-confirm-container');
+      const authTitle = document.getElementById('auth-title');
+      const authSubtitle = document.getElementById('auth-subtitle');
+
+      // Reset tab active styling
+      [tabSignIn, tabSignUp, tabLocal].forEach(tab => {
+        tab.className = "flex-1 py-2 rounded-lg text-xs font-medium tracking-wide transition-all duration-200 text-slate-400 hover:text-slate-200 border border-transparent";
+      });
+
+      if (mode === 'signin') {
+        tabSignIn.className = "flex-1 py-2 rounded-lg text-xs font-medium tracking-wide transition-all duration-200 bg-cyan-500/15 text-cyan-300 border border-cyan-400/30 shadow-[0_0_12px_rgba(6,182,212,0.15)]";
+        fieldName.classList.add('hidden');
+        fieldConfirm.classList.add('hidden');
+        authTitle.textContent = "Welcome back.";
+        authSubtitle.textContent = "Let's get you back to building.";
+        btnText.textContent = "SIGN IN";
+      } else if (mode === 'signup') {
+        tabSignUp.className = "flex-1 py-2 rounded-lg text-xs font-medium tracking-wide transition-all duration-200 bg-violet-500/15 text-violet-300 border border-violet-400/30 shadow-[0_0_12px_rgba(139,92,246,0.15)]";
+        fieldName.classList.remove('hidden');
+        fieldConfirm.classList.remove('hidden');
+        authTitle.textContent = "Create account.";
+        authSubtitle.textContent = "Initialize your personal AI developer enclave.";
+        btnText.textContent = "CREATE ACCOUNT";
+      } else if (mode === 'local') {
+        continueLocally();
+      }
+    }
+
+    // Submit handler
+    function handleAuthSubmit() {
+      if (!isFormFilled()) {
+        performPlayfulDodge();
+        return;
+      }
+
+      // Successful authentication transition
+      btnText.textContent = "You're in.";
+      dodgeBtn.classList.remove('from-cyan-500', 'to-violet-600');
+      dodgeBtn.classList.add('from-emerald-500', 'to-cyan-600');
+      
+      const successOverlay = document.getElementById('success-overlay');
+      const successMessage = document.getElementById('success-message');
+      
+      const email = document.getElementById('input-email').value || 'dev@boss.ai';
+      successMessage.textContent = `Authenticated as ${email}. Initializing BOSS neural workspace...`;
+
+      successOverlay.classList.remove('opacity-0', 'pointer-events-none');
+      successOverlay.classList.add('opacity-100');
+
+      setTimeout(() => {
+        alert("Phase 2.3 Auth Complete! In production, this transitions seamlessly into the BOSS Home workspace.");
+        successOverlay.classList.add('opacity-0', 'pointer-events-none');
+        successOverlay.classList.remove('opacity-100');
+        resetButtonToCenter();
+      }, 2200);
+    }
+
+    // Continue Locally option
+    function continueLocally() {
+      const successOverlay = document.getElementById('success-overlay');
+      const successMessage = document.getElementById('success-message');
+      
+      successMessage.textContent = "Alright. Let's build locally. Zero telemetry, local weights only.";
+      successOverlay.classList.remove('opacity-0', 'pointer-events-none');
+      successOverlay.classList.add('opacity-100');
+
+      setTimeout(() => {
+        alert("Continuing as Local Developer (No Account). Moving directly to BOSS Home Screen.");
+        successOverlay.classList.add('opacity-0', 'pointer-events-none');
+        successOverlay.classList.remove('opacity-100');
+      }, 1800);
+    }
+
+    // Mock social login
+    function mockSocialLogin(provider) {
+      document.getElementById('input-email').value = `developer@${provider.toLowerCase()}.com`;
+      document.getElementById('input-password').value = `secure_token_${provider.toLowerCase()}`;
+      checkInputState();
+      handleAuthSubmit();
+    }
+
+    function togglePasswordVisibility() {
+      const passInput = document.getElementById('input-password');
+      if (passInput.type === 'password') {
+        passInput.type = 'text';
+      } else {
+        passInput.type = 'password';
+      }
+    }
+  </script>
+</body>
+</html>

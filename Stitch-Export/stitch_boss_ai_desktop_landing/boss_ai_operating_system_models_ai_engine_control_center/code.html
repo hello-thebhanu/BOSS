@@ -1,0 +1,1072 @@
+<!DOCTYPE html>
+<html lang="en" class="h-full bg-[#020408]">
+<head>
+  <meta charset="utf-8">
+  <title>BOSS AI Operating System - Models & AI Engine Control Center</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,300;0,400;0,500;0,700;1,400&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            obsidian: '#020408',
+            surface: {
+              base: '#04070D',
+              panel: '#070B14',
+              elevated: '#0B111F',
+              card: '#0D1424',
+              highlight: '#111B30'
+            },
+            cyan: {
+              glow: '#00F2FE',
+              dim: '#00838F',
+              core: '#38E1FF'
+            },
+            violet: {
+              electric: '#8A2BE2',
+              soft: '#A855F7',
+              deep: '#4C1D95'
+            }
+          },
+          fontFamily: {
+            sans: ['"Plus Jakarta Sans"', 'sans-serif'],
+            mono: ['"JetBrains Mono"', 'monospace']
+          },
+          animation: {
+            'orbit-slow': 'orbit 26s linear infinite',
+            'orbit-reverse': 'orbitRev 18s linear infinite',
+            'pulse-subtle': 'pulseSubtle 4s ease-in-out infinite',
+            'stream-glow': 'streamGlow 3s ease-in-out infinite'
+          },
+          keyframes: {
+            orbit: {
+              '0%': { transform: 'rotate(0deg)' },
+              '100%': { transform: 'rotate(360deg)' }
+            },
+            orbitRev: {
+              '0%': { transform: 'rotate(360deg)' },
+              '100%': { transform: 'rotate(0deg)' }
+            },
+            pulseSubtle: {
+              '0%, 100%': { opacity: '0.85', transform: 'scale(1)' },
+              '50%': { opacity: '1', transform: 'scale(1.03)' }
+            },
+            streamGlow: {
+              '0%, 100%': { opacity: '0.6' },
+              '50%': { opacity: '1' }
+            }
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    body {
+      color: #E2E8F0;
+      background-color: #020408;
+      overflow-x: hidden;
+      font-feature-settings: "cv02", "cv03", "cv04", "cv11";
+      -webkit-font-smoothing: antialiased;
+    }
+    .smoked-glass {
+      background: rgba(7, 12, 22, 0.72);
+      backdrop-filter: blur(18px);
+      -webkit-backdrop-filter: blur(18px);
+      border: 1px solid rgba(255, 255, 255, 0.07);
+    }
+    .smoked-glass-elevated {
+      background: rgba(11, 18, 33, 0.82);
+      backdrop-filter: blur(24px);
+      -webkit-backdrop-filter: blur(24px);
+      border: 1px solid rgba(56, 225, 255, 0.18);
+    }
+    .hairline-border {
+      border: 1px solid rgba(255, 255, 255, 0.06);
+    }
+    .hairline-border-cyan {
+      border: 1px solid rgba(56, 225, 255, 0.28);
+    }
+    .hairline-border-violet {
+      border: 1px solid rgba(168, 85, 247, 0.25);
+    }
+    .radial-ambient {
+      background: radial-gradient(circle at 50% 18%, rgba(56, 225, 255, 0.045) 0%, rgba(138, 43, 226, 0.025) 35%, transparent 70%);
+    }
+    /* Custom subtle scrollbar */
+    ::-webkit-scrollbar {
+      width: 5px;
+      height: 5px;
+    }
+    ::-webkit-scrollbar-track {
+      background: rgba(2, 4, 8, 0.6);
+    }
+    ::-webkit-scrollbar-thumb {
+      background: rgba(255, 255, 255, 0.12);
+      border-radius: 9999px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: rgba(56, 225, 255, 0.35);
+    }
+  </style>
+</head>
+<body class="h-screen w-screen flex flex-col overflow-hidden text-sm select-none font-sans radial-ambient">
+
+  <!-- TOP PERSISTENT SYSTEM CHROME -->
+  <header class="h-10 w-full flex items-center justify-between px-4 bg-[#020408]/90 border-b border-white/[0.07] z-50 text-[11px] font-mono tracking-wider">
+    <!-- Window controls & App Badge -->
+    <div class="flex items-center space-x-3">
+      <div class="flex items-center space-x-1.5 mr-2">
+        <span class="w-2.5 h-2.5 rounded-full bg-[#FF5F56]/80 hover:bg-[#FF5F56] transition-colors cursor-pointer"></span>
+        <span class="w-2.5 h-2.5 rounded-full bg-[#FFBD2E]/80 hover:bg-[#FFBD2E] transition-colors cursor-pointer"></span>
+        <span class="w-2.5 h-2.5 rounded-full bg-[#27C93F]/80 hover:bg-[#27C93F] transition-colors cursor-pointer"></span>
+      </div>
+      <div class="flex items-center space-x-2">
+        <span class="w-1.5 h-1.5 rounded-full bg-cyan-core animate-pulse"></span>
+        <span class="font-bold tracking-widest text-white">BOSS</span>
+        <span class="text-white/40 text-[10px]">v0.1.0-preview</span>
+      </div>
+      <span class="text-white/20">//</span>
+      <div class="text-white/60">BHANU_WORKSPACE</div>
+      <span class="text-white/20">//</span>
+      <div class="text-cyan-core/80 bg-cyan-950/40 px-1.5 py-0.5 rounded border border-cyan-500/20 text-[10px]">LOCAL_ENGINE</div>
+      <span class="text-white/20">//</span>
+      <div class="text-white/50 truncate max-w-xs">
+        LOCATION: <span class="text-white/90">SETTINGS</span> // <span class="text-cyan-core">MODELS &amp; AI ENGINE</span>
+      </div>
+    </div>
+
+    <!-- Enclave Status & Telemetry -->
+    <div class="flex items-center space-x-4">
+      <div class="flex items-center space-x-2 px-2.5 py-0.5 rounded-full bg-emerald-950/40 border border-emerald-500/30 text-emerald-400 text-[10px]">
+        <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-ping"></span>
+        <span>ENCLAVE: ISOLATED ZERO-CLOUD</span>
+      </div>
+      <div class="text-white/40 text-[10px]">
+        TTFT: <span class="text-cyan-core">11ms</span>
+      </div>
+      <div class="text-white/40 text-[10px]">
+        VRAM: <span class="text-white/80">4.2 / 16 GB</span>
+      </div>
+      <button class="text-white/40 hover:text-white transition-colors p-1" title="System Settings">
+        <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+        </svg>
+      </button>
+    </div>
+  </header>
+
+  <!-- MAIN 3-PANE WORKSPACE BODY -->
+  <div class="flex-1 flex overflow-hidden">
+
+    <!-- PANE 1: PERSISTENT BOSS NAVIGATION SIDEBAR -->
+    <aside class="w-64 bg-[#03060C] border-r border-white/[0.07] flex flex-col justify-between flex-shrink-0 z-20">
+      <!-- Top Section -->
+      <div class="p-3 space-y-4">
+        <!-- Logo / Workspace Pill -->
+        <div class="flex items-center justify-between p-2 rounded-lg bg-surface-panel border border-white/[0.05]">
+          <div class="flex items-center space-x-2.5">
+            <div class="w-7 h-7 rounded-md bg-gradient-to-br from-cyan-500/20 to-violet-600/30 border border-cyan-400/40 flex items-center justify-center font-bold text-cyan-core text-xs shadow-[0_0_12px_rgba(56,225,255,0.25)]">
+              B
+            </div>
+            <div>
+              <div class="flex items-center space-x-1.5">
+                <span class="font-bold text-white tracking-wide text-xs">BOSS</span>
+                <span class="px-1 py-0.2 text-[9px] bg-cyan-950/60 text-cyan-300 rounded border border-cyan-400/30 font-mono">CORE</span>
+              </div>
+              <p class="text-[10px] text-white/40 font-mono">Bhanu OS • v0.1.0</p>
+            </div>
+          </div>
+          <span class="w-2 h-2 rounded-full bg-cyan-core animate-pulse shadow-[0_0_8px_#00F2FE]"></span>
+        </div>
+
+        <!-- Quick Omni-Search Input -->
+        <div class="relative">
+          <svg class="w-3.5 h-3.5 absolute left-3 top-2.5 text-white/30" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+          </svg>
+          <input type="text" placeholder="Omni-search system..." readonly class="w-full bg-surface-base border border-white/[0.08] rounded-md py-1.5 pl-8 pr-7 text-[11px] text-white/70 placeholder-white/25 focus:outline-none cursor-default font-mono">
+          <span class="absolute right-2 top-2 text-[9px] bg-white/[0.05] border border-white/10 px-1 rounded text-white/40 font-mono">⌘K</span>
+        </div>
+
+        <!-- Primary Navigation List -->
+        <nav class="space-y-0.5 pt-1 text-[12px]">
+          <a href="#" class="flex items-center justify-between px-3 py-2 rounded-md text-white/60 hover:text-white hover:bg-white/[0.04] transition-colors">
+            <div class="flex items-center space-x-2.5">
+              <svg class="w-4 h-4 text-white/40" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
+              </svg>
+              <span>Workspace Home</span>
+            </div>
+          </a>
+
+          <a href="#" class="flex items-center justify-between px-3 py-2 rounded-md text-white/60 hover:text-white hover:bg-white/[0.04] transition-colors">
+            <div class="flex items-center space-x-2.5">
+              <svg class="w-4 h-4 text-white/40" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
+              </svg>
+              <span>Neural Chat</span>
+            </div>
+            <span class="text-[10px] font-mono text-white/30">⌘1</span>
+          </a>
+
+          <a href="#" class="flex items-center justify-between px-3 py-2 rounded-md text-white/60 hover:text-white hover:bg-white/[0.04] transition-colors">
+            <div class="flex items-center space-x-2.5">
+              <svg class="w-4 h-4 text-white/40" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-6l-2-2H5a2 2 0 00-2 2z" />
+              </svg>
+              <span>Projects</span>
+            </div>
+            <span class="text-[10px] font-mono text-white/30">⌘2</span>
+          </a>
+
+          <a href="#" class="flex items-center justify-between px-3 py-2 rounded-md text-white/60 hover:text-white hover:bg-white/[0.04] transition-colors">
+            <div class="flex items-center space-x-2.5">
+              <svg class="w-4 h-4 text-white/40" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4" />
+              </svg>
+              <span>Coding Studio</span>
+            </div>
+            <span class="text-[9px] font-mono bg-cyan-950/60 text-cyan-300 border border-cyan-500/30 px-1 py-0.2 rounded">LIVE</span>
+          </a>
+
+          <a href="#" class="flex items-center justify-between px-3 py-2 rounded-md text-white/60 hover:text-white hover:bg-white/[0.04] transition-colors">
+            <div class="flex items-center space-x-2.5">
+              <svg class="w-4 h-4 text-white/40" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M8 9l3 3-3 3m5 0h3M5 20h14a2 2 0 002-2V6a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+              </svg>
+              <span>Terminal Session</span>
+            </div>
+            <span class="text-[10px] font-mono text-white/30">zsh</span>
+          </a>
+
+          <a href="#" class="flex items-center justify-between px-3 py-2 rounded-md text-white/60 hover:text-white hover:bg-white/[0.04] transition-colors">
+            <div class="flex items-center space-x-2.5">
+              <svg class="w-4 h-4 text-white/40" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z" />
+              </svg>
+              <span>Tools &amp; Plugins</span>
+            </div>
+            <span class="text-[10px] font-mono text-white/30">10</span>
+          </a>
+
+          <a href="#" class="flex items-center justify-between px-3 py-2 rounded-md text-white/60 hover:text-white hover:bg-white/[0.04] transition-colors">
+            <div class="flex items-center space-x-2.5">
+              <svg class="w-4 h-4 text-white/40" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+              </svg>
+              <span>History</span>
+            </div>
+          </a>
+        </nav>
+
+        <!-- System Control Section -->
+        <div class="pt-2">
+          <div class="text-[10px] font-mono text-white/30 px-3 pb-1 tracking-wider uppercase">System Control</div>
+          <a href="#" class="flex items-center justify-between px-3 py-2 rounded-md bg-cyan-950/20 text-cyan-core border border-cyan-500/25 shadow-[0_0_15px_rgba(56,225,255,0.08)]">
+            <div class="flex items-center space-x-2.5">
+              <svg class="w-4 h-4 text-cyan-core" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+              </svg>
+              <span class="font-medium">Settings</span>
+            </div>
+            <span class="w-1.5 h-1.5 rounded-full bg-cyan-core animate-pulse"></span>
+          </a>
+        </div>
+
+        <!-- Workspaces list -->
+        <div class="pt-1">
+          <div class="flex items-center justify-between text-[10px] font-mono text-white/30 px-3 pb-1 tracking-wider uppercase">
+            <span>Workspaces</span>
+            <span>2 BOUND</span>
+          </div>
+          <div class="space-y-1 text-[11px] font-mono">
+            <div class="flex items-center space-x-2 px-3 py-1 text-white/80 hover:text-white cursor-pointer">
+              <span class="w-1.5 h-1.5 rounded-full bg-cyan-core"></span>
+              <span class="truncate">boss-core-engine</span>
+              <span class="text-[9px] text-white/30 ml-auto">active</span>
+            </div>
+            <div class="flex items-center space-x-2 px-3 py-1 text-white/40 hover:text-white cursor-pointer">
+              <span class="w-1.5 h-1.5 rounded-full bg-white/20"></span>
+              <span class="truncate">arm-cortex-firmware</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Bottom User & Enclave Telemetry Dock -->
+      <div class="p-3 border-t border-white/[0.07] bg-surface-base/90 space-y-2">
+        <div class="flex items-center justify-between">
+          <div class="flex items-center space-x-2">
+            <div class="w-6 h-6 rounded-full bg-violet-600/30 border border-violet-400/40 flex items-center justify-center font-bold text-violet-300 text-[10px]">
+              B
+            </div>
+            <div>
+              <div class="flex items-center space-x-1.5">
+                <span class="text-xs font-semibold text-white">Bhanu DEV</span>
+                <span class="text-[9px] bg-cyan-950/80 text-cyan-300 px-1 rounded border border-cyan-500/20 font-mono">DEV</span>
+              </div>
+              <p class="text-[9px] text-emerald-400 font-mono flex items-center space-x-1">
+                <span class="w-1 h-1 rounded-full bg-emerald-400"></span>
+                <span>Local Enclave Active</span>
+              </p>
+            </div>
+          </div>
+          <button class="text-white/30 hover:text-white p-1">
+            <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 12h.01M12 12h.01M19 12h.01M6 12a1 1 0 11-2 0 1 1 0 012 0zm7 0a1 1 0 11-2 0 1 1 0 012 0zm7 0a1 1 0 11-2 0 1 1 0 012 0z" />
+            </svg>
+          </button>
+        </div>
+
+        <div class="p-2 rounded bg-surface-panel/80 border border-white/[0.05] text-[9px] font-mono space-y-1">
+          <div class="flex justify-between text-white/50">
+            <span>LLM: <strong class="text-cyan-core">7B Q4_K_M</strong></span>
+            <span class="text-emerald-400 font-bold">ONLINE</span>
+          </div>
+          <div class="flex justify-between text-white/50">
+            <span>VRAM: <strong class="text-white">4.2GB</strong></span>
+            <span>TEMP: <strong class="text-white">41°C</strong></span>
+          </div>
+        </div>
+      </div>
+    </aside>
+
+    <!-- PANE 2: SETTINGS CATEGORIES NAVIGATION -->
+    <section class="w-72 bg-[#040810] border-r border-white/[0.07] flex flex-col justify-between flex-shrink-0 z-10">
+      <div class="p-4 space-y-4">
+        <!-- Settings Header with Mini BOSS Core -->
+        <div class="flex items-center justify-between pb-2 border-b border-white/[0.05]">
+          <div>
+            <div class="flex items-center space-x-2">
+              <h2 class="text-sm font-bold text-white tracking-wide uppercase font-mono">Settings</h2>
+              <span class="px-1.5 py-0.2 rounded bg-cyan-950/60 border border-cyan-400/30 text-[9px] text-cyan-300 font-mono">CONFIG</span>
+            </div>
+            <p class="text-[11px] text-white/40 mt-0.5">Configure your workspace.</p>
+          </div>
+
+          <!-- Mini Established Holographic Core Indicator -->
+          <div class="relative w-8 h-8 flex items-center justify-center">
+            <div class="absolute inset-0 rounded-full border border-cyan-core/30 animate-orbit-slow"></div>
+            <div class="absolute inset-1 rounded-full border border-violet-soft/30 animate-orbit-reverse border-dashed"></div>
+            <div class="w-3 h-3 rounded-full bg-cyan-core/80 shadow-[0_0_8px_#00F2FE] animate-pulse"></div>
+          </div>
+        </div>
+
+        <!-- Search Settings -->
+        <div class="relative">
+          <svg class="w-3.5 h-3.5 absolute left-3 top-2.5 text-white/30" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+          </svg>
+          <input type="text" value="models" placeholder="Search settings..." class="w-full bg-surface-base border border-cyan-500/30 rounded-md py-1.5 pl-8 pr-3 text-[11px] text-white placeholder-white/25 focus:outline-none font-mono">
+        </div>
+
+        <!-- Category Menu Items -->
+        <div class="space-y-1 text-[12px]">
+          <!-- General -->
+          <a href="#" class="flex items-center justify-between px-3 py-2 rounded-md text-white/60 hover:text-white hover:bg-white/[0.03] transition-colors">
+            <div class="flex items-center space-x-2.5">
+              <svg class="w-4 h-4 text-white/40" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4" />
+              </svg>
+              <span>General</span>
+            </div>
+            <span class="text-[10px] font-mono text-white/30">PREV</span>
+          </a>
+
+          <!-- Appearance -->
+          <a href="#" class="flex items-center justify-between px-3 py-2 rounded-md text-white/60 hover:text-white hover:bg-white/[0.03] transition-colors">
+            <div class="flex items-center space-x-2.5">
+              <svg class="w-4 h-4 text-white/40" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M7 21a4 4 0 01-4-4 5 5 0 015-5h4a5 5 0 015 5 4 4 0 01-4 4H7z" />
+              </svg>
+              <span>Appearance</span>
+            </div>
+            <span class="text-[10px] font-mono text-white/40">Dark</span>
+          </a>
+
+          <!-- Voice -->
+          <a href="#" class="flex items-center justify-between px-3 py-2 rounded-md text-white/60 hover:text-white hover:bg-white/[0.03] transition-colors">
+            <div class="flex items-center space-x-2.5">
+              <svg class="w-4 h-4 text-white/40" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 01-3-3V5a3 3 0 116 0v6a3 3 0 01-3 3z" />
+              </svg>
+              <span>Voice</span>
+            </div>
+            <span class="text-[10px] font-mono text-cyan-400">READY</span>
+          </a>
+
+          <!-- Models (ACTIVE) -->
+          <div class="flex items-center justify-between px-3 py-2.5 rounded-md bg-cyan-950/30 text-cyan-core border border-cyan-400/35 shadow-[0_0_18px_rgba(56,225,255,0.12)]">
+            <div class="flex items-center space-x-2.5">
+              <svg class="w-4 h-4 text-cyan-core" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M9 3v2m6-2v2M9 19v2m6-2v2M5 9H3m2 6H3m18-6h-2m2 6h-2M7 19h10a2 2 0 002-2V7a2 2 0 00-2-2H7a2 2 0 00-2 2v10a2 2 0 002 2zM9 9h6v6H9V9z" />
+              </svg>
+              <span class="font-semibold tracking-wide">Models &amp; AI Engine</span>
+            </div>
+            <span class="text-[9px] font-mono bg-cyan-400/20 text-cyan-300 px-1.5 py-0.5 rounded border border-cyan-400/40">7B LOCAL</span>
+          </div>
+
+          <!-- Memory -->
+          <a href="#" class="flex items-center justify-between px-3 py-2 rounded-md text-white/60 hover:text-white hover:bg-white/[0.03] transition-colors">
+            <div class="flex items-center space-x-2.5">
+              <svg class="w-4 h-4 text-white/40" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M4 7v10c0 2.21 3.582 4 8 4s8-1.79 8-4V7M4 7c0 2.21 3.582 4 8 4s8-1.79 8-4M4 7c0-2.21 3.582-4 8-4s8 1.79 8 4m0 5c0 2.21-3.582 4-8 4s-8-1.79-8-4" />
+              </svg>
+              <span>Memory</span>
+            </div>
+            <span class="text-[10px] font-mono text-white/30">ENCLAVE</span>
+          </a>
+
+          <!-- Profile -->
+          <a href="#" class="flex items-center justify-between px-3 py-2 rounded-md text-white/60 hover:text-white hover:bg-white/[0.03] transition-colors">
+            <div class="flex items-center space-x-2.5">
+              <svg class="w-4 h-4 text-white/40" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+              </svg>
+              <span>Profile</span>
+            </div>
+            <span class="text-[10px] font-mono text-white/30">Bhanu</span>
+          </a>
+
+          <!-- Permissions & Security -->
+          <a href="#" class="flex items-center justify-between px-3 py-2 rounded-md text-white/60 hover:text-white hover:bg-white/[0.03] transition-colors">
+            <div class="flex items-center space-x-2.5">
+              <svg class="w-4 h-4 text-white/40" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+              </svg>
+              <span>Permissions</span>
+            </div>
+            <span class="text-[10px] font-mono text-white/30">STRICT</span>
+          </a>
+
+          <!-- About BOSS -->
+          <a href="#" class="flex items-center justify-between px-3 py-2 rounded-md text-white/60 hover:text-white hover:bg-white/[0.03] transition-colors">
+            <div class="flex items-center space-x-2.5">
+              <svg class="w-4 h-4 text-white/40" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+              </svg>
+              <span>About BOSS</span>
+            </div>
+            <span class="text-[10px] font-mono text-white/30">v0.1.0</span>
+          </a>
+        </div>
+      </div>
+
+      <!-- Local Machine Storage Seal -->
+      <div class="p-3.5 m-3 rounded-lg smoked-glass text-[10px] space-y-1.5 font-mono text-white/50 border border-white/[0.06]">
+        <div class="flex items-center space-x-2 text-cyan-core">
+          <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+          </svg>
+          <span class="font-bold tracking-wider">LOCAL-FIRST ENGINE</span>
+        </div>
+        <p class="text-[10px] leading-relaxed text-white/40">
+          Inference runs locally via Metal Neural FFI. Zero model egress, zero telemetry, full offline sovereignty.
+        </p>
+      </div>
+    </section>
+
+    <!-- PANE 3: MAIN MODELS & AI ENGINE WORKSPACE CANVAS -->
+    <main class="flex-1 bg-[#020408] overflow-y-auto p-6 space-y-6">
+
+      <!-- SECTION 0: HEADER & ENGINE STATUS BANNER -->
+      <div class="flex items-start justify-between pb-4 border-b border-white/[0.06]">
+        <div>
+          <div class="flex items-center space-x-3">
+            <h1 class="text-2xl font-bold text-white tracking-tight font-sans">Models &amp; AI Engine</h1>
+            <span class="text-xs font-mono px-2 py-0.5 rounded bg-cyan-950/60 text-cyan-core border border-cyan-400/30">PHASE 10.4</span>
+            <span class="text-xs font-mono px-2.5 py-0.5 rounded-full bg-emerald-950/50 text-emerald-400 border border-emerald-500/30 flex items-center space-x-1.5">
+              <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
+              <span>LOCAL ENGINE READY</span>
+            </span>
+          </div>
+          <p class="text-xs text-white/50 mt-1 font-sans">
+            Choose the intelligence that powers BOSS. High-performance, offline local-first inference calibrated for code generation and agentic orchestration.
+          </p>
+        </div>
+
+        <div class="flex items-center space-x-3 font-mono text-xs">
+          <div class="flex items-center space-x-2 px-3 py-1.5 rounded bg-surface-panel border border-white/[0.07] text-white/60">
+            <span class="w-1.5 h-1.5 rounded-full bg-cyan-core"></span>
+            <span>AUTOSAVE ACTIVE: <strong class="text-white">SAVED</strong></span>
+          </div>
+          <button class="px-3 py-1.5 rounded bg-surface-elevated hover:bg-surface-highlight border border-white/10 text-white hover:text-cyan-core transition-colors flex items-center space-x-1.5 text-xs">
+            <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12" />
+            </svg>
+            <span>Import Model</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- SECTION 1: ACTIVE MODEL HERO WITH BOSS HOLOGRAPHIC CORE -->
+      <section class="smoked-glass-elevated rounded-xl p-5 border border-cyan-500/25 relative overflow-hidden shadow-[0_0_35px_rgba(56,225,255,0.06)]">
+        <!-- Subtle background ambient grid highlight -->
+        <div class="absolute -right-20 -top-20 w-80 h-80 bg-cyan-500/10 rounded-full blur-3xl pointer-events-none"></div>
+
+        <div class="flex flex-col lg:flex-row items-center justify-between gap-6 relative z-10">
+          
+          <!-- Left: Model Identity & Architecture Specs -->
+          <div class="flex-1 space-y-4">
+            <div class="flex items-center space-x-2">
+              <span class="text-[10px] font-mono tracking-widest text-cyan-core uppercase bg-cyan-950/70 px-2 py-0.5 rounded border border-cyan-400/40">ACTIVE INTELLIGENCE</span>
+              <span class="text-[10px] font-mono text-emerald-400 flex items-center space-x-1">
+                <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-ping"></span>
+                <span>RESIDENT IN VRAM</span>
+              </span>
+              <span class="text-[10px] font-mono text-white/30">•</span>
+              <span class="text-[10px] font-mono text-white/50">ZERO EGRESS ENFORCED</span>
+            </div>
+
+            <div>
+              <h2 class="text-2xl font-extrabold text-white tracking-wide font-sans flex items-center space-x-3">
+                <span>BOSS Local Coder</span>
+                <span class="text-xs font-mono px-2 py-0.5 rounded-md bg-white/10 text-white/90 border border-white/15">v2.4</span>
+              </h2>
+              <p class="text-xs text-white/60 mt-1 max-w-xl font-sans leading-relaxed">
+                Fine-tuned Qwen/Llama-3 architecture with 32k window AST parsing, optimized for multi-file code synthesis, agentic diff repair, and low-latency terminal execution.
+              </p>
+            </div>
+
+            <!-- Tech Spec Badges Grid -->
+            <div class="grid grid-cols-2 sm:grid-cols-4 gap-2.5 pt-1 text-xs font-mono">
+              <div class="p-2.5 rounded-lg bg-surface-base/80 border border-white/[0.06]">
+                <span class="text-[10px] text-white/40 block">PARAMETERS</span>
+                <span class="font-bold text-white text-sm">7B Dense</span>
+                <span class="text-[9px] text-cyan-core block mt-0.5">Zero Pruning</span>
+              </div>
+              <div class="p-2.5 rounded-lg bg-surface-base/80 border border-white/[0.06]">
+                <span class="text-[10px] text-white/40 block">QUANTIZATION</span>
+                <span class="font-bold text-cyan-core text-sm">Q4_K_M</span>
+                <span class="text-[9px] text-white/40 block mt-0.5">Optimal Perplexity</span>
+              </div>
+              <div class="p-2.5 rounded-lg bg-surface-base/80 border border-white/[0.06]">
+                <span class="text-[10px] text-white/40 block">VRAM FOOTPRINT</span>
+                <span class="font-bold text-white text-sm">4.2 GB</span>
+                <span class="text-[9px] text-emerald-400 block mt-0.5">Fits in Unified RAM</span>
+              </div>
+              <div class="p-2.5 rounded-lg bg-surface-base/80 border border-white/[0.06]">
+                <span class="text-[10px] text-white/40 block">CONTEXT LIMIT</span>
+                <span class="font-bold text-violet-soft text-sm">32,768</span>
+                <span class="text-[9px] text-white/40 block mt-0.5">Full AST Tokenizer</span>
+              </div>
+            </div>
+
+            <!-- Primary Actions Button Row -->
+            <div class="flex items-center space-x-3 pt-2">
+              <button class="px-4 py-2 rounded-lg bg-cyan-core text-obsidian font-semibold text-xs hover:bg-cyan-300 transition-all shadow-[0_0_16px_rgba(56,225,255,0.4)] flex items-center space-x-2">
+                <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z" />
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+                <span>TEST INFERENCE BENCHMARK</span>
+              </button>
+
+              <button class="px-3.5 py-2 rounded-lg bg-surface-panel hover:bg-surface-elevated border border-white/15 text-white/90 text-xs transition-colors flex items-center space-x-1.5 font-mono">
+                <svg class="w-3.5 h-3.5 text-white/50" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4" />
+                </svg>
+                <span>SWITCH MODEL</span>
+              </button>
+
+              <button class="px-3 py-2 rounded-lg bg-red-950/20 hover:bg-red-950/40 border border-red-500/20 text-red-300 text-xs transition-colors flex items-center space-x-1 font-mono">
+                <span>UNLOAD VRAM</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- Right: The Established Holographic Orbital BOSS Core in READY Model State -->
+          <div class="w-64 flex flex-col items-center justify-center p-3 rounded-xl bg-surface-base/90 border border-white/[0.08] relative">
+            <span class="text-[9px] font-mono text-white/40 tracking-wider uppercase mb-2">NEURAL CORE RESONANCE</span>
+            
+            <!-- Authentic Orbital Core Simulation (Matches Phases 1.1-1.6 & 2.13) -->
+            <div class="relative w-40 h-40 flex items-center justify-center my-2">
+              <!-- Outer Orbital Track -->
+              <div class="absolute inset-0 rounded-full border border-cyan-core/30 animate-orbit-slow">
+                <span class="absolute top-1 left-7 w-2 h-2 rounded-full bg-cyan-core shadow-[0_0_8px_#00F2FE]"></span>
+              </div>
+              <!-- Counter Orbit Track -->
+              <div class="absolute inset-3 rounded-full border border-violet-electric/40 animate-orbit-reverse border-dashed">
+                <span class="absolute bottom-2 right-6 w-1.5 h-1.5 rounded-full bg-violet-soft shadow-[0_0_6px_#A855F7]"></span>
+              </div>
+              <!-- Inner Reticle -->
+              <div class="absolute inset-7 rounded-full border border-white/15"></div>
+              
+              <!-- Center Breathing Intelligence Sphere -->
+              <div class="w-16 h-16 rounded-full bg-gradient-to-br from-cyan-400 via-violet-600 to-blue-900 flex items-center justify-center shadow-[0_0_28px_rgba(56,225,255,0.45)] animate-pulse-subtle">
+                <!-- Acoustic / Neural Frequency Bars -->
+                <div class="flex items-center space-x-0.5">
+                  <span class="w-1 h-3 bg-white/90 rounded-full animate-bounce" style="animation-delay: 0.1s"></span>
+                  <span class="w-1 h-6 bg-white rounded-full animate-bounce" style="animation-delay: 0.25s"></span>
+                  <span class="w-1 h-8 bg-cyan-100 rounded-full animate-bounce" style="animation-delay: 0.4s"></span>
+                  <span class="w-1 h-5 bg-white rounded-full animate-bounce" style="animation-delay: 0.15s"></span>
+                  <span class="w-1 h-2.5 bg-white/90 rounded-full animate-bounce" style="animation-delay: 0.3s"></span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Real-time Core Status Ribbon -->
+            <div class="text-center mt-1 space-y-0.5">
+              <div class="text-[11px] font-mono text-cyan-core font-bold flex items-center justify-center space-x-1">
+                <span class="w-1.5 h-1.5 rounded-full bg-cyan-core animate-pulse"></span>
+                <span>STATE: READY // INFERENCE BOUND</span>
+              </div>
+              <p class="text-[9px] font-mono text-white/40">Tokens/Sec: ~68.4 t/s (Apple Metal)</p>
+            </div>
+          </div>
+
+        </div>
+      </section>
+
+      <!-- SECTION 2: TWO-COLUMN MAIN WORKSPACE (MODELS REPOSITORY vs INSPECTOR & SETTINGS) -->
+      <div class="grid grid-cols-1 xl:grid-cols-12 gap-6">
+
+        <!-- LEFT COLUMN (7 COLUMNS): INSTALLED MODELS & GET/IMPORT -->
+        <div class="xl:col-span-7 space-y-5">
+          
+          <!-- Installed Models Header -->
+          <div class="flex items-center justify-between">
+            <div class="flex items-center space-x-2">
+              <h3 class="text-sm font-bold text-white uppercase tracking-wider font-mono">Installed Models</h3>
+              <span class="px-1.5 py-0.2 rounded bg-white/10 text-white/60 text-[10px] font-mono">3 LOCAL</span>
+            </div>
+            <div class="text-[11px] font-mono text-white/40 flex items-center space-x-3">
+              <span>STORAGE: <strong class="text-white/80">14.8 GB</strong></span>
+              <button class="text-cyan-core hover:underline">+ Get Models</button>
+            </div>
+          </div>
+
+          <!-- Model Cards List -->
+          <div class="space-y-3">
+            
+            <!-- Model 1: BOSS Local Coder (ACTIVE) -->
+            <div class="smoked-glass-elevated rounded-lg p-4 border border-cyan-400/40 relative group cursor-pointer transition-all shadow-[0_0_16px_rgba(56,225,255,0.08)]">
+              <div class="flex items-start justify-between">
+                <div class="flex items-start space-x-3">
+                  <div class="w-9 h-9 rounded-md bg-cyan-500/20 border border-cyan-400/40 flex items-center justify-center text-cyan-core text-sm font-mono font-bold shadow-[0_0_10px_rgba(56,225,255,0.2)]">
+                    7B
+                  </div>
+                  <div>
+                    <div class="flex items-center space-x-2">
+                      <h4 class="font-bold text-white text-sm">BOSS Local Coder</h4>
+                      <span class="px-1.5 py-0.2 rounded text-[9px] font-mono bg-cyan-950/80 text-cyan-300 border border-cyan-400/40 font-bold">ACTIVE</span>
+                      <span class="px-1.5 py-0.2 rounded text-[9px] font-mono bg-emerald-950/60 text-emerald-400 border border-emerald-500/30">READY</span>
+                    </div>
+                    <p class="text-xs text-white/50 mt-0.5">Primary multi-file refactoring, AST logic &amp; terminal execution engine.</p>
+                  </div>
+                </div>
+                <span class="w-2 h-2 rounded-full bg-cyan-core animate-pulse shadow-[0_0_8px_#00F2FE]"></span>
+              </div>
+
+              <!-- Metadata & Metrics Bar -->
+              <div class="flex items-center justify-between pt-3 mt-3 border-t border-white/[0.06] text-[11px] font-mono text-white/50">
+                <div class="flex items-center space-x-4">
+                  <span>Q4_K_M</span>
+                  <span>4.2 GB</span>
+                  <span class="text-cyan-core">32K Context</span>
+                  <span>Last used: Just now</span>
+                </div>
+                <div class="flex items-center space-x-2">
+                  <button class="px-2 py-0.5 rounded bg-cyan-400/10 text-cyan-core border border-cyan-400/30 hover:bg-cyan-400/20 transition-colors">Details</button>
+                  <button class="px-2 py-0.5 rounded bg-white/[0.05] hover:bg-white/10 text-white/70 transition-colors">Test</button>
+                </div>
+              </div>
+            </div>
+
+            <!-- Model 2: BOSS Reasoner 14B -->
+            <div class="smoked-glass rounded-lg p-4 border border-white/[0.07] hover:border-violet-400/40 relative group cursor-pointer transition-all">
+              <div class="flex items-start justify-between">
+                <div class="flex items-start space-x-3">
+                  <div class="w-9 h-9 rounded-md bg-violet-600/20 border border-violet-400/30 flex items-center justify-center text-violet-300 text-sm font-mono font-bold">
+                    14B
+                  </div>
+                  <div>
+                    <div class="flex items-center space-x-2">
+                      <h4 class="font-bold text-white text-sm">BOSS Reasoner</h4>
+                      <span class="px-1.5 py-0.2 rounded text-[9px] font-mono bg-surface-panel text-white/50 border border-white/10">STANDBY</span>
+                      <span class="px-1.5 py-0.2 rounded text-[9px] font-mono bg-white/[0.05] text-white/60">AVAILABLE</span>
+                    </div>
+                    <p class="text-xs text-white/50 mt-0.5">Heavyweight architectural reasoning, invariant verification &amp; mathematical logic.</p>
+                  </div>
+                </div>
+                <span class="w-2 h-2 rounded-full bg-white/20"></span>
+              </div>
+
+              <!-- Metadata & Metrics Bar -->
+              <div class="flex items-center justify-between pt-3 mt-3 border-t border-white/[0.06] text-[11px] font-mono text-white/50">
+                <div class="flex items-center space-x-4">
+                  <span>Q4_K_M</span>
+                  <span>8.5 GB</span>
+                  <span class="text-violet-soft">64K Context</span>
+                  <span>Last used: 2d ago</span>
+                </div>
+                <div class="flex items-center space-x-2">
+                  <button class="px-2 py-0.5 rounded bg-surface-elevated hover:bg-white/10 text-white transition-colors border border-white/10">Switch to 14B</button>
+                  <button class="px-2 py-0.5 rounded bg-white/[0.04] text-white/50 hover:text-white transition-colors">Details</button>
+                </div>
+              </div>
+            </div>
+
+            <!-- Model 3: BOSS Fast 3B -->
+            <div class="smoked-glass rounded-lg p-4 border border-white/[0.07] hover:border-cyan-500/30 relative group cursor-pointer transition-all">
+              <div class="flex items-start justify-between">
+                <div class="flex items-start space-x-3">
+                  <div class="w-9 h-9 rounded-md bg-blue-600/20 border border-blue-400/30 flex items-center justify-center text-blue-300 text-sm font-mono font-bold">
+                    3B
+                  </div>
+                  <div>
+                    <div class="flex items-center space-x-2">
+                      <h4 class="font-bold text-white text-sm">BOSS Fast</h4>
+                      <span class="px-1.5 py-0.2 rounded text-[9px] font-mono bg-surface-panel text-white/50 border border-white/10">STANDBY</span>
+                      <span class="px-1.5 py-0.2 rounded text-[9px] font-mono bg-white/[0.05] text-white/60">AVAILABLE</span>
+                    </div>
+                    <p class="text-xs text-white/50 mt-0.5">Ultra-low latency for instant inline code completions and quick voice Q&amp;A.</p>
+                  </div>
+                </div>
+                <span class="w-2 h-2 rounded-full bg-white/20"></span>
+              </div>
+
+              <!-- Metadata & Metrics Bar -->
+              <div class="flex items-center justify-between pt-3 mt-3 border-t border-white/[0.06] text-[11px] font-mono text-white/50">
+                <div class="flex items-center space-x-4">
+                  <span>Q4_K_M</span>
+                  <span>2.1 GB</span>
+                  <span class="text-blue-300">16K Context</span>
+                  <span>Last used: 1w ago</span>
+                </div>
+                <div class="flex items-center space-x-2">
+                  <button class="px-2 py-0.5 rounded bg-surface-elevated hover:bg-white/10 text-white transition-colors border border-white/10">Switch to 3B</button>
+                  <button class="px-2 py-0.5 rounded bg-white/[0.04] text-white/50 hover:text-white transition-colors">Details</button>
+                </div>
+              </div>
+            </div>
+
+          </div>
+
+          <!-- SECTION 1B: DOWNLOAD / GET MODELS COMPACT CATALOG -->
+          <div class="smoked-glass rounded-lg p-4 border border-white/[0.06] space-y-3">
+            <div class="flex items-center justify-between">
+              <div class="flex items-center space-x-2">
+                <svg class="w-4 h-4 text-cyan-core" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+                </svg>
+                <h4 class="text-xs font-bold text-white tracking-wide uppercase font-mono">Available for Download</h4>
+              </div>
+              <span class="text-[10px] font-mono text-white/40">Verified Local Quantizations</span>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-2 text-xs font-mono">
+              <!-- Catalog Item 1 -->
+              <div class="p-2.5 rounded bg-surface-panel border border-white/[0.05] flex items-center justify-between">
+                <div>
+                  <div class="font-bold text-white">DeepSeek-Coder 6.7B</div>
+                  <div class="text-[10px] text-white/40">Q4_K_M • 3.8 GB • GGUF</div>
+                </div>
+                <button class="px-2 py-1 rounded bg-white/[0.07] hover:bg-white/15 text-white text-[10px] transition-colors">
+                  Download
+                </button>
+              </div>
+
+              <!-- Catalog Item 2 -->
+              <div class="p-2.5 rounded bg-surface-panel border border-white/[0.05] flex items-center justify-between">
+                <div>
+                  <div class="font-bold text-white">Mistral-Instruct 7B</div>
+                  <div class="text-[10px] text-white/40">Q4_K_M • 4.1 GB • GGUF</div>
+                </div>
+                <button class="px-2 py-1 rounded bg-white/[0.07] hover:bg-white/15 text-white text-[10px] transition-colors">
+                  Download
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- SECTION 1C: INTERACTIVE MODEL TEST CONFIRMATION -->
+          <div class="smoked-glass rounded-lg p-4 border border-cyan-500/20 space-y-2.5">
+            <div class="flex items-center justify-between">
+              <div class="flex items-center space-x-2">
+                <span class="w-2 h-2 rounded-full bg-cyan-core animate-pulse"></span>
+                <span class="text-xs font-mono font-bold text-white">LIVE MODEL VERIFICATION TEST</span>
+              </div>
+              <span class="text-[10px] font-mono text-cyan-core">Latency: 18ms TTFT</span>
+            </div>
+
+            <div class="p-3 rounded bg-surface-base/90 border border-white/[0.06] font-mono text-xs space-y-2">
+              <div class="text-white/40 text-[10px]">// BENCHMARK QUERY SENT TO LOCAL VRAM:</div>
+              <div class="text-white font-medium">❯ "Write a short function that reverses a UTF-8 string with surrogate pair safety."</div>
+              
+              <div class="p-2.5 rounded bg-[#010204] border border-cyan-500/20 text-[11px] text-cyan-300 font-mono leading-relaxed overflow-x-auto">
+                <span class="text-violet-400">export function</span> <span class="text-cyan-200">reverseSafe</span>(str: <span class="text-emerald-400">string</span>): <span class="text-emerald-400">string</span> {<br>
+                &nbsp;&nbsp;<span class="text-white/40">// Uses Intl.Segmenter to preserve grapheme cluster integrity</span><br>
+                &nbsp;&nbsp;<span class="text-violet-400">const</span> segmenter = <span class="text-violet-400">new</span> Intl.Segmenter(<span class="text-emerald-300">'en'</span>, { granularity: <span class="text-emerald-300">'grapheme'</span> });<br>
+                &nbsp;&nbsp;<span class="text-violet-400">return</span> [...segmenter.segment(str)].map(s => s.segment).reverse().join(<span class="text-emerald-300">''</span>);<br>
+                }
+              </div>
+
+              <div class="flex items-center justify-between text-[10px] text-emerald-400 pt-1">
+                <span class="flex items-center space-x-1">
+                  <svg class="w-3 h-3 text-emerald-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                  </svg>
+                  <span>Model Verified: 100% Valid Syntax • Grapheme Cluster Invariant Met</span>
+                </span>
+                <span class="text-white/40">Tokens: 68 • Time: 0.98s</span>
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- RIGHT COLUMN (5 COLUMNS): INFERENCE TUNING, HARDWARE & REPOSITORY DETAILS -->
+        <div class="xl:col-span-5 space-y-5">
+          
+          <!-- Selected Model Detail Card -->
+          <div class="smoked-glass rounded-lg p-4 border border-white/[0.08] space-y-3">
+            <div class="flex items-center justify-between pb-2 border-b border-white/[0.06]">
+              <div class="flex items-center space-x-2">
+                <span class="text-xs font-bold text-white uppercase font-mono">Model Inspection</span>
+                <span class="text-[9px] font-mono text-cyan-core bg-cyan-950/60 px-1.5 py-0.2 rounded border border-cyan-400/30">INSPECTOR</span>
+              </div>
+              <span class="text-[10px] font-mono text-white/40">SHA: 8e49b2f1</span>
+            </div>
+
+            <!-- Capabilities checklist -->
+            <div class="space-y-1.5 text-xs font-mono">
+              <span class="text-[10px] text-white/40 block">VERIFIED CAPABILITIES:</span>
+              <div class="grid grid-cols-2 gap-1.5 text-[11px]">
+                <div class="flex items-center space-x-1.5 text-white/80">
+                  <span class="text-cyan-core">✓</span>
+                  <span>Code Generation</span>
+                </div>
+                <div class="flex items-center space-x-1.5 text-white/80">
+                  <span class="text-cyan-core">✓</span>
+                  <span>AST Refactoring</span>
+                </div>
+                <div class="flex items-center space-x-1.5 text-white/80">
+                  <span class="text-cyan-core">✓</span>
+                  <span>Multi-file Diff</span>
+                </div>
+                <div class="flex items-center space-x-1.5 text-white/80">
+                  <span class="text-cyan-core">✓</span>
+                  <span>Terminal Automation</span>
+                </div>
+                <div class="flex items-center space-x-1.5 text-white/80">
+                  <span class="text-cyan-core">✓</span>
+                  <span>Voice Intent Parse</span>
+                </div>
+                <div class="flex items-center space-x-1.5 text-white/80">
+                  <span class="text-cyan-core">✓</span>
+                  <span>GGUF v3 Native</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Health Checks Checklist -->
+            <div class="pt-2 border-t border-white/[0.06] space-y-1 text-[11px] font-mono">
+              <span class="text-[10px] text-white/40 block">SYSTEM HEALTH:</span>
+              <div class="flex items-center justify-between text-white/70">
+                <span>Model Weights Mapped</span>
+                <span class="text-emerald-400">● 100% READY</span>
+              </div>
+              <div class="flex items-center justify-between text-white/70">
+                <span>Byte-Pair Tokenizer</span>
+                <span class="text-emerald-400">● LOADED</span>
+              </div>
+              <div class="flex items-center justify-between text-white/70">
+                <span>KV Cache Allocation</span>
+                <span class="text-emerald-400">● 1.2 GB ALLOCATED</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- INFERENCE SETTINGS & PRESETS -->
+          <div class="smoked-glass rounded-lg p-4 border border-white/[0.08] space-y-4">
+            <div class="flex items-center justify-between">
+              <h4 class="text-xs font-bold text-white uppercase font-mono tracking-wide">Inference Calibration</h4>
+              <span class="text-[10px] font-mono text-cyan-core">Profile: Focused</span>
+            </div>
+
+            <!-- Presets: Focused vs Balanced vs Creative -->
+            <div class="space-y-1.5">
+              <label class="text-[10px] font-mono text-white/40 block">BOSS OPERATIONAL PROFILE</label>
+              <div class="grid grid-cols-3 gap-1.5 font-mono text-xs">
+                <button class="py-1.5 px-2 rounded bg-cyan-950/60 text-cyan-core border border-cyan-400/40 text-center font-bold shadow-[0_0_10px_rgba(56,225,255,0.15)]">
+                  Focused
+                </button>
+                <button class="py-1.5 px-2 rounded bg-surface-panel hover:bg-surface-elevated text-white/60 hover:text-white border border-white/10 text-center transition-colors">
+                  Balanced
+                </button>
+                <button class="py-1.5 px-2 rounded bg-surface-panel hover:bg-surface-elevated text-white/60 hover:text-white border border-white/10 text-center transition-colors">
+                  Creative
+                </button>
+              </div>
+              <p class="text-[10px] text-white/40 mt-1 leading-normal font-sans">
+                Optimized for strict, deterministic code syntax and atomic patch integrity.
+              </p>
+            </div>
+
+            <!-- Temperature Slider -->
+            <div class="space-y-1.5 pt-1">
+              <div class="flex items-center justify-between text-xs font-mono">
+                <span class="text-white/60">Temperature</span>
+                <span class="text-cyan-core font-bold">0.20 <span class="text-[9px] text-white/30">(Precise)</span></span>
+              </div>
+              <div class="relative flex items-center">
+                <input type="range" min="0" max="100" value="20" class="w-full h-1 bg-surface-panel rounded-lg appearance-none cursor-pointer accent-cyan-400">
+              </div>
+              <div class="flex justify-between text-[9px] font-mono text-white/30">
+                <span>Focused (0.0)</span>
+                <span>Balanced (0.5)</span>
+                <span>Creative (1.0)</span>
+              </div>
+            </div>
+
+            <!-- Context Window Selection -->
+            <div class="space-y-1.5 pt-1">
+              <div class="flex items-center justify-between text-xs font-mono">
+                <span class="text-white/60">Active Context Window</span>
+                <span class="text-violet-soft font-bold">32K Tokens</span>
+              </div>
+              <div class="grid grid-cols-4 gap-1.5 font-mono text-xs text-center">
+                <button class="py-1 rounded bg-surface-panel hover:bg-white/10 text-white/50 border border-white/10">8K</button>
+                <button class="py-1 rounded bg-surface-panel hover:bg-white/10 text-white/50 border border-white/10">16K</button>
+                <button class="py-1 rounded bg-violet-950/50 text-violet-300 border border-violet-400/40 font-bold">32K</button>
+                <button class="py-1 rounded bg-surface-panel hover:bg-white/10 text-white/30 border border-white/10">64K</button>
+              </div>
+              <p class="text-[10px] text-white/40 leading-normal font-sans">
+                Larger context windows allow BOSS to analyze entire repository call graphs simultaneously.
+              </p>
+            </div>
+
+            <!-- Max Output & Top-P -->
+            <div class="grid grid-cols-2 gap-3 pt-1 text-xs font-mono">
+              <div class="space-y-1">
+                <span class="text-[10px] text-white/40 block">MAX OUTPUT</span>
+                <div class="p-1.5 rounded bg-surface-panel border border-white/10 text-white font-bold text-center">
+                  2,048 Tokens
+                </div>
+              </div>
+              <div class="space-y-1">
+                <span class="text-[10px] text-white/40 block">TOP P</span>
+                <div class="p-1.5 rounded bg-surface-panel border border-white/10 text-white font-bold text-center">
+                  0.90
+                </div>
+              </div>
+            </div>
+
+          </div>
+
+          <!-- HARDWARE ACCELERATION & MEMORY BAR -->
+          <div class="smoked-glass rounded-lg p-4 border border-white/[0.08] space-y-3.5">
+            <div class="flex items-center justify-between">
+              <h4 class="text-xs font-bold text-white uppercase font-mono tracking-wide">Inference Hardware</h4>
+              <span class="text-[10px] font-mono text-emerald-400">Metal Acceleration</span>
+            </div>
+
+            <!-- Hardware Mode Selector -->
+            <div class="grid grid-cols-4 gap-1 text-xs font-mono text-center">
+              <button class="py-1.5 rounded bg-cyan-950/70 text-cyan-core border border-cyan-400/30 font-bold">
+                AUTO
+              </button>
+              <button class="py-1.5 rounded bg-surface-panel text-white/60 hover:text-white border border-white/10">
+                GPU
+              </button>
+              <button class="py-1.5 rounded bg-surface-panel text-white/60 hover:text-white border border-white/10">
+                CPU
+              </button>
+              <button class="py-1.5 rounded bg-surface-panel text-white/30 border border-white/5 cursor-not-allowed" title="NPU driver not loaded">
+                NPU
+              </button>
+            </div>
+
+            <!-- Memory Allocation Visual Bar -->
+            <div class="space-y-1.5 font-mono text-xs">
+              <div class="flex justify-between">
+                <span class="text-white/60 text-[11px]">VRAM Allocation:</span>
+                <span class="text-white font-bold">4.2 GB / 16.0 GB <span class="text-[10px] text-cyan-core">(26.2%)</span></span>
+              </div>
+              <div class="w-full h-2 rounded-full bg-surface-panel overflow-hidden border border-white/10 flex">
+                <div class="h-full bg-gradient-to-r from-cyan-500 to-cyan-300 rounded-full" style="width: 26.2%"></div>
+                <div class="h-full bg-violet-600/40" style="width: 7.5%"></div>
+              </div>
+              <div class="flex justify-between text-[9px] text-white/40 pt-0.5">
+                <span class="flex items-center space-x-1">
+                  <span class="w-1.5 h-1.5 rounded-full bg-cyan-400"></span>
+                  <span>Weights: 4.2GB</span>
+                </span>
+                <span class="flex items-center space-x-1">
+                  <span class="w-1.5 h-1.5 rounded-full bg-violet-500"></span>
+                  <span>KV Cache: 1.2GB</span>
+                </span>
+                <span>System Free: 10.6GB</span>
+              </div>
+            </div>
+
+            <!-- Fallback Model Strategy -->
+            <div class="flex items-center justify-between pt-2 border-t border-white/[0.06] text-xs font-mono">
+              <div>
+                <span class="text-white block">Fallback Model:</span>
+                <span class="text-[10px] text-white/40">Switch if primary VRAM overflows</span>
+              </div>
+              <select class="bg-surface-panel border border-white/15 rounded px-2 py-1 text-[11px] text-white/80 focus:outline-none cursor-pointer">
+                <option selected>BOSS Fast (3B Q4_K_M)</option>
+                <option>None (Strict Fail)</option>
+                <option>Auto (Lowest Footprint)</option>
+              </select>
+            </div>
+          </div>
+
+          <!-- OPTIONAL CLOUD BRIDGE (DE-EMPHASIZED) -->
+          <div class="p-3 rounded-lg bg-surface-base/60 border border-white/[0.05] flex items-center justify-between text-xs font-mono">
+            <div>
+              <div class="flex items-center space-x-2">
+                <span class="w-2 h-2 rounded-full bg-white/20"></span>
+                <span class="font-bold text-white/60">Optional Cloud Bridge</span>
+                <span class="text-[9px] bg-white/[0.05] text-white/40 px-1 rounded">NOT CONFIGURED</span>
+              </div>
+              <p class="text-[10px] text-white/30 mt-0.5 font-sans">
+                Optional remote inference connector. Never required. 100% offline local models remain BOSS's core foundation.
+              </p>
+            </div>
+            <button class="px-2.5 py-1 rounded bg-white/[0.05] hover:bg-white/10 text-white/60 hover:text-white border border-white/10 text-[11px] transition-colors ml-3">
+              Configure
+            </button>
+          </div>
+
+        </div>
+
+      </div>
+
+    </main>
+
+  </div>
+
+  <!-- PERSISTENT GLOBAL SYSTEM GUARANTEE FOOTER -->
+  <footer class="h-8 w-full bg-[#010306] border-t border-white/[0.07] px-4 flex items-center justify-between text-[10px] font-mono tracking-wider text-white/40 z-50">
+    <div class="flex items-center space-x-3">
+      <span class="text-cyan-core font-bold">BHANU OPEN SOURCE SYSTEM</span>
+      <span>•</span>
+      <span>PHASE 10.4 — MODELS &amp; AI ENGINE CONTROL CENTER</span>
+    </div>
+    <div class="flex items-center space-x-5 text-white/50">
+      <span class="flex items-center space-x-1.5 text-cyan-core">
+        <span class="w-1.5 h-1.5 rounded-full bg-cyan-core"></span>
+        <span>METAL FFI ACCELERATED</span>
+      </span>
+      <span>•</span>
+      <span class="text-emerald-400">100% OFFLINE CAPABLE</span>
+      <span>•</span>
+      <span>ZERO TELEMETRY EGRESS</span>
+      <span>•</span>
+      <span class="text-white/80">AES-256 LOCAL ENCLAVE</span>
+    </div>
+  </footer>
+
+</body>
+</html>

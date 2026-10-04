@@ -1,0 +1,28 @@
+[package]
+name = "boss-desktop"
+version = "0.1.0"
+edition = "2021"
+description = "BOSS — Bhanu Open Source System: Local-First Desktop AI Developer Operating Environment"
+authors = ["Bhanu"]
+license = "MIT"
+
+[build-dependencies]
+tauri-build = { version = "2", features = [] }
+
+[dependencies]
+tauri = { version = "2", features = [] }
+rusqlite = { version = "0.32", features = ["bundled"] }
+serde_json = "1"
+serde = { version = "1", features = ["derive"] }
+tauri-plugin-dialog = "2"
+
+[lib]
+name = "boss_desktop_lib"
+crate-type = ["lib", "cdylib", "staticlib"]
+
+[profile.release]
+opt-level = 3
+lto = true
+codegen-units = 1
+panic = "abort"
+strip = true

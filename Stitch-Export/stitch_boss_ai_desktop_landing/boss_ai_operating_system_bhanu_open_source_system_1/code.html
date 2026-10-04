@@ -1,0 +1,760 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>BOSS — Bhanu Open Source System (v0.1)</title>
+<!-- Tailwind CSS CDN with forms and container queries -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            obsidian: {
+              950: '#030508',
+              900: '#06080e',
+              850: '#090d16',
+              800: '#0e1320'
+            },
+            boss: {
+              neon: '#6366f1',
+              violet: '#8b5cf6',
+              cyan: '#06b6d4',
+              emerald: '#10b981'
+            }
+          },
+          fontFamily: {
+            sans: ['Inter', 'system-ui', '-apple-system', 'Segoe UI', 'Roboto', 'sans-serif'],
+            mono: ['JetBrains Mono', 'Fira Code', 'monospace']
+          },
+          boxShadow: {
+            'cinematic-core': '0 0 80px 20px rgba(99, 102, 241, 0.22), 0 0 140px 40px rgba(139, 92, 246, 0.12), inset 0 0 45px rgba(6, 182, 212, 0.25)',
+            'prompt-glow': '0 20px 40px -15px rgba(0,0,0,0.8), 0 0 35px 2px rgba(99, 102, 241, 0.08), inset 0 1px 1px 0 rgba(255, 255, 255, 0.08)'
+          }
+        }
+      }
+    };
+  </script>
+<!-- Google Fonts -->
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&amp;family=JetBrains+Mono:wght@400;500;600&amp;display=swap" rel="stylesheet"/>
+<!-- Lucide Icons -->
+<script src="https://unpkg.com/lucide@latest"></script>
+<style data-purpose="cinematic-visuals">
+    /* Deep space cyber perspective grid */
+    .cyber-grid-persp {
+      background-size: 60px 60px;
+      background-image: 
+        linear-gradient(to right, rgba(99, 102, 241, 0.035) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(99, 102, 241, 0.035) 1px, transparent 1px);
+      mask-image: radial-gradient(ellipse 80% 60% at 50% 45%, #000 30%, transparent 85%);
+      -webkit-mask-image: radial-gradient(ellipse 80% 60% at 50% 45%, #000 30%, transparent 85%);
+    }
+
+    /* Multi-layered orbital rings with 3D tilt */
+    @keyframes orbitTilt1 {
+      0% { transform: rotate(0deg) rotateX(72deg) scale(1); }
+      50% { transform: rotate(180deg) rotateX(68deg) scale(1.02); }
+      100% { transform: rotate(360deg) rotateX(72deg) scale(1); }
+    }
+    @keyframes orbitTilt2 {
+      0% { transform: rotate(0deg) rotateY(64deg) rotateZ(25deg); }
+      100% { transform: rotate(-360deg) rotateY(64deg) rotateZ(25deg); }
+    }
+    @keyframes orbitTilt3 {
+      0% { transform: rotate(45deg) rotateX(80deg); }
+      100% { transform: rotate(405deg) rotateX(80deg); }
+    }
+
+    .animate-orbit-tilt-1 { animation: orbitTilt1 24s linear infinite; }
+    .animate-orbit-tilt-2 { animation: orbitTilt2 30s linear infinite; }
+    .animate-orbit-tilt-3 { animation: orbitTilt3 18s linear infinite; }
+
+    /* Core breathing glow */
+    @keyframes coreAuraPulse {
+      0%, 100% {
+        box-shadow: 0 0 60px 15px rgba(99, 102, 241, 0.28), 0 0 120px 30px rgba(139, 92, 246, 0.16), inset 0 0 40px rgba(6, 182, 212, 0.25);
+        transform: scale(1);
+      }
+      50% {
+        box-shadow: 0 0 85px 25px rgba(99, 102, 241, 0.42), 0 0 150px 45px rgba(139, 92, 246, 0.25), inset 0 0 60px rgba(6, 182, 212, 0.45);
+        transform: scale(1.025);
+      }
+    }
+    .animate-boss-aura { animation: coreAuraPulse 6s ease-in-out infinite; }
+
+    /* Listening sound rings pulse outwards */
+    @keyframes pingSlow {
+      0% { transform: scale(0.9); opacity: 0.8; }
+      80%, 100% { transform: scale(1.7); opacity: 0; }
+    }
+    .animate-ping-audio {
+      animation: pingSlow 2s cubic-bezier(0, 0, 0.2, 1) infinite;
+    }
+
+    /* Waveform visualizer bars */
+    @keyframes waveGentle {
+      0%, 100% { height: 25%; }
+      35% { height: 75%; }
+      65% { height: 45%; }
+      85% { height: 95%; }
+    }
+    .wave-bar {
+      animation: waveGentle 1.6s ease-in-out infinite;
+      transform-origin: bottom;
+    }
+    .wave-bar:nth-child(1) { animation-delay: 0.1s; }
+    .wave-bar:nth-child(2) { animation-delay: 0.35s; }
+    .wave-bar:nth-child(3) { animation-delay: 0.05s; }
+    .wave-bar:nth-child(4) { animation-delay: 0.5s; }
+    .wave-bar:nth-child(5) { animation-delay: 0.2s; }
+    .wave-bar:nth-child(6) { animation-delay: 0.65s; }
+    .wave-bar:nth-child(7) { animation-delay: 0.15s; }
+    .wave-bar:nth-child(8) { animation-delay: 0.4s; }
+    .wave-bar:nth-child(9) { animation-delay: 0.25s; }
+
+    /* Floating particles */
+    @keyframes floatParticle1 {
+      0%, 100% { transform: translateY(0) translateX(0); opacity: 0.4; }
+      50% { transform: translateY(-12px) translateX(6px); opacity: 0.85; }
+    }
+    @keyframes floatParticle2 {
+      0%, 100% { transform: translateY(0) translateX(0); opacity: 0.3; }
+      50% { transform: translateY(14px) translateX(-8px); opacity: 0.75; }
+    }
+    .particle-1 { animation: floatParticle1 7s ease-in-out infinite; }
+    .particle-2 { animation: floatParticle2 9s ease-in-out infinite; }
+
+    /* Custom Glass Paneling */
+    .glass-panel-smoked {
+      background: rgba(8, 11, 18, 0.72);
+      backdrop-filter: blur(28px);
+      -webkit-backdrop-filter: blur(28px);
+      border: 1px solid rgba(255, 255, 255, 0.06);
+    }
+    
+    .glass-input-bar {
+      background: rgba(10, 13, 22, 0.82);
+      backdrop-filter: blur(32px);
+      -webkit-backdrop-filter: blur(32px);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+    }
+
+    .specular-border {
+      box-shadow: inset 0 1px 0 0 rgba(255, 255, 255, 0.1), inset 0 0 12px 0 rgba(139, 92, 246, 0.05);
+    }
+  </style>
+</head>
+<body class="bg-[#040508] text-slate-200 font-sans h-screen w-screen overflow-hidden select-none flex flex-col antialiased">
+<!-- Atmospheric Background Glow & Cinematic Cyber Grid -->
+<div class="fixed inset-0 pointer-events-none z-0 overflow-hidden">
+<div class="cyber-grid-persp absolute inset-0 opacity-40"></div>
+<!-- Subtle Obsidian / Violet / Indigo deep ambient light zones -->
+<div class="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[720px] h-[580px] bg-gradient-to-b from-indigo-600/12 via-violet-600/6 to-transparent rounded-full blur-[140px]"></div>
+<div class="absolute -bottom-10 left-1/3 w-[640px] h-[360px] bg-cyan-600/8 rounded-full blur-[160px]"></div>
+<div class="absolute top-0 right-1/4 w-[480px] h-[380px] bg-purple-600/7 rounded-full blur-[150px]"></div>
+<!-- Bottom horizon gradient falloff -->
+<div class="absolute bottom-0 inset-x-0 h-48 bg-gradient-to-t from-[#030407] via-[#04060c]/85 to-transparent pointer-events-none"></div>
+</div>
+<!-- BEGIN: WindowFrame -->
+<div class="relative z-10 flex flex-col h-full w-full">
+<!-- Top Window Chrome / Minimalist Apple-grade Titlebar -->
+<header class="h-11 border-b border-white/[0.05] bg-[#05070e]/85 backdrop-blur-xl px-4 flex items-center justify-between flex-shrink-0" data-purpose="app-chrome">
+<!-- Window Controls (macOS Minimalist Left) -->
+<div class="flex items-center space-x-2 w-48">
+<span class="w-3 h-3 rounded-full bg-[#ef4444]/90 hover:opacity-100 transition cursor-pointer border border-red-500/30"></span>
+<span class="w-3 h-3 rounded-full bg-[#eab308]/90 hover:opacity-100 transition cursor-pointer border border-yellow-500/30"></span>
+<span class="w-3 h-3 rounded-full bg-[#22c55e]/90 hover:opacity-100 transition cursor-pointer border border-green-500/30"></span>
+</div>
+<!-- App Title Center Spec -->
+<div class="flex items-center space-x-2 text-xs text-slate-400 font-mono tracking-tight">
+<span class="inline-block w-1.5 h-1.5 rounded-full bg-cyan-400 shadow-[0_0_8px_#22d3ee]"></span>
+<span class="font-medium tracking-wide text-slate-200">BOSS Core Instance</span>
+<span class="text-slate-600">•</span>
+<span class="text-slate-500">v0.1.0-preview</span>
+</div>
+<!-- Top Right Actions & Local Latency Telemetry -->
+<div class="flex items-center space-x-3 text-xs">
+<!-- Local Engine Badge with real-time ping -->
+<div class="flex items-center space-x-2 bg-slate-900/80 border border-white/[0.08] px-2.5 py-1 rounded-full text-slate-300 shadow-inner">
+<span class="relative flex h-2 w-2">
+<span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+<span class="relative inline-flex rounded-full h-2 w-2 bg-emerald-400"></span>
+</span>
+<span class="font-mono text-[11px] font-medium text-emerald-400">Local</span>
+<i class="w-3 h-3 text-slate-400" data-lucide="chevron-down"></i>
+</div>
+<!-- Latency Monitor -->
+<span class="hidden md:inline-block font-mono text-[10px] text-slate-400 bg-black/40 px-2.5 py-1 rounded-md border border-white/[0.06]">
+<span class="text-slate-500">TTFT:</span> 14ms
+      </span>
+<!-- Theme & Utility buttons -->
+<button class="w-7 h-7 flex items-center justify-center rounded-lg text-slate-400 hover:text-slate-200 hover:bg-white/[0.05] transition" title="Theme Settings">
+<i class="w-3.5 h-3.5" data-lucide="sun"></i>
+</button>
+<button class="w-7 h-7 flex items-center justify-center rounded-lg text-slate-400 hover:text-slate-200 hover:bg-white/[0.05] transition" title="Minimize">
+<i class="w-3.5 h-3.5" data-lucide="minus"></i>
+</button>
+<button class="w-7 h-7 flex items-center justify-center rounded-lg text-slate-400 hover:text-slate-200 hover:bg-white/[0.05] transition" title="Maximize">
+<i class="w-3 h-3" data-lucide="square"></i>
+</button>
+<button class="w-7 h-7 flex items-center justify-center rounded-lg text-slate-400 hover:text-rose-400 hover:bg-rose-500/10 transition" title="Close Window">
+<i class="w-3.5 h-3.5" data-lucide="x"></i>
+</button>
+</div>
+</header>
+<!-- END: WindowFrame -->
+<!-- BEGIN: MainBodyLayout -->
+<div class="flex-1 flex overflow-hidden">
+<!-- BEGIN: LeftSidebar (Glassmorphic smoked panel) -->
+<aside class="w-72 border-r border-white/[0.06] glass-panel-smoked flex flex-col justify-between p-3.5 flex-shrink-0 relative z-20" data-purpose="sidebar-navigation">
+<!-- Top Section of Sidebar -->
+<div class="space-y-4">
+<!-- App Identity Header -->
+<div class="flex items-center justify-between px-2 pt-1 pb-1">
+<div class="flex items-center space-x-3">
+<div class="w-9 h-9 rounded-xl bg-gradient-to-br from-indigo-500/80 via-purple-600/70 to-cyan-500/80 p-[1px] shadow-lg shadow-indigo-500/20">
+<div class="w-full h-full bg-[#070b14] rounded-[11px] flex items-center justify-center">
+<i class="w-5 h-5 text-cyan-400 drop-shadow-[0_0_6px_rgba(6,182,212,0.6)]" data-lucide="cpu"></i>
+</div>
+</div>
+<div>
+<div class="flex items-center space-x-1.5">
+<h1 class="text-base font-bold tracking-wider text-transparent bg-clip-text bg-gradient-to-r from-white via-indigo-200 to-violet-300 font-mono">BOSS</h1>
+<span class="text-[9px] font-mono px-1.5 py-0.5 rounded bg-white/[0.06] text-slate-400 border border-white/[0.08]">v0.1.0</span>
+</div>
+<p class="text-[11px] text-slate-400 font-sans leading-none mt-0.5 tracking-tight">Bhanu Open Source System</p>
+</div>
+</div>
+</div>
+<!-- Primary Navigation Buttons -->
+<nav class="space-y-1" data-purpose="quick-commands">
+<!-- New Chat Highlighted -->
+<button class="w-full flex items-center justify-between px-3 py-2 rounded-xl bg-gradient-to-r from-indigo-950/60 to-purple-950/40 border border-indigo-500/35 text-indigo-100 hover:border-indigo-400/60 shadow-lg shadow-indigo-950/40 group transition">
+<div class="flex items-center space-x-2.5">
+<i class="w-4 h-4 text-indigo-300 group-hover:scale-110 transition-transform" data-lucide="message-square-plus"></i>
+<span class="text-xs font-semibold tracking-wide">New Chat</span>
+</div>
+<kbd class="text-[10px] font-mono px-1.5 py-0.5 rounded bg-black/50 border border-indigo-400/30 text-indigo-300">Ctrl N</kbd>
+</button>
+<!-- Search -->
+<button class="w-full flex items-center justify-between px-3 py-2 rounded-xl text-slate-400 hover:text-slate-100 hover:bg-white/[0.04] transition">
+<div class="flex items-center space-x-2.5">
+<i class="w-4 h-4 text-slate-400" data-lucide="search"></i>
+<span class="text-xs font-medium">Search</span>
+</div>
+<kbd class="text-[10px] font-mono px-1.5 py-0.5 rounded bg-black/40 border border-white/[0.08] text-slate-400">Ctrl K</kbd>
+</button>
+<!-- Projects -->
+<button class="w-full flex items-center space-x-2.5 px-3 py-2 rounded-xl text-slate-400 hover:text-slate-100 hover:bg-white/[0.04] transition">
+<i class="w-4 h-4 text-slate-400" data-lucide="folder-kanban"></i>
+<span class="text-xs font-medium">Projects</span>
+</button>
+<!-- Templates -->
+<button class="w-full flex items-center space-x-2.5 px-3 py-2 rounded-xl text-slate-400 hover:text-slate-100 hover:bg-white/[0.04] transition">
+<i class="w-4 h-4 text-slate-400" data-lucide="layout-template"></i>
+<span class="text-xs font-medium">Templates</span>
+</button>
+<!-- Tools -->
+<button class="w-full flex items-center space-x-2.5 px-3 py-2 rounded-xl text-slate-400 hover:text-slate-100 hover:bg-white/[0.04] transition">
+<i class="w-4 h-4 text-slate-400" data-lucide="wrench"></i>
+<span class="text-xs font-medium">Tools</span>
+</button>
+<!-- Settings -->
+<button class="w-full flex items-center space-x-2.5 px-3 py-2 rounded-xl text-slate-400 hover:text-slate-100 hover:bg-white/[0.04] transition">
+<i class="w-4 h-4 text-slate-400" data-lucide="settings"></i>
+<span class="text-xs font-medium">Settings</span>
+</button>
+</nav>
+<!-- Divider -->
+<div class="border-t border-white/[0.06] pt-3">
+<div class="flex items-center justify-between px-2 mb-2">
+<span class="text-[10px] uppercase font-mono tracking-widest text-slate-500 font-semibold">Recent</span>
+<button class="text-[10px] text-slate-400 hover:text-cyan-400 transition">
+<i class="w-3 h-3" data-lucide="arrow-right"></i>
+</button>
+</div>
+<!-- Recent Sessions List -->
+<div class="space-y-0.5 overflow-y-auto max-h-[195px] pr-1" data-purpose="history-list">
+<a class="flex items-center justify-between px-2.5 py-1.5 rounded-lg text-xs text-slate-300 hover:bg-white/[0.05] hover:text-cyan-300 group transition" href="#">
+<div class="flex items-center space-x-2 truncate pr-2">
+<i class="w-3.5 h-3.5 text-slate-500 group-hover:text-cyan-400 flex-shrink-0 transition-colors" data-lucide="terminal"></i>
+<span class="truncate">Cyberpunk Linux env</span>
+</div>
+<span class="text-[10px] font-mono text-slate-500 group-hover:text-slate-400 flex-shrink-0">2h</span>
+</a>
+<a class="flex items-center justify-between px-2.5 py-1.5 rounded-lg text-xs text-slate-300 hover:bg-white/[0.05] hover:text-cyan-300 group transition" href="#">
+<div class="flex items-center space-x-2 truncate pr-2">
+<i class="w-3.5 h-3.5 text-slate-500 group-hover:text-cyan-400 flex-shrink-0 transition-colors" data-lucide="globe"></i>
+<span class="truncate">Portfolio Website</span>
+</div>
+<span class="text-[10px] font-mono text-slate-500 group-hover:text-slate-400 flex-shrink-0">1d</span>
+</a>
+<a class="flex items-center justify-between px-2.5 py-1.5 rounded-lg text-xs text-slate-300 hover:bg-white/[0.05] hover:text-cyan-300 group transition" href="#">
+<div class="flex items-center space-x-2 truncate pr-2">
+<i class="w-3.5 h-3.5 text-slate-500 group-hover:text-cyan-400 flex-shrink-0 transition-colors" data-lucide="bug"></i>
+<span class="truncate">ARM Driver Debug</span>
+</div>
+<span class="text-[10px] font-mono text-slate-500 group-hover:text-slate-400 flex-shrink-0">2d</span>
+</a>
+<a class="flex items-center justify-between px-2.5 py-1.5 rounded-lg text-xs text-slate-300 hover:bg-white/[0.05] hover:text-cyan-300 group transition" href="#">
+<div class="flex items-center space-x-2 truncate pr-2">
+<i class="w-3.5 h-3.5 text-slate-500 group-hover:text-cyan-400 flex-shrink-0 transition-colors" data-lucide="database"></i>
+<span class="truncate">Loan Tracker API</span>
+</div>
+<span class="text-[10px] font-mono text-slate-500 group-hover:text-slate-400 flex-shrink-0">3d</span>
+</a>
+<a class="flex items-center justify-between px-2.5 py-1.5 rounded-lg text-xs text-slate-300 hover:bg-white/[0.05] hover:text-cyan-300 group transition" href="#">
+<div class="flex items-center space-x-2 truncate pr-2">
+<i class="w-3.5 h-3.5 text-slate-500 group-hover:text-cyan-400 flex-shrink-0 transition-colors" data-lucide="sparkles"></i>
+<span class="truncate">BOSS UI Design</span>
+</div>
+<span class="text-[10px] font-mono text-slate-500 group-hover:text-slate-400 flex-shrink-0">4d</span>
+</a>
+<button class="w-full text-left px-2.5 py-1 text-[11px] text-cyan-400 hover:text-cyan-300 hover:underline flex items-center space-x-1 mt-1 font-mono">
+<span>View all</span>
+<i class="w-3 h-3 inline" data-lucide="arrow-right"></i>
+</button>
+</div>
+</div>
+</div>
+<!-- Bottom Status Box & Developer Profile Card -->
+<div class="space-y-3 pt-2" data-purpose="sidebar-footer">
+<!-- Local Model Status & Hardware Stats Card -->
+<div class="rounded-xl bg-[#080b14]/90 border border-white/[0.06] p-3 shadow-inner relative overflow-hidden specular-border" data-purpose="hardware-stats">
+<div class="flex items-center justify-between mb-2">
+<div class="flex items-center space-x-2">
+<span class="w-2 h-2 rounded-full bg-emerald-400 shadow-[0_0_8px_#34d399]" id="sidebar-status-dot"></span>
+<span class="text-xs font-semibold text-slate-200">Local Model</span>
+</div>
+<span class="text-[10px] font-mono text-emerald-400 font-medium tracking-wide" id="sidebar-status-label">Ready</span>
+</div>
+<!-- RAM Metric -->
+<div class="space-y-1 mb-2.5">
+<div class="flex justify-between text-[10px] font-mono">
+<span class="text-slate-500">RAM</span>
+<span class="text-slate-300">4.2 / 16 GB</span>
+</div>
+<div class="w-full h-1 bg-white/[0.06] rounded-full overflow-hidden">
+<div class="h-full bg-gradient-to-r from-cyan-400 via-indigo-500 to-violet-400 rounded-full" style="width: 26.2%"></div>
+</div>
+</div>
+<!-- CPU Sparkline Graph Realtime Simulation -->
+<div class="flex items-center justify-between pt-1 border-t border-white/[0.05]">
+<div class="text-[10px] font-mono text-slate-400">
+              CPU <span class="text-slate-200 ml-1 font-semibold" id="cpu-percent">12%</span>
+</div>
+<svg class="w-20 h-4 stroke-indigo-400 fill-none" viewbox="0 0 80 16">
+<path d="M0 12 L15 11 L25 14 L35 7 L45 13 L55 5 L65 10 L80 8" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"></path>
+</svg>
+</div>
+</div>
+<!-- User Identity Pill -->
+<div class="flex items-center justify-between px-2 py-1.5 rounded-xl hover:bg-white/[0.04] transition">
+<div class="flex items-center space-x-2.5">
+<div class="w-8 h-8 rounded-full bg-gradient-to-br from-indigo-500 via-purple-600 to-cyan-500 flex items-center justify-center text-white font-bold text-xs shadow-md shadow-indigo-500/20 ring-1 ring-white/20">
+              B
+            </div>
+<div>
+<p class="text-xs font-medium text-slate-200 leading-tight">Bhanu</p>
+<p class="text-[10px] text-slate-500 font-mono leading-none">Developer Mode</p>
+</div>
+</div>
+<button class="text-slate-400 hover:text-slate-200 transition" title="User preferences">
+<i class="w-3.5 h-3.5" data-lucide="sliders-horizontal"></i>
+</button>
+</div>
+</div>
+</aside>
+<!-- END: LeftSidebar -->
+<!-- BEGIN: CenterWorkspace -->
+<main class="flex-1 flex flex-col items-center justify-between p-6 relative overflow-y-auto z-10" data-purpose="hero-workspace">
+<!-- Right indicator steps (01, 02, 03, 04 from reference) -->
+<div class="absolute right-8 top-16 hidden xl:flex flex-col space-y-4 text-[10px] font-mono text-slate-500 pointer-events-none select-none">
+<span class="text-cyan-400 font-bold border-l-2 border-cyan-400 pl-2">01</span>
+<span class="pl-2.5 hover:text-slate-400 transition">02</span>
+<span class="pl-2.5 hover:text-slate-400 transition">03</span>
+<span class="pl-2.5 hover:text-slate-400 transition">04</span>
+</div>
+<!-- Live State Indicator Floating Badge (Top Center) -->
+<div class="w-full flex justify-center pt-1 pb-2">
+<div class="inline-flex items-center space-x-2 px-3 py-1 rounded-full bg-white/[0.03] border border-white/[0.08] backdrop-blur-md shadow-inner text-[11px] font-mono transition-all duration-300" id="current-state-pill">
+<span class="w-2 h-2 rounded-full bg-cyan-400 shadow-[0_0_8px_#22d3ee]" id="pill-indicator-dot"></span>
+<span class="text-slate-400 font-medium" id="pill-indicator-title">STATUS:</span>
+<span class="text-cyan-300 font-semibold uppercase tracking-wider" id="pill-indicator-mode">READY</span>
+</div>
+</div>
+<!-- Center Interactive Core & Titles Container -->
+<div class="flex flex-col items-center max-w-2xl w-full my-auto text-center relative" data-purpose="boss-core-stage">
+<!-- Large BOSS Title with Hyper-clean Specular Glow -->
+<div class="mb-1 relative">
+<h1 class="text-6xl md:text-7xl font-extrabold tracking-[0.35em] font-mono text-transparent bg-clip-text bg-gradient-to-b from-white via-slate-100 to-indigo-300 drop-shadow-[0_0_35px_rgba(99,102,241,0.45)] select-none">
+            BOSS
+          </h1>
+</div>
+<!-- Subtitle / Brand expansion -->
+<h2 class="text-xs md:text-sm font-medium text-slate-400 tracking-[0.35em] font-mono uppercase mb-3">
+          BHANU  AI  SYSTEM
+        </h2>
+<!-- Core Motto Line -->
+<div class="flex items-center space-x-3 text-[10px] md:text-xs font-mono tracking-[0.3em] text-slate-400 uppercase mb-7">
+<span class="hover:text-slate-200 transition">THINK</span>
+<span class="text-indigo-400/60">›</span>
+<span class="hover:text-slate-200 transition">BUILD</span>
+<span class="text-indigo-400/60">›</span>
+<span class="hover:text-slate-200 transition">SOLVE</span>
+<span class="text-indigo-400/60">›</span>
+<span class="hover:text-slate-200 transition">TOGETHER</span>
+</div>
+<!-- BOSS CORE ORB (Iconic Luminous Glass Sphere) -->
+<div class="relative flex items-center justify-center my-2 cursor-pointer group" id="boss-core-trigger" title="Click core to cycle AI states">
+<!-- Starlight Ambient Particles -->
+<div class="particle-1 absolute -top-8 -left-12 w-1.5 h-1.5 rounded-full bg-cyan-400 blur-[0.4px]"></div>
+<div class="particle-2 absolute top-16 -right-14 w-2 h-2 rounded-full bg-violet-400 blur-[0.4px]"></div>
+<div class="particle-1 absolute -bottom-6 left-1/4 w-1 h-1 rounded-full bg-indigo-300"></div>
+<div class="particle-2 absolute bottom-12 -left-8 w-1.5 h-1.5 rounded-full bg-emerald-400 opacity-60"></div>
+<!-- Expanding Ping Wave for Listening state (controlled via JS) -->
+<div class="absolute w-56 h-56 rounded-full border border-violet-500/40 pointer-events-none hidden" id="audio-ping-ring"></div>
+<!-- Outer Orbital Rings (Counter-rotating & 3D tilted) -->
+<div class="absolute w-72 h-72 rounded-full border border-cyan-500/25 animate-orbit-tilt-1 pointer-events-none shadow-[0_0_12px_rgba(6,182,212,0.15)]"></div>
+<div class="absolute w-80 h-80 rounded-full border border-violet-500/25 animate-orbit-tilt-2 pointer-events-none"></div>
+<div class="absolute w-88 h-88 rounded-full border border-indigo-400/15 animate-orbit-tilt-3 pointer-events-none"></div>
+<!-- Volumetric 3D Glass Sphere Body -->
+<div class="relative w-48 h-48 md:w-56 md:h-56 rounded-full bg-gradient-to-tr from-[#060812] via-[#0d142b] to-[#1a153b] border border-cyan-400/30 p-1 animate-boss-aura flex items-center justify-center overflow-hidden transition-all duration-700 group-hover:border-cyan-300/80 group-hover:scale-[1.03]" id="core-sphere-body">
+<!-- Volumetric Rim Lighting & Refraction Highlights -->
+<div class="absolute -top-14 -left-10 w-48 h-48 bg-gradient-to-br from-white/25 via-cyan-400/15 to-transparent rounded-full blur-md pointer-events-none"></div>
+<div class="absolute -bottom-12 -right-10 w-44 h-44 bg-gradient-to-tl from-violet-600/35 via-indigo-500/15 to-transparent rounded-full blur-lg pointer-events-none"></div>
+<!-- Inner Glass Ring Refraction Sheen -->
+<div class="absolute inset-1 rounded-full border border-white/[0.08] pointer-events-none"></div>
+<!-- Dynamic Audio Soundwave Bars Visualizer -->
+<div class="flex items-center justify-center space-x-1.5 h-20 z-10 px-4" id="visualizer-bars">
+<span class="wave-bar w-1 bg-gradient-to-t from-cyan-400 to-indigo-300 rounded-full shadow-[0_0_8px_#22d3ee]"></span>
+<span class="wave-bar w-1.5 bg-gradient-to-t from-cyan-300 to-blue-400 rounded-full shadow-[0_0_10px_#38bdf8]"></span>
+<span class="wave-bar w-1.5 bg-gradient-to-t from-indigo-300 to-white rounded-full shadow-[0_0_12px_#818cf8]"></span>
+<span class="wave-bar w-2 bg-gradient-to-t from-indigo-200 via-white to-cyan-300 rounded-full shadow-[0_0_15px_#c084fc]"></span>
+<span class="wave-bar w-2.5 bg-gradient-to-t from-white via-violet-200 to-cyan-400 rounded-full shadow-[0_0_18px_#ffffff]"></span>
+<span class="wave-bar w-2 bg-gradient-to-t from-indigo-200 via-white to-cyan-300 rounded-full shadow-[0_0_15px_#c084fc]"></span>
+<span class="wave-bar w-1.5 bg-gradient-to-t from-indigo-300 to-white rounded-full shadow-[0_0_12px_#818cf8]"></span>
+<span class="wave-bar w-1.5 bg-gradient-to-t from-cyan-300 to-blue-400 rounded-full shadow-[0_0_10px_#38bdf8]"></span>
+<span class="wave-bar w-1 bg-gradient-to-t from-cyan-400 to-indigo-300 rounded-full shadow-[0_0_8px_#22d3ee]"></span>
+</div>
+</div>
+<!-- Assistant Companion Chip Speech Bubble (Right floating) -->
+<div class="absolute -top-3 -right-36 md:-right-48 bg-[#090d1c]/90 border border-cyan-400/40 rounded-xl px-4 py-2.5 text-left backdrop-blur-xl shadow-2xl shadow-cyan-950/40 hover:border-cyan-300 transition-all cursor-pointer group-hover:scale-105" data-purpose="core-speech-bubble" id="companion-bubble" title="Click to cycle state">
+<div class="flex items-center space-x-1.5">
+<p class="text-xs text-slate-100 font-mono tracking-tight" id="core-state-text">Ready when you are.</p>
+<span class="inline-block text-cyan-400 font-mono text-xs cursor-blink font-bold" id="core-blinker">_</span>
+</div>
+</div>
+</div>
+<!-- Minimal Sub-label Guide for States -->
+<p class="text-[11px] font-mono text-slate-500 mt-5 tracking-tight select-none">
+          Click core or mic to cycle states <span class="text-slate-400 font-semibold">[READY • LISTENING • THINKING • WORKING • COMPLETED]</span>
+</p>
+</div>
+<!-- BEGIN: CommandBarArea (Smoked Glass Bar) -->
+<div class="w-full max-w-3xl flex flex-col items-center space-y-3.5 mb-1" data-purpose="chat-input-area">
+<!-- Main Dark Glass Input Bar with Subtle Specular Edge -->
+<div class="w-full rounded-2xl glass-input-bar p-2.5 shadow-prompt-glow transition-all duration-300 hover:border-indigo-500/40 focus-within:border-indigo-400/80 focus-within:shadow-[0_0_40px_rgba(99,102,241,0.22)] relative specular-border">
+<!-- Top input row -->
+<div class="flex items-center px-3 pt-1 pb-2">
+<input autocomplete="off" class="w-full bg-transparent border-none text-slate-100 placeholder-slate-500 text-sm focus:outline-none focus:ring-0 font-mono tracking-wide" id="boss-prompt-input" placeholder="Ask BOSS anything..." type="text"/>
+</div>
+<!-- Bottom Tools and Actions Bar -->
+<div class="flex items-center justify-between pt-1.5 border-t border-white/[0.06] px-1.5">
+<!-- Left Action Chips -->
+<div class="flex items-center space-x-1.5">
+<!-- Add context tag -->
+<button class="w-7 h-7 rounded-lg bg-white/[0.04] hover:bg-white/[0.09] border border-white/[0.08] text-slate-300 flex items-center justify-center transition" title="Add context">
+<i class="w-3.5 h-3.5" data-lucide="plus"></i>
+</button>
+<!-- Code Attachment -->
+<button class="flex items-center space-x-1.5 px-2.5 py-1 rounded-lg bg-white/[0.03] hover:bg-white/[0.08] hover:border-indigo-400/40 border border-white/[0.06] text-slate-300 text-xs font-mono transition group">
+<i class="w-3.5 h-3.5 text-indigo-400 group-hover:text-indigo-300" data-lucide="code-2"></i>
+<span>Code</span>
+</button>
+<!-- File Attachment -->
+<button class="flex items-center space-x-1.5 px-2.5 py-1 rounded-lg bg-white/[0.03] hover:bg-white/[0.08] hover:border-indigo-400/40 border border-white/[0.06] text-slate-300 text-xs font-mono transition group">
+<i class="w-3.5 h-3.5 text-slate-400 group-hover:text-slate-200" data-lucide="paperclip"></i>
+<span>File</span>
+</button>
+<!-- Image Attachment -->
+<button class="flex items-center space-x-1.5 px-2.5 py-1 rounded-lg bg-white/[0.03] hover:bg-white/[0.08] hover:border-indigo-400/40 border border-white/[0.06] text-slate-300 text-xs font-mono transition group">
+<i class="w-3.5 h-3.5 text-slate-400 group-hover:text-slate-200" data-lucide="image"></i>
+<span>Image</span>
+</button>
+</div>
+<!-- Right Actions (Voice Microphone Portal & Send) -->
+<div class="flex items-center space-x-2">
+<!-- Mic Voice Companion Portal Button -->
+<button class="w-8 h-8 rounded-full bg-slate-900 border border-white/[0.12] text-slate-300 hover:text-cyan-300 hover:border-cyan-400/70 hover:shadow-[0_0_15px_rgba(6,182,212,0.4)] flex items-center justify-center transition-all duration-300 shadow-sm" id="mic-btn" title="Voice Portal to Core">
+<i class="w-4 h-4" data-lucide="mic"></i>
+</button>
+<!-- Obsidian-Violet Send Button -->
+<button class="w-8 h-8 rounded-full bg-gradient-to-tr from-indigo-600 via-indigo-500 to-violet-500 hover:from-indigo-500 hover:to-cyan-400 text-white flex items-center justify-center shadow-lg shadow-indigo-600/40 hover:shadow-[0_0_20px_rgba(99,102,241,0.6)] hover:scale-105 active:scale-95 transition-all duration-200" id="send-btn" title="Execute Prompt">
+<i class="w-4 h-4" data-lucide="arrow-up"></i>
+</button>
+</div>
+</div>
+</div>
+<!-- Row of Quick Feature Action Pills -->
+<div class="flex flex-wrap items-center justify-center gap-2 pt-1" data-purpose="quick-prompts">
+<button class="flex items-center space-x-2 px-3.5 py-1.5 rounded-full bg-white/[0.03] border border-white/[0.07] text-slate-300 hover:border-indigo-500/50 hover:bg-white/[0.06] hover:text-white text-xs font-medium backdrop-blur-sm transition-all hover:shadow-[0_0_15px_rgba(99,102,241,0.25)]">
+<i class="w-3.5 h-3.5 text-amber-400" data-lucide="lightbulb"></i>
+<span>Plan New Idea</span>
+</button>
+<button class="flex items-center space-x-2 px-3.5 py-1.5 rounded-full bg-white/[0.03] border border-white/[0.07] text-slate-300 hover:border-indigo-500/50 hover:bg-white/[0.06] hover:text-white text-xs font-medium backdrop-blur-sm transition-all hover:shadow-[0_0_15px_rgba(99,102,241,0.25)]">
+<i class="w-3.5 h-3.5 text-blue-400" data-lucide="folder"></i>
+<span>Open Project</span>
+</button>
+<button class="flex items-center space-x-2 px-3.5 py-1.5 rounded-full bg-white/[0.03] border border-white/[0.07] text-slate-300 hover:border-indigo-500/50 hover:bg-white/[0.06] hover:text-white text-xs font-medium backdrop-blur-sm transition-all hover:shadow-[0_0_15px_rgba(99,102,241,0.25)]">
+<i class="w-3.5 h-3.5 text-cyan-400" data-lucide="layout-grid"></i>
+<span>Build from Design</span>
+</button>
+<button class="flex items-center space-x-2 px-3.5 py-1.5 rounded-full bg-white/[0.03] border border-white/[0.07] text-slate-300 hover:border-indigo-500/50 hover:bg-white/[0.06] hover:text-white text-xs font-medium backdrop-blur-sm transition-all hover:shadow-[0_0_15px_rgba(99,102,241,0.25)]">
+<i class="w-3.5 h-3.5 text-purple-400" data-lucide="bug"></i>
+<span>Debug an Issue</span>
+</button>
+<button class="flex items-center space-x-2 px-3 py-1.5 rounded-full bg-white/[0.03] border border-white/[0.07] text-slate-400 hover:border-white/[0.2] hover:text-slate-200 text-xs font-medium backdrop-blur-sm transition">
+<i class="w-3.5 h-3.5" data-lucide="more-horizontal"></i>
+</button>
+</div>
+</div>
+<!-- END: CommandBarArea -->
+<!-- BEGIN: FooterAtmosphericLine -->
+<footer class="w-full flex items-center justify-between text-xs text-slate-500 pt-1 border-t border-white/[0.05] font-mono" data-purpose="desktop-status-bar">
+<!-- Left Balance Placeholder -->
+<div class="w-1/4"></div>
+<!-- Subtle Developer Quote Center -->
+<div class="text-center">
+<span class="text-slate-400">“A better developer, every day.”</span>
+<span class="text-slate-500 font-semibold ml-1.5">— BOSS</span>
+</div>
+<!-- Bottom Right Developer Statement Pill -->
+<div class="w-1/4 flex justify-end">
+<div class="inline-flex items-center space-x-2 bg-[#080b16]/90 border border-white/[0.07] rounded-xl px-3 py-1.5 text-[11px] shadow-lg specular-border">
+<span class="text-slate-300">"Ideas → Code → Reality"</span>
+<span class="w-1.5 h-1.5 rounded-full bg-violet-400 shadow-[0_0_6px_#a78bfa]"></span>
+<span class="text-slate-500 font-mono">with BOSS //</span>
+</div>
+</div>
+</footer>
+<!-- END: FooterAtmosphericLine -->
+</main>
+<!-- END: CenterWorkspace -->
+</div>
+<!-- END: MainBodyLayout -->
+</div>
+<!-- BEGIN: Interactive Behavior Script -->
+<script data-purpose="orb-and-chat-interaction">
+  document.addEventListener('DOMContentLoaded', () => {
+    lucide.createIcons();
+
+    const coreTrigger = document.getElementById('boss-core-trigger');
+    const companionBubble = document.getElementById('companion-bubble');
+    const sphereBody = document.getElementById('core-sphere-body');
+    const stateText = document.getElementById('core-state-text');
+    const blinker = document.getElementById('core-blinker');
+    const visualizerBars = document.getElementById('visualizer-bars');
+    const micBtn = document.getElementById('mic-btn');
+    const promptInput = document.getElementById('boss-prompt-input');
+    const sendBtn = document.getElementById('send-btn');
+    const audioPingRing = document.getElementById('audio-ping-ring');
+
+    const statePillMode = document.getElementById('pill-indicator-mode');
+    const statePillDot = document.getElementById('pill-indicator-dot');
+    const sidebarStatusDot = document.getElementById('sidebar-status-dot');
+    const sidebarStatusLabel = document.getElementById('sidebar-status-label');
+    const cpuPercent = document.getElementById('cpu-percent');
+
+    // 5 Distinct States Specification
+    const states = [
+      {
+        name: 'READY',
+        message: 'Ready when you are.',
+        blinker: '_',
+        color: '#06b6d4',
+        glowColor: 'rgba(6, 182, 212, 0.3)',
+        border: 'border-cyan-400/40',
+        waveDuration: '1.6s',
+        waveOpacity: '0.85',
+        cpu: '12%',
+        activeMic: false,
+        pulseRing: false
+      },
+      {
+        name: 'LISTENING',
+        message: 'Listening to voice input...',
+        blinker: '•',
+        color: '#8b5cf6',
+        glowColor: 'rgba(139, 92, 246, 0.45)',
+        border: 'border-violet-400',
+        waveDuration: '0.45s',
+        waveOpacity: '1',
+        cpu: '28%',
+        activeMic: true,
+        pulseRing: true
+      },
+      {
+        name: 'THINKING',
+        message: 'Synthesizing solution architecture...',
+        blinker: '✦',
+        color: '#a855f7',
+        glowColor: 'rgba(168, 85, 247, 0.5)',
+        border: 'border-purple-400',
+        waveDuration: '2.5s',
+        waveOpacity: '0.6',
+        cpu: '74%',
+        activeMic: false,
+        pulseRing: false
+      },
+      {
+        name: 'WORKING',
+        message: 'Executing build & test suite...',
+        blinker: '⚙',
+        color: '#3b82f6',
+        glowColor: 'rgba(59, 130, 246, 0.45)',
+        border: 'border-indigo-400',
+        waveDuration: '0.8s',
+        waveOpacity: '0.9',
+        cpu: '92%',
+        activeMic: false,
+        pulseRing: false
+      },
+      {
+        name: 'COMPLETED',
+        message: 'All systems verified. Ready.',
+        blinker: '✓',
+        color: '#10b981',
+        glowColor: 'rgba(16, 185, 129, 0.45)',
+        border: 'border-emerald-400',
+        waveDuration: '1.8s',
+        waveOpacity: '0.9',
+        cpu: '14%',
+        activeMic: false,
+        pulseRing: false
+      }
+    ];
+
+    let currentStateIdx = 0;
+
+    function renderState(idx) {
+      currentStateIdx = idx;
+      const cur = states[currentStateIdx];
+
+      // Update text in companion chip
+      stateText.textContent = cur.message;
+      blinker.textContent = cur.blinker;
+
+      // Update Pill status above
+      statePillMode.textContent = cur.name;
+      statePillMode.style.color = cur.color;
+      statePillDot.style.backgroundColor = cur.color;
+      statePillDot.style.boxShadow = `0 0 10px ${cur.color}`;
+
+      // Update Sidebar Telemetry Status
+      sidebarStatusDot.style.backgroundColor = cur.color;
+      sidebarStatusDot.style.boxShadow = `0 0 8px ${cur.color}`;
+      sidebarStatusLabel.textContent = cur.name === 'WORKING' ? 'Busy' : cur.name === 'THINKING' ? 'Synthesizing' : cur.name;
+      sidebarStatusLabel.style.color = cur.color;
+      cpuPercent.textContent = cur.cpu;
+
+      // Update Core Sphere Glow & Border
+      sphereBody.style.borderColor = cur.color;
+      sphereBody.style.boxShadow = `0 0 70px 18px ${cur.glowColor}, 0 0 130px 35px rgba(99, 102, 241, 0.2), inset 0 0 45px ${cur.glowColor}`;
+      companionBubble.style.borderColor = cur.color;
+      companionBubble.style.boxShadow = `0 10px 30px -5px ${cur.glowColor}`;
+
+      // Listening Audio Ring Animation
+      if (cur.pulseRing) {
+        audioPingRing.classList.remove('hidden');
+        audioPingRing.classList.add('animate-ping-audio');
+      } else {
+        audioPingRing.classList.add('hidden');
+        audioPingRing.classList.remove('animate-ping-audio');
+      }
+
+      // Waveform bars frequency
+      const bars = visualizerBars.querySelectorAll('.wave-bar');
+      bars.forEach(bar => {
+        bar.style.animationDuration = cur.waveDuration;
+        bar.style.opacity = cur.waveOpacity;
+      });
+
+      // Mic Button illumination
+      if (cur.activeMic) {
+        micBtn.classList.add('bg-violet-950/80', 'border-violet-400', 'text-violet-200', 'shadow-[0_0_20px_rgba(139,92,246,0.6)]');
+        micBtn.classList.remove('text-slate-300');
+      } else {
+        micBtn.classList.remove('bg-violet-950/80', 'border-violet-400', 'text-violet-200', 'shadow-[0_0_20px_rgba(139,92,246,0.6)]');
+        micBtn.classList.add('text-slate-300');
+      }
+    }
+
+    // Cycle forward
+    function nextState() {
+      const nextIdx = (currentStateIdx + 1) % states.length;
+      renderState(nextIdx);
+    }
+
+    coreTrigger.addEventListener('click', (e) => {
+      e.stopPropagation();
+      nextState();
+    });
+
+    companionBubble.addEventListener('click', (e) => {
+      e.stopPropagation();
+      nextState();
+    });
+
+    micBtn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      if (currentStateIdx === 1) {
+        // Stop listening -> Back to ready
+        renderState(0);
+      } else {
+        // Enter Listening state
+        renderState(1);
+      }
+    });
+
+    // Prompt submit simulation through states
+    function handlePromptSubmit() {
+      const val = promptInput.value.trim();
+      if (!val) return;
+      promptInput.value = '';
+      
+      // Move to THINKING
+      renderState(2);
+      stateText.textContent = `Analyzing: "${val.slice(0, 18)}..."`;
+
+      setTimeout(() => {
+        // Move to WORKING
+        renderState(3);
+        setTimeout(() => {
+          // Move to COMPLETED
+          renderState(4);
+          setTimeout(() => {
+            // Calm back to READY
+            renderState(0);
+          }, 3500);
+        }, 3000);
+      }, 2200);
+    }
+
+    sendBtn.addEventListener('click', handlePromptSubmit);
+    promptInput.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') {
+        handlePromptSubmit();
+      }
+    });
+
+    // Initialize with State 0 (READY)
+    renderState(0);
+  });
+</script>
+<!-- END: Interactive Behavior Script -->
+</body></html>

@@ -1,0 +1,863 @@
+<!DOCTYPE html>
+
+<html class="h-full bg-[#020408] text-slate-100 antialiased selection:bg-cyan-500/30 selection:text-cyan-200" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>BOSS AI Operating System - Tools &amp; Plugins Workspace</title>
+<!-- Tailwind CSS v3 with Forms & Container Queries -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<!-- Tailwind Configuration -->
+<script data-purpose="tailwind-config">
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            boss: {
+              void: '#020408',
+              surface: '#050811',
+              card: 'rgba(13, 17, 28, 0.75)',
+              glass: 'rgba(8, 12, 22, 0.85)',
+              cyan: '#00e5ff',
+              violet: '#8b5cf6',
+              border: 'rgba(255, 255, 255, 0.07)',
+              glow: 'rgba(0, 229, 255, 0.12)'
+            }
+          },
+          fontFamily: {
+            sans: ['Inter', '-apple-system', 'BlinkMacSystemFont', 'Segoe UI', 'Roboto', 'sans-serif'],
+            mono: ['JetBrains Mono', 'Fira Code', 'Menlo', 'monospace']
+          },
+          boxShadow: {
+            'cyan-glow': '0 0 25px -5px rgba(0, 229, 255, 0.25)',
+            'violet-glow': '0 0 25px -5px rgba(139, 92, 246, 0.25)',
+            'subtle-glass': 'inset 0 1px 1px 0 rgba(255, 255, 255, 0.08)'
+          }
+        }
+      }
+    }
+  </script>
+<!-- Google Fonts: Inter & JetBrains Mono -->
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&amp;family=JetBrains+Mono:wght@400;500;600&amp;display=swap" rel="stylesheet"/>
+<!-- Core Component Styles -->
+<style data-purpose="custom-layout">
+    /* Subtle radial neon background gradients */
+    body {
+      background-color: #020408;
+      background-image: 
+        radial-gradient(circle at 10% 0%, rgba(0, 229, 255, 0.04) 0%, transparent 40%),
+        radial-gradient(circle at 90% 10%, rgba(139, 92, 246, 0.04) 0%, transparent 45%),
+        radial-gradient(circle at 50% 100%, rgba(0, 229, 255, 0.02) 0%, transparent 50%);
+    }
+
+    /* Custom thin scrollbar */
+    ::-webkit-scrollbar {
+      width: 5px;
+      height: 5px;
+    }
+    ::-webkit-scrollbar-track {
+      background: rgba(2, 4, 8, 0.5);
+    }
+    ::-webkit-scrollbar-thumb {
+      background: rgba(255, 255, 255, 0.12);
+      border-radius: 4px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: rgba(0, 229, 255, 0.3);
+    }
+  </style>
+<style data-purpose="animations">
+    @keyframes pulse-subtle {
+      0%, 100% { opacity: 0.9; transform: scale(1); }
+      50% { opacity: 0.5; transform: scale(0.96); }
+    }
+    .animate-pulse-subtle {
+      animation: pulse-subtle 3s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+    }
+
+    @keyframes orb-spin {
+      from { transform: rotate(0deg); }
+      to { transform: rotate(360deg); }
+    }
+    .animate-spin-slow {
+      animation: orb-spin 16s linear infinite;
+    }
+  </style>
+</head>
+<body class="h-full flex flex-col font-sans overflow-hidden text-xs md:text-sm text-slate-300">
+<!-- BEGIN: TopChromeSystemBar -->
+<header class="h-10 bg-[#050811]/90 backdrop-blur-md border-b border-white/[0.07] px-3.5 flex items-center justify-between select-none z-50 flex-shrink-0" data-purpose="system-chrome">
+<!-- Left: Window Controls & System Breadcrumbs -->
+<div class="flex items-center gap-3.5">
+<!-- macOS traffic dots -->
+<div class="flex items-center gap-1.5 pr-2">
+<span class="w-2.5 h-2.5 rounded-full bg-[#ff5f56]/80 hover:bg-[#ff5f56] transition-colors cursor-pointer border border-[#e0443e]/40"></span>
+<span class="w-2.5 h-2.5 rounded-full bg-[#ffbd2e]/80 hover:bg-[#ffbd2e] transition-colors cursor-pointer border border-[#dea123]/40"></span>
+<span class="w-2.5 h-2.5 rounded-full bg-[#27c93f]/80 hover:bg-[#27c93f] transition-colors cursor-pointer border border-[#1aab29]/40"></span>
+</div>
+<div class="h-3 w-px bg-white/10"></div>
+<!-- Breadcrumb indicator -->
+<div class="flex items-center gap-2 font-mono text-[11px] text-slate-400 tracking-wide">
+<span class="inline-flex items-center text-cyan-400">
+<span class="w-1.5 h-1.5 rounded-full bg-cyan-400 shadow-[0_0_8px_#00e5ff] mr-1.5 animate-pulse"></span>
+          BOSS <span class="text-slate-500 ml-1 font-normal">v0.1.0-preview</span>
+</span>
+<span class="text-slate-600">//</span>
+<span class="text-slate-300">BHANU_WORKSPACE</span>
+<span class="text-slate-600">//</span>
+<span class="text-emerald-400 bg-emerald-500/10 px-1.5 py-0.5 rounded border border-emerald-500/20 text-[10px] uppercase tracking-wider">Prod</span>
+</div>
+</div>
+<!-- Center: Location tag & Security Enclave Pill -->
+<div class="hidden lg:flex items-center gap-3 font-mono text-[11px]">
+<div class="px-2.5 py-1 rounded bg-white/[0.03] border border-white/[0.06] text-slate-300 flex items-center gap-1.5">
+<span class="text-slate-500">LOCATION:</span>
+<span class="text-cyan-300 font-semibold tracking-wide">TOOLS // CAPABILITY_REGISTRY</span>
+</div>
+<div class="px-2.5 py-1 rounded-full bg-cyan-950/40 border border-cyan-500/30 text-cyan-300 flex items-center gap-1.5 shadow-[0_0_12px_rgba(0,229,255,0.1)]">
+<span class="w-1.5 h-1.5 rounded-full bg-cyan-400 animate-pulse"></span>
+<span class="text-[10px] font-semibold tracking-wider">ENCLAVE: ISOLATED ZERO-CLOUD</span>
+</div>
+</div>
+<!-- Right: Telemetry metrics & Quick Tools -->
+<div class="flex items-center gap-3 font-mono text-[11px] text-slate-400">
+<div class="flex items-center gap-2 px-2 py-0.5 rounded bg-black/40 border border-white/5">
+<span class="text-slate-500">TTFT:</span>
+<span class="text-cyan-400 font-semibold">12ms</span>
+</div>
+<div class="flex items-center gap-2 px-2 py-0.5 rounded bg-black/40 border border-white/5">
+<span class="text-slate-500">MEMORY:</span>
+<span class="text-slate-200">4.2 <span class="text-slate-500">/ 16 GB</span></span>
+</div>
+<button class="p-1 text-slate-400 hover:text-slate-200 hover:bg-white/5 rounded transition-all" title="System Settings">
+<svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="1.75" viewbox="0 0 24 24">
+<path d="M9.594 3.94c.09-.542.56-.94 1.11-.94h2.593c.55 0 1.02.398 1.11.94l.213 1.281c.063.374.313.686.645.87.074.04.147.083.22.127.325.196.72.257 1.075.124l1.217-.456a1.125 1.125 0 011.37.49l1.296 2.247a1.125 1.125 0 01-.26 1.431l-1.003.827c-.293.241-.438.613-.43.992a7.723 7.723 0 010 .255c-.008.378.137.75.43.991l1.004.827c.424.35.534.955.26 1.43l-1.298 2.247a1.125 1.125 0 01-1.369.491l-1.217-.456c-.355-.133-.75-.072-1.076.124a6.6 6.6 0 01-.22.128c-.331.183-.581.495-.644.869l-.213 1.281c-.09.543-.56.94-1.11.94h-2.594c-.55 0-1.019-.398-1.11-.94l-.213-1.281c-.062-.374-.312-.686-.644-.87a6.52 6.52 0 01-.22-.127c-.325-.196-.72-.257-1.076-.124l-1.217.456a1.125 1.125 0 01-1.369-.49l-1.297-2.247a1.125 1.125 0 01.26-1.431l1.004-.827c.292-.241.437-.613.43-.991a6.932 6.932 0 010-.255c.007-.38-.138-.751-.43-.992l-1.004-.827a1.125 1.125 0 01-.26-1.43l1.297-2.247a1.125 1.125 0 011.37-.491l1.216.456c.356.133.751.072 1.076-.124.072-.044.146-.086.22-.128.332-.183.582-.495.644-.869l.214-1.28Z" stroke-linecap="round" stroke-linejoin="round"></path>
+<path d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" stroke-linecap="round" stroke-linejoin="round"></path>
+</svg>
+</button>
+</div>
+</header>
+<!-- END: TopChromeSystemBar -->
+<!-- Main Viewport Container (Sidebar + Content + Details Pane) -->
+<div class="flex-1 flex overflow-hidden relative">
+<!-- BEGIN: PersistentNavigationSidebar -->
+<aside class="w-64 bg-[#050811]/95 backdrop-blur-xl border-r border-white/[0.07] flex flex-col justify-between flex-shrink-0 select-none z-30" data-purpose="primary-sidebar">
+<!-- Upper Section: Search & Main Nav -->
+<div class="p-3 space-y-4">
+<!-- Brand identity widget with glowing badge -->
+<div class="flex items-center justify-between px-2 py-1.5">
+<div class="flex items-center gap-2.5">
+<div class="relative w-7 h-7 rounded-lg bg-gradient-to-br from-cyan-400 via-indigo-500 to-violet-600 p-[1px] shadow-[0_0_12px_rgba(0,229,255,0.3)]">
+<div class="w-full h-full bg-[#050811] rounded-[7px] flex items-center justify-center">
+<svg class="w-4 h-4 text-cyan-400" fill="none" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24">
+<path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5" stroke-linecap="round" stroke-linejoin="round"></path>
+</svg>
+</div>
+</div>
+<div>
+<div class="font-bold tracking-wider text-slate-100 text-xs flex items-center gap-1.5">
+                BOSS
+                <span class="text-[9px] px-1 py-0.2 rounded bg-cyan-500/10 text-cyan-400 border border-cyan-500/20 font-mono">CORE</span>
+</div>
+<div class="text-[10px] text-slate-500 font-mono">Bhanu OS • v0.1.0</div>
+</div>
+</div>
+</div>
+<!-- Quick Omni-Search Input -->
+<div class="relative">
+<input class="w-full bg-black/50 border border-white/10 rounded-md py-1.5 pl-8 pr-8 text-xs text-slate-200 placeholder-slate-500 focus:outline-none focus:border-cyan-500/50 focus:ring-1 focus:ring-cyan-500/40 transition-all font-sans" placeholder="Omni-search system..." type="text"/>
+<svg class="w-3.5 h-3.5 absolute left-2.5 top-2.5 text-slate-500" fill="none" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24">
+<circle cx="11" cy="11" r="8"></circle>
+<path d="m21 21-4.3-4.3"></path>
+</svg>
+<kbd class="absolute right-2 top-2 px-1 rounded bg-white/10 text-[9px] font-mono text-slate-400">⌘K</kbd>
+</div>
+<!-- Navigation Links -->
+<nav class="space-y-1">
+<a class="flex items-center justify-between px-2.5 py-1.5 rounded-md text-slate-400 hover:text-slate-100 hover:bg-white/[0.04] transition-colors group" href="#">
+<div class="flex items-center gap-2.5">
+<svg class="w-4 h-4 text-slate-500 group-hover:text-slate-300" fill="none" stroke="currentColor" stroke-width="1.75" viewbox="0 0 24 24">
+<path d="m2.25 12 8.954-8.955c.44-.439 1.152-.439 1.591 0L21.75 12M4.5 9.75v10.125c0 .621.504 1.125 1.125 1.125H9.75v-4.875c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21h4.125c.621 0 1.125-.504 1.125-1.125V9.75M8.25 21h8.25" stroke-linecap="round" stroke-linejoin="round"></path>
+</svg>
+<span>Workspace Home</span>
+</div>
+</a>
+<a class="flex items-center justify-between px-2.5 py-1.5 rounded-md text-slate-400 hover:text-slate-100 hover:bg-white/[0.04] transition-colors group" href="#">
+<div class="flex items-center gap-2.5">
+<svg class="w-4 h-4 text-slate-500 group-hover:text-slate-300" fill="none" stroke="currentColor" stroke-width="1.75" viewbox="0 0 24 24">
+<path d="M8.625 12a.375.375 0 11-.75 0 .375.375 0 01.75 0zm0 0H8.25m4.125 0a.375.375 0 11-.75 0 .375.375 0 01.75 0zm0 0H12m4.125 0a.375.375 0 11-.75 0 .375.375 0 01.75 0zm0 0h-.375M21 12c0 4.556-4.03 8.25-9 8.25a9.764 9.764 0 01-2.555-.337A5.972 5.972 0 015.41 20.97a5.969 5.969 0 01-.474-.065 4.48 4.48 0 00.978-2.025c.09-.457-.133-.901-.467-1.226C3.93 16.178 3 14.189 3 12c0-4.556 4.03-8.25 9-8.25s9 3.694 9 8.25z" stroke-linecap="round" stroke-linejoin="round"></path>
+</svg>
+<span>Neural Chat</span>
+</div>
+<kbd class="text-[9px] font-mono text-slate-500">⌘1</kbd>
+</a>
+<a class="flex items-center justify-between px-2.5 py-1.5 rounded-md text-slate-400 hover:text-slate-100 hover:bg-white/[0.04] transition-colors group" href="#">
+<div class="flex items-center gap-2.5">
+<svg class="w-4 h-4 text-slate-500 group-hover:text-slate-300" fill="none" stroke="currentColor" stroke-width="1.75" viewbox="0 0 24 24">
+<path d="M2.25 12.75V12A2.25 2.25 0 014.5 9.75h15A2.25 2.25 0 0121.75 12v.75m-8.69-6.44l-2.12-2.12a1.5 1.5 0 00-1.061-.44H4.5A2.25 2.25 0 002.25 6v12a2.25 2.25 0 002.25 2.25h15A2.25 2.25 0 0021.75 18V9a2.25 2.25 0 00-2.25-2.25h-5.379a1.5 1.5 0 01-1.06-.44z" stroke-linecap="round" stroke-linejoin="round"></path>
+</svg>
+<span>Projects</span>
+</div>
+<kbd class="text-[9px] font-mono text-slate-500">⌘2</kbd>
+</a>
+<a class="flex items-center justify-between px-2.5 py-1.5 rounded-md text-slate-400 hover:text-slate-100 hover:bg-white/[0.04] transition-colors group" href="#">
+<div class="flex items-center gap-2.5">
+<svg class="w-4 h-4 text-slate-500 group-hover:text-slate-300" fill="none" stroke="currentColor" stroke-width="1.75" viewbox="0 0 24 24">
+<path d="M17.25 6.75L22.5 12l-5.25 5.25m-10.5 0L1.5 12l5.25-5.25m7.5-3l-4.5 16.5" stroke-linecap="round" stroke-linejoin="round"></path>
+</svg>
+<span>Coding Studio</span>
+</div>
+<span class="text-[9px] font-mono text-emerald-400 bg-emerald-500/10 px-1 py-0.2 rounded border border-emerald-500/20">LIVE</span>
+</a>
+<a class="flex items-center justify-between px-2.5 py-1.5 rounded-md text-slate-400 hover:text-slate-100 hover:bg-white/[0.04] transition-colors group" href="#">
+<div class="flex items-center gap-2.5">
+<svg class="w-4 h-4 text-slate-500 group-hover:text-slate-300" fill="none" stroke="currentColor" stroke-width="1.75" viewbox="0 0 24 24">
+<path d="m6.75 7.5 3 2.25-3 2.25m4.5 0h3m-9 8.25h13.5A2.25 2.25 0 0021 18V6a2.25 2.25 0 00-2.25-2.25H5.25A2.25 2.25 0 003 6v12a2.25 2.25 0 002.25 2.25z" stroke-linecap="round" stroke-linejoin="round"></path>
+</svg>
+<span>Terminal Session</span>
+</div>
+<span class="text-[9px] font-mono text-slate-500">zsh</span>
+</a>
+<!-- ACTIVE STATE: Tools & Plugins -->
+<a aria-current="page" class="flex items-center justify-between px-2.5 py-1.5 rounded-md text-cyan-300 bg-gradient-to-r from-cyan-500/15 to-transparent border-l-2 border-cyan-400 font-medium transition-all shadow-[inset_0_1px_1px_rgba(255,255,255,0.06)]" href="#">
+<div class="flex items-center gap-2.5">
+<svg class="w-4 h-4 text-cyan-400 drop-shadow-[0_0_8px_rgba(0,229,255,0.7)]" fill="none" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24">
+<path d="M11.42 15.17L17.25 21A2.652 2.652 0 0021 17.25l-5.877-5.877M11.42 15.17l2.496-3.03c.317-.384.74-.626 1.208-.766M11.42 15.17l-4.655 5.653a2.548 2.548 0 11-3.586-3.586l6.837-5.63m5.108-.233c.55-.164 1.163-.188 1.743-.14a4.5 4.5 0 004.486-6.32l-3.232 3.232a1.875 1.875 0 01-2.652-2.652l3.232-3.232a4.5 4.5 0 00-6.32 4.486c.048.58.024 1.193-.14 1.743" stroke-linecap="round" stroke-linejoin="round"></path>
+</svg>
+<span class="text-slate-100">Tools &amp; Plugins</span>
+</div>
+<span class="w-1.5 h-1.5 rounded-full bg-cyan-400 shadow-[0_0_8px_#00e5ff]"></span>
+</a>
+<a class="flex items-center justify-between px-2.5 py-1.5 rounded-md text-slate-400 hover:text-slate-100 hover:bg-white/[0.04] transition-colors group" href="#">
+<div class="flex items-center gap-2.5">
+<svg class="w-4 h-4 text-slate-500 group-hover:text-slate-300" fill="none" stroke="currentColor" stroke-width="1.75" viewbox="0 0 24 24">
+<path d="M12 6v6h4.5m4.5 0a9 9 0 11-18 0 9 9 0 0118 0z" stroke-linecap="round" stroke-linejoin="round"></path>
+</svg>
+<span>History</span>
+</div>
+</a>
+</nav>
+<!-- Active Workspaces Context Segment -->
+<div class="pt-3 border-t border-white/[0.06]">
+<div class="px-2 pb-1.5 flex items-center justify-between text-[10px] uppercase font-mono text-slate-500 tracking-wider">
+<span>Workspaces</span>
+<span class="text-slate-600">2 Bound</span>
+</div>
+<div class="space-y-1">
+<div class="px-2 py-1.5 rounded bg-white/[0.02] border border-white/[0.04] flex items-center justify-between text-xs">
+<div class="flex items-center gap-2 truncate">
+<span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span>
+<span class="font-mono text-slate-200 truncate">boss-core-engine</span>
+</div>
+<span class="text-[9px] font-mono text-emerald-400/80">active</span>
+</div>
+<div class="px-2 py-1.5 rounded hover:bg-white/[0.02] transition-colors flex items-center justify-between text-xs text-slate-400">
+<div class="flex items-center gap-2 truncate">
+<span class="w-1.5 h-1.5 rounded-full bg-slate-600"></span>
+<span class="font-mono truncate">arm-cortex-firmware</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Bottom Profile & Local Enclave Status Widget -->
+<div class="p-3 bg-black/40 border-t border-white/[0.06] space-y-2">
+<div class="flex items-center gap-2.5 px-1">
+<div class="w-7 h-7 rounded-full bg-gradient-to-tr from-cyan-600 to-violet-600 flex items-center justify-center font-bold text-xs text-white shadow-[0_0_10px_rgba(139,92,246,0.3)]">
+            B
+          </div>
+<div class="flex-1 min-w-0">
+<div class="text-xs font-semibold text-slate-200 truncate">Bhanu DEV</div>
+<div class="text-[10px] text-emerald-400 flex items-center gap-1">
+<span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-ping"></span>
+              Local Enclave Active
+            </div>
+</div>
+</div>
+<div class="p-2 rounded bg-black/60 border border-white/[0.05] text-[10px] font-mono text-slate-400 space-y-0.5">
+<div class="flex justify-between">
+<span>LLM:</span>
+<span class="text-cyan-400 font-medium">7B Q4_K_M ONLINE</span>
+</div>
+<div class="flex justify-between">
+<span>VRAM:</span>
+<span class="text-slate-200">4.2GB <span class="text-slate-500">• 41°C</span></span>
+</div>
+</div>
+</div>
+</aside>
+<!-- END: PersistentNavigationSidebar -->
+<!-- BEGIN: MainCapabilitiesWorkspace -->
+<main class="flex-1 flex flex-col bg-[#020408] overflow-y-auto z-10" data-purpose="capabilities-catalog">
+<!-- Catalog Header & Global Search Bar -->
+<section class="p-6 pb-4 border-b border-white/[0.06] bg-gradient-to-b from-[#080d1a]/70 to-transparent sticky top-0 z-20 backdrop-blur-md" data-purpose="workspace-header">
+<div class="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
+<!-- Title block -->
+<div>
+<div class="flex items-center gap-3">
+<h1 class="text-xl font-bold tracking-tight text-white flex items-center gap-2">
+                TOOLS &amp; PLUGINS
+              </h1>
+<span class="px-2 py-0.5 rounded-full text-[10px] font-mono font-medium bg-cyan-500/10 text-cyan-300 border border-cyan-500/30">
+                10 ACTIVE
+              </span>
+</div>
+<p class="text-xs text-slate-400 mt-1">
+              Capabilities available to BOSS • <span class="text-slate-200 font-medium">6 Local Built-in</span> • <span class="text-slate-200 font-medium">4 Verified Integrations</span>
+</p>
+</div>
+<!-- Right controls: Filter omni-input + Add Custom Tool + Mini holographic core indicator -->
+<div class="flex items-center gap-3">
+<div class="relative w-64 md:w-80">
+<input class="w-full bg-black/60 border border-white/10 rounded-lg py-1.5 pl-8 pr-3 text-xs text-slate-200 placeholder-slate-500 focus:outline-none focus:border-cyan-400 focus:ring-1 focus:ring-cyan-400/40 transition-all font-mono" placeholder="Filter tools by capability, scope, or binary..." type="text"/>
+<svg class="w-3.5 h-3.5 absolute left-2.5 top-2.5 text-slate-500" fill="none" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24">
+<path d="m21 21-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z" stroke-linecap="round" stroke-linejoin="round"></path>
+</svg>
+</div>
+<button class="px-3 py-1.5 rounded-lg bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-400 hover:to-blue-500 text-slate-950 font-semibold text-xs flex items-center gap-1.5 shadow-[0_0_15px_rgba(0,229,255,0.3)] transition-all whitespace-nowrap">
+<svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2.5" viewbox="0 0 24 24">
+<path d="M12 4.5v15m7.5-7.5h-15" stroke-linecap="round" stroke-linejoin="round"></path>
+</svg>
+<span>+ Custom Tool (CLI/MCP)</span>
+</button>
+<!-- Holographic BOSS bound pill -->
+<div class="hidden xl:flex items-center gap-2 px-3 py-1.5 rounded-lg bg-[#0d1424] border border-cyan-500/30 text-cyan-300 font-mono text-[10px]">
+<div class="relative w-2.5 h-2.5 flex items-center justify-center">
+<span class="w-2 h-2 rounded-full bg-cyan-400 shadow-[0_0_6px_#00e5ff]"></span>
+<span class="absolute w-4 h-4 rounded-full border border-cyan-400/50 animate-ping"></span>
+</div>
+<span class="tracking-wider font-semibold">BOSS ENGINE BOUND // ZERO SILENT ACTIONS</span>
+</div>
+</div>
+</div>
+<!-- Filter Tabs / Scope Categorization -->
+<div class="flex items-center gap-1.5 mt-5 overflow-x-auto pb-1 text-xs border-b border-white/[0.04]">
+<button class="px-3 py-1 rounded-md bg-cyan-500/15 text-cyan-300 border border-cyan-500/30 font-medium whitespace-nowrap shadow-[0_0_10px_rgba(0,229,255,0.15)]">
+            All Capabilities (10)
+          </button>
+<button class="px-3 py-1 rounded-md text-slate-400 hover:text-slate-200 hover:bg-white/[0.04] transition-colors whitespace-nowrap">
+            Local Core (6)
+          </button>
+<button class="px-3 py-1 rounded-md text-slate-400 hover:text-slate-200 hover:bg-white/[0.04] transition-colors whitespace-nowrap">
+            Development
+          </button>
+<button class="px-3 py-1 rounded-md text-slate-400 hover:text-slate-200 hover:bg-white/[0.04] transition-colors whitespace-nowrap">
+            Files &amp; IO
+          </button>
+<button class="px-3 py-1 rounded-md text-slate-400 hover:text-slate-200 hover:bg-white/[0.04] transition-colors whitespace-nowrap">
+            Terminal &amp; Execution
+          </button>
+<button class="px-3 py-1 rounded-md text-slate-400 hover:text-slate-200 hover:bg-white/[0.04] transition-colors whitespace-nowrap">
+            External Connectors (4)
+          </button>
+<button class="px-3 py-1 rounded-md text-slate-400 hover:text-slate-200 hover:bg-white/[0.04] transition-colors whitespace-nowrap flex items-center gap-1.5 text-amber-400/90">
+<span class="w-1.5 h-1.5 rounded-full bg-amber-400"></span>
+            Permissions Audit
+          </button>
+</div>
+</section>
+<!-- Capability Cards Content Area -->
+<div class="p-6 space-y-8 flex-1">
+<!-- SECTION 1: Built-in Sandboxed Local Tools -->
+<section data-purpose="core-tools-grid">
+<div class="flex items-center justify-between mb-3">
+<div class="flex items-center gap-2">
+<span class="w-2 h-2 rounded bg-cyan-400 shadow-[0_0_6px_#00e5ff]"></span>
+<h2 class="font-mono text-xs uppercase tracking-wider font-semibold text-slate-200">
+                Core System Capabilities (100% Local &amp; Sandboxed)
+              </h2>
+</div>
+<span class="text-[11px] font-mono text-slate-500">BOUND_TO_ENCLAVE_ROOT</span>
+</div>
+<!-- Cards Grid -->
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3.5">
+<!-- Tool Card 1: File System Engine (ACTIVE / SELECTED) -->
+<div class="relative group p-4 rounded-xl bg-gradient-to-b from-[#0d1628]/90 to-[#070b14]/90 border-2 border-cyan-400/80 shadow-[0_0_20px_rgba(0,229,255,0.15)] cursor-pointer transition-all hover:translate-y-[-1px]" data-purpose="tool-card-active">
+<!-- Top bar indicator -->
+<div class="flex items-start justify-between">
+<div class="flex items-center gap-2.5">
+<div class="p-2 rounded-lg bg-cyan-500/20 border border-cyan-400/40 text-cyan-300">
+<svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="1.75" viewbox="0 0 24 24">
+<path d="M3.75 9.776c.112-.017.227-.026.344-.026h15.812c.117 0 .232.009.344.026m-16.5 0a2.25 2.25 0 00-1.883 2.542l.857 6a2.25 2.25 0 002.227 1.932H19.05a2.25 2.25 0 002.227-1.932l.857-6a2.25 2.25 0 00-1.883-2.542m-16.5 0V6A2.25 2.25 0 016 3.75h3.879a1.5 1.5 0 011.06.44l2.122 2.12a1.5 1.5 0 001.06.44H18A2.25 2.25 0 0120.25 9v.776" stroke-linecap="round" stroke-linejoin="round"></path>
+</svg>
+</div>
+<div>
+<h3 class="font-semibold text-slate-100 text-sm flex items-center gap-1.5">
+                      FILE SYSTEM ENGINE
+                      <span class="w-1.5 h-1.5 rounded-full bg-cyan-400 animate-pulse"></span>
+</h3>
+<div class="text-[10px] font-mono text-emerald-400">● LOCAL • ENABLED</div>
+</div>
+</div>
+<span class="px-2 py-0.5 rounded text-[10px] font-mono bg-cyan-500/20 text-cyan-300 border border-cyan-500/40">
+                  SELECTED
+                </span>
+</div>
+<p class="text-xs text-slate-300 mt-3 leading-relaxed">
+                Inspect, read, and write project files within bounded repository roots.
+              </p>
+<!-- Capability Tags -->
+<div class="flex flex-wrap gap-1.5 mt-3">
+<span class="px-2 py-0.5 rounded bg-white/[0.04] text-[10px] font-mono text-slate-300 border border-white/[0.05]">Read</span>
+<span class="px-2 py-0.5 rounded bg-white/[0.04] text-[10px] font-mono text-slate-300 border border-white/[0.05]">Write</span>
+<span class="px-2 py-0.5 rounded bg-white/[0.04] text-[10px] font-mono text-slate-300 border border-white/[0.05]">AST Parse</span>
+<span class="px-2 py-0.5 rounded bg-white/[0.04] text-[10px] font-mono text-slate-300 border border-white/[0.05]">Symlink Watch</span>
+</div>
+<!-- Scope info -->
+<div class="mt-3.5 pt-2.5 border-t border-white/[0.06] flex items-center justify-between text-[10px] font-mono text-slate-400">
+<span class="truncate">Scope: ~/projects/boss-core-engine only</span>
+<span class="text-cyan-400 whitespace-nowrap ml-2">Zero Cloud Escape</span>
+</div>
+</div>
+<!-- Tool Card 2: Terminal Runner -->
+<div class="p-4 rounded-xl bg-gradient-to-b from-[#0a0e1c]/80 to-[#04060d]/80 border border-white/[0.08] hover:border-cyan-500/40 shadow-[inset_0_1px_1px_rgba(255,255,255,0.06)] cursor-pointer transition-all hover:translate-y-[-1px] group">
+<div class="flex items-start justify-between">
+<div class="flex items-center gap-2.5">
+<div class="p-2 rounded-lg bg-white/[0.05] border border-white/10 text-slate-300 group-hover:text-cyan-300 transition-colors">
+<svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="1.75" viewbox="0 0 24 24">
+<path d="m6.75 7.5 3 2.25-3 2.25m4.5 0h3m-9 8.25h13.5A2.25 2.25 0 0021 18V6a2.25 2.25 0 00-2.25-2.25H5.25A2.25 2.25 0 003 6v12a2.25 2.25 0 002.25 2.25z" stroke-linecap="round" stroke-linejoin="round"></path>
+</svg>
+</div>
+<div>
+<h3 class="font-semibold text-slate-100 text-sm group-hover:text-cyan-200 transition-colors">TERMINAL RUNNER</h3>
+<div class="text-[10px] font-mono text-amber-400">● LOCAL • STRICT APPROVAL</div>
+</div>
+</div>
+<span class="px-2 py-0.5 rounded text-[10px] font-mono bg-white/[0.05] text-slate-400 border border-white/10">
+                  SANDBOXED
+                </span>
+</div>
+<p class="text-xs text-slate-400 mt-3 leading-relaxed">
+                Execute sandboxed PTY commands with pre-execution safety AST profiling.
+              </p>
+<div class="flex flex-wrap gap-1.5 mt-3">
+<span class="px-2 py-0.5 rounded bg-white/[0.04] text-[10px] font-mono text-slate-300 border border-white/[0.05]">zsh</span>
+<span class="px-2 py-0.5 rounded bg-white/[0.04] text-[10px] font-mono text-slate-300 border border-white/[0.05]">Bun</span>
+<span class="px-2 py-0.5 rounded bg-white/[0.04] text-[10px] font-mono text-slate-300 border border-white/[0.05]">Cargo</span>
+<span class="px-2 py-0.5 rounded bg-white/[0.04] text-[10px] font-mono text-slate-300 border border-white/[0.05]">Git CLI</span>
+</div>
+<div class="mt-3.5 pt-2.5 border-t border-white/[0.06] flex items-center justify-between text-[10px] font-mono text-slate-400">
+<span>Non-destructive: Auto</span>
+<span class="text-amber-400">Destructive: Explicit Confirmation</span>
+</div>
+</div>
+<!-- Tool Card 3: Neural Code Search -->
+<div class="p-4 rounded-xl bg-gradient-to-b from-[#0a0e1c]/80 to-[#04060d]/80 border border-white/[0.08] hover:border-cyan-500/40 shadow-[inset_0_1px_1px_rgba(255,255,255,0.06)] cursor-pointer transition-all hover:translate-y-[-1px] group">
+<div class="flex items-start justify-between">
+<div class="flex items-center gap-2.5">
+<div class="p-2 rounded-lg bg-white/[0.05] border border-white/10 text-slate-300 group-hover:text-cyan-300 transition-colors">
+<svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="1.75" viewbox="0 0 24 24">
+<path d="m21 21-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607zM10.5 7.5v6m3-3h-6" stroke-linecap="round" stroke-linejoin="round"></path>
+</svg>
+</div>
+<div>
+<h3 class="font-semibold text-slate-100 text-sm group-hover:text-cyan-200 transition-colors">NEURAL CODE SEARCH</h3>
+<div class="text-[10px] font-mono text-emerald-400">● LOCAL • ENABLED</div>
+</div>
+</div>
+<span class="px-2 py-0.5 rounded text-[10px] font-mono bg-white/[0.05] text-slate-400 border border-white/10">
+                  INDEXED
+                </span>
+</div>
+<p class="text-xs text-slate-400 mt-3 leading-relaxed">
+                Real-time semantic vector index and syntax tree resolution.
+              </p>
+<div class="flex flex-wrap gap-1.5 mt-3">
+<span class="px-2 py-0.5 rounded bg-white/[0.04] text-[10px] font-mono text-slate-300 border border-white/[0.05]">AST Embeddings</span>
+<span class="px-2 py-0.5 rounded bg-white/[0.04] text-[10px] font-mono text-slate-300 border border-white/[0.05]">Symbol Index</span>
+<span class="px-2 py-0.5 rounded bg-white/[0.04] text-[10px] font-mono text-slate-300 border border-white/[0.05]">32k Cache</span>
+</div>
+<div class="mt-3.5 pt-2.5 border-t border-white/[0.06] flex items-center justify-between text-[10px] font-mono text-slate-400">
+<span>Memory: 142MB RAM</span>
+<span class="text-emerald-400">Latency: 4.8ms</span>
+</div>
+</div>
+<!-- Tool Card 4: Git Operations -->
+<div class="p-4 rounded-xl bg-gradient-to-b from-[#0a0e1c]/80 to-[#04060d]/80 border border-white/[0.08] hover:border-cyan-500/40 shadow-[inset_0_1px_1px_rgba(255,255,255,0.06)] cursor-pointer transition-all hover:translate-y-[-1px] group">
+<div class="flex items-start justify-between">
+<div class="flex items-center gap-2.5">
+<div class="p-2 rounded-lg bg-white/[0.05] border border-white/10 text-slate-300 group-hover:text-cyan-300 transition-colors">
+<svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="1.75" viewbox="0 0 24 24">
+<path d="M12 4.5v15m7.5-7.5h-15" stroke-linecap="round" stroke-linejoin="round"></path>
+</svg>
+</div>
+<div>
+<h3 class="font-semibold text-slate-100 text-sm group-hover:text-cyan-200 transition-colors">GIT OPERATIONS</h3>
+<div class="text-[10px] font-mono text-emerald-400">● LOCAL • ENABLED</div>
+</div>
+</div>
+<span class="px-2 py-0.5 rounded text-[10px] font-mono bg-emerald-500/10 text-emerald-300 border border-emerald-500/20">
+                  SAFE
+                </span>
+</div>
+<p class="text-xs text-slate-400 mt-3 leading-relaxed">
+                Branch orchestration, atomic diff synthesis, and local staging.
+              </p>
+<div class="flex flex-wrap gap-1.5 mt-3">
+<span class="px-2 py-0.5 rounded bg-white/[0.04] text-[10px] font-mono text-slate-300 border border-white/[0.05]">Diff Engine</span>
+<span class="px-2 py-0.5 rounded bg-white/[0.04] text-[10px] font-mono text-slate-300 border border-white/[0.05]">Log Traversal</span>
+<span class="px-2 py-0.5 rounded bg-white/[0.04] text-[10px] font-mono text-slate-300 border border-white/[0.05]">Branch Switch</span>
+</div>
+<div class="mt-3.5 pt-2.5 border-t border-white/[0.06] flex items-center justify-between text-[10px] font-mono text-slate-400">
+<span>Target: Local Repository</span>
+<span class="text-slate-400">Direct Push: Guarded</span>
+</div>
+</div>
+<!-- Tool Card 5: Voice & Speech Runner -->
+<div class="p-4 rounded-xl bg-gradient-to-b from-[#0a0e1c]/80 to-[#04060d]/80 border border-white/[0.08] hover:border-cyan-500/40 shadow-[inset_0_1px_1px_rgba(255,255,255,0.06)] cursor-pointer transition-all hover:translate-y-[-1px] group">
+<div class="flex items-start justify-between">
+<div class="flex items-center gap-2.5">
+<div class="p-2 rounded-lg bg-white/[0.05] border border-white/10 text-slate-300 group-hover:text-cyan-300 transition-colors">
+<svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="1.75" viewbox="0 0 24 24">
+<path d="M12 18.75a6 6 0 006-6v-1.5m-6 7.5a6 6 0 01-6-6v-1.5m6 7.5v3.75m-3.75 0h7.5M12 1.5a3 3 0 00-3 3v4.5a3 3 0 006 0V4.5a3 3 0 00-3-3z" stroke-linecap="round" stroke-linejoin="round"></path>
+</svg>
+</div>
+<div>
+<h3 class="font-semibold text-slate-100 text-sm group-hover:text-cyan-200 transition-colors">VOICE &amp; SPEECH RUNNER</h3>
+<div class="text-[10px] font-mono text-emerald-400">● LOCAL • ENABLED</div>
+</div>
+</div>
+<span class="px-2 py-0.5 rounded text-[10px] font-mono bg-violet-500/10 text-violet-300 border border-violet-500/20">
+                  WHISPER 16k
+                </span>
+</div>
+<p class="text-xs text-slate-400 mt-3 leading-relaxed">
+                Whisper 16kHz low-latency speech-to-intent offline inference.
+              </p>
+<div class="flex flex-wrap gap-1.5 mt-3">
+<span class="px-2 py-0.5 rounded bg-white/[0.04] text-[10px] font-mono text-slate-300 border border-white/[0.05]">Metal Neural Engine</span>
+<span class="px-2 py-0.5 rounded bg-white/[0.04] text-[10px] font-mono text-slate-300 border border-white/[0.05]">Streaming VAD</span>
+</div>
+<div class="mt-3.5 pt-2.5 border-t border-white/[0.06] flex items-center justify-between text-[10px] font-mono text-slate-400">
+<span>Input: CoreAudio Built-in</span>
+<span class="text-cyan-400">Zero Audio Telemetry</span>
+</div>
+</div>
+<!-- Tool Card 6: Static Type & Linter Inspector -->
+<div class="p-4 rounded-xl bg-gradient-to-b from-[#0a0e1c]/80 to-[#04060d]/80 border border-white/[0.08] hover:border-cyan-500/40 shadow-[inset_0_1px_1px_rgba(255,255,255,0.06)] cursor-pointer transition-all hover:translate-y-[-1px] group">
+<div class="flex items-start justify-between">
+<div class="flex items-center gap-2.5">
+<div class="p-2 rounded-lg bg-white/[0.05] border border-white/10 text-slate-300 group-hover:text-cyan-300 transition-colors">
+<svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="1.75" viewbox="0 0 24 24">
+<path d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" stroke-linecap="round" stroke-linejoin="round"></path>
+</svg>
+</div>
+<div>
+<h3 class="font-semibold text-slate-100 text-sm group-hover:text-cyan-200 transition-colors">STATIC TYPE &amp; LINTER INSPECTOR</h3>
+<div class="text-[10px] font-mono text-emerald-400">● LOCAL • ENABLED</div>
+</div>
+</div>
+<span class="px-2 py-0.5 rounded text-[10px] font-mono bg-white/[0.05] text-slate-400 border border-white/10">
+                  ZERO STALL
+                </span>
+</div>
+<p class="text-xs text-slate-400 mt-3 leading-relaxed">
+                Immediate TypeScript and Rust diagnostics without build pipeline stalls.
+              </p>
+<div class="flex flex-wrap gap-1.5 mt-3">
+<span class="px-2 py-0.5 rounded bg-white/[0.04] text-[10px] font-mono text-slate-300 border border-white/[0.05]">tsc --noEmit</span>
+<span class="px-2 py-0.5 rounded bg-white/[0.04] text-[10px] font-mono text-slate-300 border border-white/[0.05]">cargo check</span>
+<span class="px-2 py-0.5 rounded bg-white/[0.04] text-[10px] font-mono text-slate-300 border border-white/[0.05]">ESLint AST</span>
+</div>
+<div class="mt-3.5 pt-2.5 border-t border-white/[0.06] flex items-center justify-between text-[10px] font-mono text-slate-400">
+<span>Parallel daemon worker</span>
+<span class="text-emerald-400">Diagnostics: Clean</span>
+</div>
+</div>
+</div>
+</section>
+<!-- SECTION 2: Modular Connectors & Plugins -->
+<section data-purpose="integrations-grid">
+<div class="flex items-center justify-between mb-3 pt-2">
+<div class="flex items-center gap-2">
+<span class="w-2 h-2 rounded bg-violet-400 shadow-[0_0_6px_#8b5cf6]"></span>
+<h2 class="font-mono text-xs uppercase tracking-wider font-semibold text-slate-200">
+                Modular Connectors &amp; Plugins (Optional Integrations)
+              </h2>
+</div>
+<span class="text-[11px] font-mono text-slate-500">EXPLICIT_SOCKET_GRANTS</span>
+</div>
+<!-- Cards Grid -->
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-3.5">
+<!-- Integration 1: GitHub Repository Sync -->
+<div class="p-4 rounded-xl bg-gradient-to-b from-[#0e111d]/90 to-[#060810]/90 border border-white/[0.08] hover:border-violet-500/40 shadow-[inset_0_1px_1px_rgba(255,255,255,0.06)] cursor-pointer transition-all hover:translate-y-[-1px] group">
+<div class="flex items-start justify-between">
+<div class="flex items-center gap-2.5">
+<div class="p-2 rounded-lg bg-white/[0.05] border border-white/10 text-slate-300 group-hover:text-violet-300 transition-colors">
+<svg class="w-5 h-5" fill="currentColor" viewbox="0 0 24 24">
+<path clip-rule="evenodd" d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.53 1.032 1.53 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z" fill-rule="evenodd"></path>
+</svg>
+</div>
+<div>
+<h3 class="font-semibold text-slate-100 text-sm group-hover:text-violet-200 transition-colors">GITHUB REPOSITORY SYNC</h3>
+<div class="text-[10px] font-mono text-emerald-400">● CONNECTED • TOKEN SECURED</div>
+</div>
+</div>
+<span class="px-2 py-0.5 rounded text-[10px] font-mono bg-violet-500/15 text-violet-300 border border-violet-500/30">
+                  OAUTH SCOPED
+                </span>
+</div>
+<p class="text-xs text-slate-400 mt-3 leading-relaxed">
+                PR drafting, issues retrieval, and automated branch pushes.
+              </p>
+<div class="mt-3.5 pt-2.5 border-t border-white/[0.06] flex items-center justify-between text-[10px] font-mono text-slate-400">
+<span>Read: Repos, PRs</span>
+<span class="text-amber-400">Write: Requires Confirmation</span>
+</div>
+</div>
+<!-- Integration 2: MCP Bridge -->
+<div class="p-4 rounded-xl bg-gradient-to-b from-[#0e111d]/90 to-[#060810]/90 border border-white/[0.08] hover:border-violet-500/40 shadow-[inset_0_1px_1px_rgba(255,255,255,0.06)] cursor-pointer transition-all hover:translate-y-[-1px] group">
+<div class="flex items-start justify-between">
+<div class="flex items-center gap-2.5">
+<div class="p-2 rounded-lg bg-white/[0.05] border border-white/10 text-slate-300 group-hover:text-violet-300 transition-colors">
+<svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="1.75" viewbox="0 0 24 24">
+<path d="M13.19 8.688a4.5 4.5 0 011.242 7.244l-4.5 4.5a4.5 4.5 0 01-6.364-6.364l1.757-1.757m13.35-.622l1.757-1.757a4.5 4.5 0 00-6.364-6.364l-4.5 4.5a4.5 4.5 0 001.242 7.244" stroke-linecap="round" stroke-linejoin="round"></path>
+</svg>
+</div>
+<div>
+<h3 class="font-semibold text-slate-100 text-sm group-hover:text-violet-200 transition-colors">MCP BRIDGE (MODEL CONTEXT PROTOCOL)</h3>
+<div class="text-[10px] font-mono text-emerald-400">● RUNNING (STDIO) • LOCAL SOCKET</div>
+</div>
+</div>
+<span class="px-2 py-0.5 rounded text-[10px] font-mono bg-cyan-500/10 text-cyan-300 border border-cyan-500/30">
+                  PROTOCOL v1.2
+                </span>
+</div>
+<p class="text-xs text-slate-400 mt-3 leading-relaxed">
+                Extensible local JSON-RPC server hub for arbitrary dev tools.
+              </p>
+<div class="mt-3.5 pt-2.5 border-t border-white/[0.06] flex items-center justify-between text-[10px] font-mono text-slate-400">
+<span>Endpoint: unix:///var/run/boss-mcp.sock</span>
+<span class="text-slate-300 font-medium">3 Servers Active</span>
+</div>
+</div>
+<!-- Integration 3: Database Inspector -->
+<div class="p-4 rounded-xl bg-gradient-to-b from-[#0a0e1c]/40 to-[#04060d]/40 border border-white/[0.06] hover:border-white/20 shadow-[inset_0_1px_1px_rgba(255,255,255,0.03)] cursor-pointer transition-all group">
+<div class="flex items-start justify-between">
+<div class="flex items-center gap-2.5">
+<div class="p-2 rounded-lg bg-white/[0.03] border border-white/5 text-slate-500 group-hover:text-slate-300 transition-colors">
+<svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="1.75" viewbox="0 0 24 24">
+<path d="M20.25 6.375c0 2.278-3.694 4.125-8.25 4.125S3.75 8.653 3.75 6.375m16.5 0c0-2.278-3.694-4.125-8.25-4.125S3.75 4.097 3.75 6.375m16.5 0v11.25c0 2.278-3.694 4.125-8.25 4.125s-8.25-1.847-8.25-4.125V6.375m16.5 5.625c0 2.278-3.694 4.125-8.25 4.125s-8.25-1.847-8.25-4.125" stroke-linecap="round" stroke-linejoin="round"></path>
+</svg>
+</div>
+<div>
+<h3 class="font-semibold text-slate-300 text-sm">POSTGRESQL / SQLITE INSPECTOR</h3>
+<div class="text-[10px] font-mono text-slate-500">○ AVAILABLE • NOT CONFIGURED</div>
+</div>
+</div>
+<button class="px-2.5 py-1 rounded text-[10px] font-mono bg-white/[0.05] hover:bg-white/10 text-slate-300 border border-white/10 transition-colors">
+                  Configure [⌘C]
+                </button>
+</div>
+<p class="text-xs text-slate-500 mt-3 leading-relaxed">
+                Schema introspection and read-only query simulation.
+              </p>
+<div class="mt-3.5 pt-2.5 border-t border-white/[0.04] flex items-center justify-between text-[10px] font-mono text-slate-500">
+<span>Drivers: native pg &amp; sqlite3</span>
+<span>Requires local socket</span>
+</div>
+</div>
+<!-- Integration 4: REST / GraphQL HTTP Runner -->
+<div class="p-4 rounded-xl bg-gradient-to-b from-[#0a0e1c]/40 to-[#04060d]/40 border border-white/[0.06] hover:border-white/20 shadow-[inset_0_1px_1px_rgba(255,255,255,0.03)] cursor-pointer transition-all group">
+<div class="flex items-start justify-between">
+<div class="flex items-center gap-2.5">
+<div class="p-2 rounded-lg bg-white/[0.03] border border-white/5 text-slate-500 group-hover:text-slate-300 transition-colors">
+<svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="1.75" viewbox="0 0 24 24">
+<path d="M12 21a9.004 9.004 0 008.716-6.747M12 21a9.004 9.004 0 01-8.716-6.747M12 21c2.485 0 4.5-4.03 4.5-9S14.485 3 12 3m0 18c-2.485 0-4.5-4.03-4.5-9S9.515 3 12 3m0 0a8.997 8.997 0 017.843 4.582M12 3a8.997 8.997 0 00-7.843 4.582m15.686 0A11.953 11.953 0 0112 10.5c-2.998 0-5.74-1.1-7.843-2.918m15.686 0A8.959 8.959 0 0121 12c0 .778-.099 1.533-.284 2.253m0 0A17.919 17.919 0 0112 16.5c-3.162 0-6.133-.815-8.716-2.247m0 0A9.015 9.015 0 013 12c0-.778.099-1.533.284-2.253" stroke-linecap="round" stroke-linejoin="round"></path>
+</svg>
+</div>
+<div>
+<h3 class="font-semibold text-slate-300 text-sm">REST / GRAPHQL HTTP RUNNER</h3>
+<div class="text-[10px] font-mono text-amber-400">⚠ RESTRICTED • LOCALHOST ONLY</div>
+</div>
+</div>
+<span class="px-2 py-0.5 rounded text-[10px] font-mono bg-amber-500/10 text-amber-300 border border-amber-500/20">
+                  SANDBOXED IP
+                </span>
+</div>
+<p class="text-xs text-slate-500 mt-3 leading-relaxed">
+                Enclave-restricted API endpoint testing and mocked responses.
+              </p>
+<div class="mt-3.5 pt-2.5 border-t border-white/[0.04] flex items-center justify-between text-[10px] font-mono text-slate-500">
+<span>Allowed: 127.0.0.1, ::1</span>
+<span class="text-red-400">WAN Egress Blocked</span>
+</div>
+</div>
+</div>
+</section>
+</div>
+</main>
+<!-- END: MainCapabilitiesWorkspace -->
+<!-- BEGIN: SelectedToolInspectorPanel -->
+<aside class="w-[360px] bg-[#050811]/95 backdrop-blur-xl border-l border-white/[0.08] flex flex-col justify-between flex-shrink-0 z-20 overflow-y-auto select-none" data-purpose="details-panel">
+<!-- Upper Section: Selected Tool Metadata & Live Config -->
+<div class="p-4 space-y-5">
+<!-- Header with Selected Tool -->
+<div class="pb-3 border-b border-white/[0.06]">
+<div class="flex items-center justify-between">
+<div class="text-[10px] font-mono uppercase text-cyan-400 tracking-wider flex items-center gap-1.5">
+<span>ACTIVE CAPABILITY</span>
+<span class="w-1.5 h-1.5 rounded-full bg-cyan-400"></span>
+</div>
+<!-- Mini Holographic Orbital Core Indicator -->
+<div class="relative w-5 h-5 flex items-center justify-center" title="Holographic Core Monitoring">
+<span class="w-2.5 h-2.5 rounded-full bg-cyan-400 shadow-[0_0_8px_#00e5ff]"></span>
+<div class="absolute inset-0 rounded-full border border-cyan-400/40 border-dashed animate-spin-slow"></div>
+</div>
+</div>
+<h2 class="text-base font-bold text-white mt-1">FILE SYSTEM ENGINE</h2>
+<div class="text-[11px] font-mono text-slate-400">libboss_fs_sandbox.dylib • v0.9.4</div>
+<!-- Status & Master Switch -->
+<div class="mt-3 p-2.5 rounded-lg bg-black/50 border border-white/[0.06] flex items-center justify-between">
+<div class="flex items-center gap-2">
+<span class="w-2 h-2 rounded-full bg-emerald-400 shadow-[0_0_8px_#34d399]"></span>
+<span class="text-xs text-slate-200 font-medium">Status: Active &amp; Sandboxed</span>
+</div>
+<!-- Toggle switch (active state) -->
+<div class="w-9 h-5 rounded-full bg-cyan-500/30 border border-cyan-400/60 p-0.5 flex items-center justify-end cursor-pointer shadow-[0_0_10px_rgba(0,229,255,0.3)]">
+<div class="w-3.5 h-3.5 rounded-full bg-cyan-300 shadow"></div>
+</div>
+</div>
+</div>
+<!-- Capabilities & Methods -->
+<div class="space-y-2">
+<h3 class="text-[11px] font-mono uppercase text-slate-400 tracking-wider font-semibold">
+            Capabilities &amp; Methods
+          </h3>
+<div class="space-y-1 text-xs">
+<div class="flex items-center gap-2 text-slate-300 p-1.5 rounded bg-white/[0.02]">
+<span class="text-cyan-400 font-mono font-bold">✓</span>
+<span>Read workspace files <span class="text-slate-500 text-[10px]">(Unrestricted within root)</span></span>
+</div>
+<div class="flex items-center gap-2 text-slate-300 p-1.5 rounded bg-white/[0.02]">
+<span class="text-cyan-400 font-mono font-bold">✓</span>
+<span>Generate code patches &amp; diffs <span class="text-slate-500 text-[10px]">(Requires User Apply)</span></span>
+</div>
+<div class="flex items-center gap-2 text-slate-300 p-1.5 rounded bg-white/[0.02]">
+<span class="text-cyan-400 font-mono font-bold">✓</span>
+<span>AST dependency discovery</span>
+</div>
+<div class="flex items-center gap-2 text-red-400 p-1.5 rounded bg-red-950/20 border border-red-500/20 text-[11px]">
+<span class="font-mono font-bold">✕</span>
+<span>Access filesystem outside project root <span class="text-red-300 font-mono text-[9px]">(HARD LOCKED)</span></span>
+</div>
+</div>
+</div>
+<!-- Security & Permissions Boundary -->
+<div class="space-y-2">
+<h3 class="text-[11px] font-mono uppercase text-slate-400 tracking-wider font-semibold flex items-center justify-between">
+<span>Security &amp; Boundary Matrix</span>
+<span class="text-[10px] text-cyan-400 font-normal">Strict Enforced</span>
+</h3>
+<div class="p-2.5 rounded-lg bg-black/60 border border-white/[0.06] font-mono text-[11px] space-y-2">
+<div>
+<div class="text-slate-500 text-[9px]">LOCAL ROOT:</div>
+<div class="text-slate-200 truncate">~/projects/boss-core-engine</div>
+<div class="text-emerald-400 text-[9px] mt-0.5">● Full Read/Write with atomic backup</div>
+</div>
+<div class="pt-1.5 border-t border-white/[0.04]">
+<div class="text-slate-500 text-[9px]">PARENT DIRECTORIES:</div>
+<div class="text-red-400 text-[10px] flex items-center gap-1">
+<span>~/projects/..</span>
+<span class="px-1 rounded bg-red-500/20 text-red-300 text-[9px]">BLOCKED</span>
+</div>
+</div>
+<div class="pt-1.5 border-t border-white/[0.04]">
+<div class="text-slate-500 text-[9px]">DOTFILES (.env, .ssh):</div>
+<div class="text-amber-400 text-[10px] flex items-center gap-1">
+<span>REDACTED / CONFIRMATION REQUIRED</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Live Execution Authorization Preview -->
+<div class="space-y-2 pt-1" data-purpose="authorization-modal-preview">
+<div class="flex items-center justify-between">
+<span class="text-[11px] font-mono uppercase text-cyan-400 font-semibold tracking-wider flex items-center gap-1.5">
+<span class="w-2 h-2 rounded-full bg-cyan-400 animate-pulse"></span>
+              Live Authorization Prompt
+            </span>
+<span class="text-[10px] font-mono text-slate-500">SAMPLE REQUEST</span>
+</div>
+<div class="p-3 rounded-xl bg-gradient-to-b from-[#0c1424] to-[#080d19] border border-cyan-500/40 shadow-[0_0_15px_rgba(0,229,255,0.15)] space-y-2.5">
+<div class="flex items-center justify-between">
+<span class="text-[10px] font-mono text-cyan-300 bg-cyan-500/10 px-1.5 py-0.5 rounded border border-cyan-500/30 uppercase">Pending Action Request</span>
+<span class="text-[10px] font-mono text-slate-400">now</span>
+</div>
+<div class="text-xs text-slate-200 font-medium">
+              BOSS wants to write patch to <code class="text-cyan-300 font-mono bg-black/40 px-1 py-0.5 rounded">src/auth/jwt-middleware.ts</code> (Line 42-58)
+            </div>
+<div class="text-[11px] text-slate-400 bg-black/30 p-2 rounded border border-white/[0.04]">
+<span class="text-slate-500 font-mono text-[9px] block mb-0.5">REASON:</span>
+              Eliminate clock-skew false revocation window
+            </div>
+<div class="grid grid-cols-3 gap-1.5 pt-1">
+<button class="py-1.5 rounded-md bg-cyan-400 hover:bg-cyan-300 text-slate-950 font-bold text-[10px] font-mono tracking-wide shadow-[0_0_12px_rgba(0,229,255,0.4)] transition-all text-center">
+                ALLOW ONCE
+              </button>
+<button class="py-1.5 rounded-md bg-white/[0.08] hover:bg-white/[0.14] text-slate-200 font-medium text-[10px] font-mono transition-all text-center">
+                FOR SESSION
+              </button>
+<button class="py-1.5 rounded-md bg-red-500/20 hover:bg-red-500/30 text-red-300 border border-red-500/30 font-medium text-[10px] font-mono transition-all text-center">
+                DENY
+              </button>
+</div>
+</div>
+</div>
+<!-- Recent Tool Audit Trail -->
+<div class="space-y-2 pt-1">
+<h3 class="text-[11px] font-mono uppercase text-slate-400 tracking-wider font-semibold flex items-center justify-between">
+<span>Recent Tool Audit Trail</span>
+<span class="text-[9px] font-mono text-slate-500">REALTIME</span>
+</h3>
+<div class="space-y-1.5 font-mono text-[10px]">
+<div class="flex items-start justify-between p-1.5 rounded bg-white/[0.02] text-slate-300">
+<span class="truncate">Read src/auth/jwt-middleware.ts</span>
+<span class="text-slate-500 whitespace-nowrap ml-2">12s ago</span>
+</div>
+<div class="flex items-start justify-between p-1.5 rounded bg-white/[0.02] text-slate-400">
+<span class="truncate">Scanned 142 source manifests</span>
+<span class="text-slate-500 whitespace-nowrap ml-2">4m ago</span>
+</div>
+<div class="flex items-start justify-between p-1.5 rounded bg-white/[0.02] text-slate-400">
+<span class="truncate">Created symlink target</span>
+<span class="text-slate-500 whitespace-nowrap ml-2">18m ago</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Bottom Panel Status -->
+<div class="p-3 bg-black/60 border-t border-white/[0.06] flex items-center justify-between text-[11px] font-mono text-slate-500">
+<span class="flex items-center gap-1.5">
+<span class="w-1.5 h-1.5 rounded-full bg-cyan-400"></span>
+          AUDIT ENGINE BOUND
+        </span>
+<button class="text-cyan-400 hover:underline">Export Logs</button>
+</div>
+</aside>
+<!-- END: SelectedToolInspectorPanel -->
+</div>
+<!-- BEGIN: BottomEnclaveTelemetryFooter -->
+<footer class="h-8 bg-[#04060c] border-t border-white/[0.07] px-4 flex items-center justify-between select-none z-50 text-[11px] font-mono text-slate-400 flex-shrink-0" data-purpose="system-footer">
+<div class="flex items-center gap-2">
+<span class="text-cyan-400 font-semibold tracking-wider">BHANU OPEN SOURCE SYSTEM</span>
+<span class="text-slate-600">•</span>
+<span class="text-slate-300">PHASE 2.9 - TOOLS &amp; PLUGINS WORKSPACE</span>
+</div>
+<div class="hidden md:flex items-center gap-4 text-slate-500 text-[10px]">
+<span class="flex items-center gap-1 text-slate-400">
+<span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span>
+        LOCAL FIRST
+      </span>
+<span>•</span>
+<span class="text-slate-400">PRIVATE</span>
+<span>•</span>
+<span class="text-cyan-400">ZERO SILENT PRIVILEGE ESCALATION</span>
+<span>•</span>
+<span class="text-emerald-400">100% OFFLINE CAPABLE</span>
+</div>
+</footer>
+<!-- END: BottomEnclaveTelemetryFooter -->
+</body></html>

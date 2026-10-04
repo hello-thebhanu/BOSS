@@ -1,0 +1,13 @@
+import { invoke } from '@tauri-apps/api/core';
+import type { StorageGateway } from '../repositories/storageGateway';
+
+/** The sole browser-to-native persistence adapter. UI must consume repositories, not this class. */
+export class TauriStorageGateway implements StorageGateway {
+  projects: StorageGateway['projects'] = { create: (project) => invoke('create_project', { project }), get: (id) => invoke('get_project', { id }), list: () => invoke('list_projects'), update: (project) => invoke('update_project', { project }), delete: (id) => invoke<void>('delete_project', { id }) };
+  conversations: StorageGateway['conversations'] = { create: (conversation) => invoke('create_conversation', { conversation }), get: (id) => invoke('get_conversation', { id }), list: () => invoke('list_conversations'), update: (conversation) => invoke('update_conversation', { conversation }), delete: (id) => invoke<void>('delete_conversation', { id }) };
+  messages: StorageGateway['messages'] = { create: (message) => invoke('create_message', { message }), get: (id) => invoke('get_message', { id }), list: (conversationId) => invoke('list_messages', { conversationId }), delete: (id) => invoke<void>('delete_message', { id }) };
+  sessions: StorageGateway['sessions'] = { list: () => invoke('list_sessions'), create: (session) => invoke('create_session', { id: session.id, projectId: session.projectId, startedAt: session.startedAt, context: session.context ?? {} }), finish: (id, endedAt) => invoke('finish_session', { id, endedAt }) };
+  agentActions: StorageGateway['agentActions'] = { list: (sessionId) => invoke('list_agent_actions', { sessionId }), create: (action) => invoke('record_agent_action', { id: action.id, sessionId: action.sessionId, action: action.action, status: action.status, metadata: action.metadata ?? {}, createdAt: action.createdAt }), updateStatus: (id, status, metadata) => invoke('update_agent_action', { id, status, metadata: metadata ?? {} }) };
+  toolExecutions: StorageGateway['toolExecutions'] = { list: (sessionId) => invoke('list_tool_executions', { sessionId }), create: (value) => invoke('record_tool_execution', { id: value.id, sessionId: value.sessionId, toolName: value.toolName, status: value.status, metadata: value.metadata ?? {}, createdAt: value.createdAt }), updateStatus: (id, status, metadata) => invoke('update_tool_execution', { id, status, metadata: metadata ?? {} }) };
+  memory: StorageGateway['memory'] = { list: () => invoke('list_memory_items') }; settings: StorageGateway['settings'] = { get: (key) => invoke('get_setting', { key }), set: (setting) => invoke('set_setting', { setting }) }; permissionAudit: StorageGateway['permissionAudit'] = { list: () => invoke('list_permission_audit') };
+}

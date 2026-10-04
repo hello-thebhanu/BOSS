@@ -1,0 +1,1055 @@
+<!DOCTYPE html>
+<html lang="en" class="h-full">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>BOSS AI Operating System - Memory & Knowledge Center</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['"Plus Jakarta Sans"', 'sans-serif'],
+            mono: ['"JetBrains Mono"', 'monospace']
+          },
+          colors: {
+            boss: {
+              bg: '#020408',
+              surface: '#070b12',
+              card: '#0a101b',
+              border: 'rgba(255, 255, 255, 0.07)',
+              cyan: '#00f5ff',
+              violet: '#8a2be2',
+              emerald: '#10b981',
+              amber: '#f59e0b',
+              rose: '#f43f5e'
+            }
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    body {
+      background-color: #020408;
+      color: #e2e8f0;
+      overflow-x: hidden;
+      font-feature-settings: "cv02", "cv03", "cv04", "cv11";
+    }
+
+    /* Custom Glass Paneling */
+    .boss-glass {
+      background: rgba(10, 16, 27, 0.68);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border: 1px solid rgba(255, 255, 255, 0.07);
+    }
+
+    .boss-glass-glow {
+      box-shadow: 0 0 35px -10px rgba(0, 245, 255, 0.08), inset 0 1px 0 rgba(255, 255, 255, 0.08);
+    }
+
+    .boss-glass-active {
+      background: linear-gradient(135deg, rgba(0, 245, 255, 0.09) 0%, rgba(138, 43, 226, 0.04) 100%);
+      border: 1px solid rgba(0, 245, 255, 0.35);
+      box-shadow: 0 0 20px -5px rgba(0, 245, 255, 0.18), inset 0 1px 0 rgba(255, 255, 255, 0.12);
+    }
+
+    /* Holographic Orbital Core Animation */
+    @keyframes gyroOrbitSlow {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+    @keyframes gyroOrbitReverse {
+      0% { transform: rotate(360deg); }
+      100% { transform: rotate(0deg); }
+    }
+    @keyframes coreAuraPulse {
+      0%, 100% { opacity: 0.65; transform: scale(1); }
+      50% { opacity: 0.95; transform: scale(1.06); }
+    }
+
+    .anim-gyro-slow {
+      animation: gyroOrbitSlow 24s linear infinite;
+    }
+    .anim-gyro-reverse {
+      animation: gyroOrbitReverse 16s linear infinite;
+    }
+    .anim-core-pulse {
+      animation: coreAuraPulse 4s ease-in-out infinite;
+    }
+
+    /* Custom Scrollbar */
+    ::-webkit-scrollbar {
+      width: 5px;
+      height: 5px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #04070d;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: rgba(255, 255, 255, 0.14);
+      border-radius: 4px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: rgba(0, 245, 255, 0.35);
+    }
+  </style>
+</head>
+<body class="h-full flex flex-col antialiased selection:bg-boss-cyan/20 selection:text-boss-cyan">
+
+  <!-- ========================================================================= -->
+  <!-- TOP APPLICATION CHROME (macOS Window Controls & Global Telemetry) -->
+  <!-- ========================================================================= -->
+  <header class="h-10 border-b border-white/[0.06] bg-[#03060c] flex items-center justify-between px-4 select-none shrink-0 z-50 text-[11px] font-mono">
+    <!-- Window Controls & System Identity -->
+    <div class="flex items-center gap-3.5">
+      <div class="flex items-center gap-1.5">
+        <div class="w-2.5 h-2.5 rounded-full bg-[#ff5f56] opacity-80 hover:opacity-100 transition-opacity"></div>
+        <div class="w-2.5 h-2.5 rounded-full bg-[#ffbd2e] opacity-80 hover:opacity-100 transition-opacity"></div>
+        <div class="w-2.5 h-2.5 rounded-full bg-[#27c93f] opacity-80 hover:opacity-100 transition-opacity"></div>
+      </div>
+      <div class="h-3.5 w-px bg-white/10 mx-1"></div>
+      <div class="flex items-center gap-2 text-slate-400">
+        <span class="inline-block w-1.5 h-1.5 rounded-full bg-boss-cyan shadow-[0_0_8px_#00f5ff]"></span>
+        <span class="font-bold tracking-wider text-slate-200">BOSS</span>
+        <span class="text-slate-500 font-mono text-[10px]">v0.1.0-preview</span>
+      </div>
+      <span class="text-slate-600">//</span>
+      <span class="text-slate-400 font-mono tracking-tight">BHANU_WORKSPACE</span>
+      <span class="text-slate-600">//</span>
+      <div class="flex items-center gap-1 text-[10px] px-2 py-0.5 rounded bg-boss-cyan/10 text-boss-cyan border border-boss-cyan/20">
+        <span>LOCAL_MEMORY_ENCLAVE</span>
+      </div>
+      <span class="text-slate-600">//</span>
+      <span class="text-slate-400">LOCATION: <span class="text-slate-200">SETTINGS</span> // <span class="text-boss-cyan">MEMORY &amp; KNOWLEDGE</span></span>
+    </div>
+
+    <!-- Right Side Security & Telemetry Badges -->
+    <div class="flex items-center gap-4 text-slate-400 text-[10px]">
+      <div class="flex items-center gap-1.5 px-2.5 py-1 rounded bg-emerald-500/10 border border-emerald-500/20 text-emerald-400">
+        <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
+        <span class="font-semibold tracking-wider">ENCLAVE: ISOLATED ZERO-CLOUD</span>
+      </div>
+      <div class="flex items-center gap-2 text-slate-400">
+        <span>ITEMS: <span class="text-slate-200 font-bold">12 RECORDED</span></span>
+        <span class="text-slate-600">|</span>
+        <span>INDEX: <span class="text-boss-cyan font-bold">SQLITE ENCRYPTED</span></span>
+        <span class="text-slate-600">|</span>
+        <span>AUTO-PERSIST: <span class="text-emerald-400 font-semibold">ACTIVE</span></span>
+      </div>
+      <button class="text-slate-400 hover:text-slate-200 transition-colors">
+        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+      </button>
+    </div>
+  </header>
+
+  <!-- ========================================================================= -->
+  <!-- THREE-PANE MAIN APPLICATION INTERFACE -->
+  <!-- ========================================================================= -->
+  <div class="flex flex-1 min-h-0 overflow-hidden">
+
+    <!-- ===================================================================== -->
+    <!-- PANE 1: PERSISTENT BOSS NAVIGATION (Established Global Sidebar) -->
+    <!-- ===================================================================== -->
+    <aside class="w-60 border-r border-white/[0.06] bg-[#02050b] flex flex-col shrink-0 select-none z-30 justify-between">
+      <!-- Top Brand & Omni Search -->
+      <div class="p-3.5 space-y-3">
+        <!-- BOSS Core Mini Badge -->
+        <div class="flex items-center justify-between px-2.5 py-2 rounded-xl bg-white/[0.02] border border-white/[0.05]">
+          <div class="flex items-center gap-2.5">
+            <div class="w-7 h-7 rounded-lg bg-gradient-to-br from-boss-cyan/20 to-boss-violet/20 border border-boss-cyan/40 flex items-center justify-center font-bold text-xs text-boss-cyan shadow-[0_0_10px_rgba(0,245,255,0.2)]">
+              B
+            </div>
+            <div>
+              <div class="flex items-center gap-1.5">
+                <span class="text-xs font-bold tracking-wide text-slate-100">BOSS</span>
+                <span class="text-[9px] px-1 py-0.2 rounded bg-boss-cyan/20 text-boss-cyan font-mono font-medium">CORE</span>
+              </div>
+              <div class="text-[10px] text-slate-500 font-mono">Bhanu OS • v0.1.0</div>
+            </div>
+          </div>
+          <div class="w-2 h-2 rounded-full bg-boss-cyan shadow-[0_0_8px_#00f5ff]"></div>
+        </div>
+
+        <!-- Omni-Search Bar -->
+        <div class="relative">
+          <svg class="w-3.5 h-3.5 text-slate-500 absolute left-3 top-2.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+          <input type="text" placeholder="Omni-search system..." readonly class="w-full bg-[#070c16] border border-white/[0.07] rounded-lg pl-8 pr-7 py-1.5 text-xs text-slate-400 placeholder-slate-600 focus:outline-none cursor-pointer">
+          <span class="absolute right-2.5 top-2 text-[9px] font-mono text-slate-600 bg-white/[0.04] px-1 rounded border border-white/5">⌘K</span>
+        </div>
+
+        <!-- Global Workspaces List -->
+        <nav class="space-y-0.5 text-xs font-medium pt-1">
+          <a href="#" class="flex items-center gap-2.5 px-3 py-2 rounded-lg text-slate-400 hover:text-slate-200 hover:bg-white/[0.03] transition-colors">
+            <svg class="w-4 h-4 text-slate-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/></svg>
+            <span>Workspace Home</span>
+          </a>
+          <a href="#" class="flex items-center justify-between px-3 py-2 rounded-lg text-slate-400 hover:text-slate-200 hover:bg-white/[0.03] transition-colors">
+            <div class="flex items-center gap-2.5">
+              <svg class="w-4 h-4 text-slate-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/></svg>
+              <span>Neural Chat</span>
+            </div>
+            <span class="text-[10px] font-mono text-slate-600">⌘1</span>
+          </a>
+          <a href="#" class="flex items-center justify-between px-3 py-2 rounded-lg text-slate-400 hover:text-slate-200 hover:bg-white/[0.03] transition-colors">
+            <div class="flex items-center gap-2.5">
+              <svg class="w-4 h-4 text-slate-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-6l-2-2H5a2 2 0 00-2 2z"/></svg>
+              <span>Projects</span>
+            </div>
+            <span class="text-[10px] font-mono text-slate-600">⌘2</span>
+          </a>
+          <a href="#" class="flex items-center justify-between px-3 py-2 rounded-lg text-slate-400 hover:text-slate-200 hover:bg-white/[0.03] transition-colors">
+            <div class="flex items-center gap-2.5">
+              <svg class="w-4 h-4 text-slate-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4"/></svg>
+              <span>Coding Studio</span>
+            </div>
+            <span class="text-[9px] px-1.5 py-0.2 rounded bg-cyan-500/10 text-boss-cyan font-mono border border-cyan-500/20">LIVE</span>
+          </a>
+          <a href="#" class="flex items-center justify-between px-3 py-2 rounded-lg text-slate-400 hover:text-slate-200 hover:bg-white/[0.03] transition-colors">
+            <div class="flex items-center gap-2.5">
+              <svg class="w-4 h-4 text-slate-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M8 9l3 3-3 3m5 0h3M5 20h14a2 2 0 002-2V6a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
+              <span>Terminal Session</span>
+            </div>
+            <span class="text-[10px] font-mono text-slate-600">zsh</span>
+          </a>
+          <a href="#" class="flex items-center justify-between px-3 py-2 rounded-lg text-slate-400 hover:text-slate-200 hover:bg-white/[0.03] transition-colors">
+            <div class="flex items-center gap-2.5">
+              <svg class="w-4 h-4 text-slate-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"/></svg>
+              <span>Tools &amp; Plugins</span>
+            </div>
+            <span class="text-[10px] font-mono text-slate-600">10</span>
+          </a>
+          <a href="#" class="flex items-center gap-2.5 px-3 py-2 rounded-lg text-slate-400 hover:text-slate-200 hover:bg-white/[0.03] transition-colors">
+            <svg class="w-4 h-4 text-slate-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+            <span>History</span>
+          </a>
+        </nav>
+
+        <!-- System Control Section -->
+        <div class="pt-2">
+          <div class="text-[10px] font-mono tracking-wider text-slate-600 px-3 uppercase mb-1">System Control</div>
+          <a href="#" class="flex items-center justify-between px-3 py-2 rounded-lg bg-boss-cyan/10 border border-boss-cyan/30 text-boss-cyan font-semibold transition-all shadow-[0_0_15px_-3px_rgba(0,245,255,0.2)]">
+            <div class="flex items-center gap-2.5">
+              <svg class="w-4 h-4 text-boss-cyan" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+              <span>Settings</span>
+            </div>
+            <span class="w-1.5 h-1.5 rounded-full bg-boss-cyan shadow-[0_0_8px_#00f5ff]"></span>
+          </a>
+        </div>
+
+        <!-- Workspaces Bound Preview -->
+        <div class="pt-2 px-1">
+          <div class="text-[10px] font-mono tracking-wider text-slate-600 uppercase flex justify-between">
+            <span>Workspaces</span>
+            <span class="text-slate-500">2 Bound</span>
+          </div>
+          <div class="mt-1.5 space-y-1 text-[11px] font-mono text-slate-400">
+            <div class="flex items-center justify-between px-2 py-1 rounded bg-white/[0.02]">
+              <span class="truncate flex items-center gap-1.5">
+                <span class="w-1 h-1 rounded-full bg-boss-cyan"></span>
+                boss-core-engine
+              </span>
+              <span class="text-[9px] text-slate-500">active</span>
+            </div>
+            <div class="flex items-center justify-between px-2 py-1 rounded bg-white/[0.01] text-slate-500">
+              <span class="truncate flex items-center gap-1.5">
+                <span class="w-1 h-1 rounded-full bg-slate-600"></span>
+                arm-cortex-firmware
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Bottom Profile & Local Enclave Telemetry Dock -->
+      <div class="p-3 border-t border-white/[0.06] bg-[#010307]">
+        <div class="flex items-center justify-between mb-2">
+          <div class="flex items-center gap-2">
+            <div class="w-7 h-7 rounded-lg bg-gradient-to-tr from-boss-violet to-boss-cyan/80 flex items-center justify-center font-bold text-xs text-white shadow-sm">
+              B
+            </div>
+            <div>
+              <div class="flex items-center gap-1">
+                <span class="text-xs font-semibold text-slate-200">Bhanu DEV</span>
+                <span class="text-[9px] font-mono px-1 rounded bg-boss-cyan/10 text-boss-cyan border border-boss-cyan/20">DEV</span>
+              </div>
+              <div class="text-[10px] text-emerald-400 font-mono flex items-center gap-1">
+                <span class="w-1 h-1 rounded-full bg-emerald-400"></span> Local Enclave Active
+              </div>
+            </div>
+          </div>
+          <button class="text-slate-500 hover:text-slate-300">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 12h.01M12 12h.01M19 12h.01M6 12a1 1 0 11-2 0 1 1 0 012 0zm7 0a1 1 0 11-2 0 1 1 0 012 0zm7 0a1 1 0 11-2 0 1 1 0 012 0z"/></svg>
+          </button>
+        </div>
+
+        <div class="p-2 rounded bg-black/40 border border-white/[0.04] font-mono text-[9px] space-y-1 text-slate-400">
+          <div class="flex justify-between">
+            <span>LLM: <span class="text-slate-200">7B Q4_K_M</span></span>
+            <span class="text-emerald-400">ONLINE</span>
+          </div>
+          <div class="flex justify-between">
+            <span>VRAM: <span class="text-slate-200">4.2GB</span></span>
+            <span>TEMP: <span class="text-slate-200">41°C</span></span>
+          </div>
+        </div>
+      </div>
+    </aside>
+
+    <!-- ===================================================================== -->
+    <!-- PANE 2: SETTINGS SUBSYSTEM CATEGORY TREE -->
+    <!-- ===================================================================== -->
+    <section class="w-64 border-r border-white/[0.06] bg-[#040811] flex flex-col shrink-0 select-none z-20 justify-between">
+      <div class="p-4 space-y-4">
+        <!-- Settings Header with mini established BOSS Core -->
+        <div class="flex items-center justify-between pb-1 border-b border-white/[0.04]">
+          <div>
+            <div class="flex items-center gap-2">
+              <h2 class="text-sm font-bold tracking-tight text-white font-sans">SETTINGS</h2>
+              <span class="text-[9px] font-mono px-1.5 py-0.2 rounded bg-boss-cyan/10 text-boss-cyan border border-boss-cyan/20">CONFIG</span>
+            </div>
+            <p class="text-[11px] text-slate-500 font-sans mt-0.5">Configure your workspace.</p>
+          </div>
+          <!-- Established Mini BOSS Core Pulse Indicator -->
+          <div class="relative w-7 h-7 flex items-center justify-center">
+            <div class="absolute inset-0 rounded-full border border-boss-cyan/30 anim-gyro-slow"></div>
+            <div class="absolute inset-1 rounded-full border border-dashed border-boss-violet/40 anim-gyro-reverse"></div>
+            <div class="w-2.5 h-2.5 rounded-full bg-gradient-to-tr from-boss-cyan to-boss-violet anim-core-pulse shadow-[0_0_8px_#00f5ff]"></div>
+          </div>
+        </div>
+
+        <!-- Filter / Search in Settings -->
+        <div class="relative">
+          <svg class="w-3.5 h-3.5 text-slate-500 absolute left-3 top-2.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+          <input type="text" value="memory" readonly class="w-full bg-[#08101e] border border-boss-cyan/30 rounded-lg pl-8 pr-3 py-1.5 text-xs text-slate-200 font-mono focus:outline-none cursor-pointer">
+        </div>
+
+        <!-- Subsystem List -->
+        <div class="space-y-1 font-sans text-xs">
+          <!-- General -->
+          <a href="#" class="flex items-center justify-between px-3 py-2 rounded-lg text-slate-400 hover:text-slate-200 hover:bg-white/[0.02] transition-colors">
+            <div class="flex items-center gap-2.5">
+              <svg class="w-4 h-4 text-slate-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4"/></svg>
+              <span>General</span>
+            </div>
+            <span class="text-[9px] font-mono text-slate-600">PREV</span>
+          </a>
+
+          <!-- Appearance -->
+          <a href="#" class="flex items-center justify-between px-3 py-2 rounded-lg text-slate-400 hover:text-slate-200 hover:bg-white/[0.02] transition-colors">
+            <div class="flex items-center gap-2.5">
+              <svg class="w-4 h-4 text-slate-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg>
+              <span>Appearance</span>
+            </div>
+            <span class="text-[10px] font-mono text-slate-500">Dark</span>
+          </a>
+
+          <!-- Voice -->
+          <a href="#" class="flex items-center justify-between px-3 py-2 rounded-lg text-slate-400 hover:text-slate-200 hover:bg-white/[0.02] transition-colors">
+            <div class="flex items-center gap-2.5">
+              <svg class="w-4 h-4 text-slate-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 01-3-3V5a3 3 0 116 0v6a3 3 0 01-3 3z"/></svg>
+              <span>Voice</span>
+            </div>
+            <span class="text-[10px] font-mono text-emerald-400">READY</span>
+          </a>
+
+          <!-- Models & AI Engine -->
+          <a href="#" class="flex items-center justify-between px-3 py-2 rounded-lg text-slate-400 hover:text-slate-200 hover:bg-white/[0.02] transition-colors">
+            <div class="flex items-center gap-2.5">
+              <svg class="w-4 h-4 text-slate-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M9 3v2m6-2v2M9 19v2m6-2v2M5 9H3m2 6H3m18-6h-2m2 6h-2M7 19h10a2 2 0 002-2V7a2 2 0 00-2-2H7a2 2 0 00-2 2v10a2 2 0 002 2zM9 9h6v6H9V9z"/></svg>
+              <span>Models &amp; AI Engine</span>
+            </div>
+            <span class="text-[9px] font-mono text-slate-500">7B Local</span>
+          </a>
+
+          <!-- Memory & Knowledge (ACTIVE SUBSYSTEM) -->
+          <a href="#" class="flex items-center justify-between px-3 py-2.5 rounded-lg bg-boss-cyan/10 border border-boss-cyan/35 text-boss-cyan font-semibold transition-all shadow-[0_0_18px_-4px_rgba(0,245,255,0.2)]">
+            <div class="flex items-center gap-2.5">
+              <svg class="w-4 h-4 text-boss-cyan" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M4 7v10c0 2.21 3.582 4 8 4s8-1.79 8-4V7M4 7c0 2.21 3.582 4 8 4s8-1.79 8-4M4 7c0-2.21 3.582-4 8-4s8 1.79 8 4m0 5c0 2.21-3.582 4-8 4s-8-1.79-8-4"/></svg>
+              <span>Memory &amp; Knowledge</span>
+            </div>
+            <span class="text-[9px] font-mono px-1.5 py-0.2 rounded bg-boss-cyan/20 text-boss-cyan border border-boss-cyan/40">ACTIVE</span>
+          </a>
+
+          <!-- Profile -->
+          <a href="#" class="flex items-center justify-between px-3 py-2 rounded-lg text-slate-400 hover:text-slate-200 hover:bg-white/[0.02] transition-colors">
+            <div class="flex items-center gap-2.5">
+              <svg class="w-4 h-4 text-slate-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/></svg>
+              <span>Profile</span>
+            </div>
+            <span class="text-[10px] font-mono text-slate-500">Bhanu</span>
+          </a>
+
+          <!-- Permissions & Security -->
+          <a href="#" class="flex items-center justify-between px-3 py-2 rounded-lg text-slate-400 hover:text-slate-200 hover:bg-white/[0.02] transition-colors">
+            <div class="flex items-center gap-2.5">
+              <svg class="w-4 h-4 text-slate-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg>
+              <span>Permissions</span>
+            </div>
+            <span class="text-[9px] font-mono px-1 rounded bg-slate-800 text-slate-400">STRICT</span>
+          </a>
+
+          <!-- About BOSS -->
+          <a href="#" class="flex items-center justify-between px-3 py-2 rounded-lg text-slate-400 hover:text-slate-200 hover:bg-white/[0.02] transition-colors">
+            <div class="flex items-center gap-2.5">
+              <svg class="w-4 h-4 text-slate-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+              <span>About BOSS</span>
+            </div>
+            <span class="text-[10px] font-mono text-slate-500">v0.1.0</span>
+          </a>
+        </div>
+      </div>
+
+      <!-- Local SQLite Storage Enclave Doctrine Card -->
+      <div class="p-3.5 m-3 rounded-xl bg-black/40 border border-white/[0.06] text-[11px] font-mono">
+        <div class="flex items-center gap-2 text-boss-cyan mb-1.5">
+          <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/></svg>
+          <span class="font-bold text-[10px] uppercase tracking-wider">SOVEREIGN MEMORY</span>
+        </div>
+        <p class="text-slate-400 leading-relaxed text-[10px] font-sans">
+          Memory records are stored exclusively in your local encrypted SQLite vault. BOSS never uploads memories to any external cloud or third-party servers.
+        </p>
+      </div>
+    </section>
+
+    <!-- ===================================================================== -->
+    <!-- PANE 3: MAIN MEMORY & KNOWLEDGE STAGE (High-Density Transparent Control) -->
+    <!-- ===================================================================== -->
+    <main class="flex-1 overflow-y-auto bg-[#020408] p-6 space-y-6">
+
+      <!-- =================================================================== -->
+      <!-- HEADER: MEMORY & KNOWLEDGE BANNER + AUTOSAVE STATUS -->
+      <!-- =================================================================== -->
+      <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 pb-4 border-b border-white/[0.06]">
+        <div>
+          <div class="flex items-center gap-3">
+            <h1 class="text-2xl font-bold tracking-tight text-white font-sans">Memory &amp; Knowledge</h1>
+            <span class="text-[10px] font-mono px-2 py-0.5 rounded bg-boss-cyan/10 text-boss-cyan border border-boss-cyan/30">PHASE 10.5</span>
+            <div class="flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 text-[11px] font-mono">
+              <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
+              <span>LOCAL MEMORY ACTIVE</span>
+            </div>
+          </div>
+          <p class="text-xs text-slate-400 mt-1 font-sans">
+            Control what BOSS remembers and uses as context. Transparent, consent-driven, and 100% stored on your machine.
+          </p>
+        </div>
+
+        <!-- Real-Time Actions & Status -->
+        <div class="flex items-center gap-3 shrink-0">
+          <div class="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-black/50 border border-white/[0.07] text-[11px] font-mono text-slate-400">
+            <span class="w-2 h-2 rounded-full bg-emerald-400"></span>
+            <span>AUTOSAVE: <strong class="text-slate-200">SAVED</strong></span>
+          </div>
+          <button class="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-boss-cyan text-black font-semibold text-xs hover:bg-cyan-300 transition-all shadow-[0_0_15px_rgba(0,245,255,0.3)]">
+            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.2" d="M12 4v16m8-8H4"/></svg>
+            <span>+ ADD MEMORY</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- =================================================================== -->
+      <!-- SECTION 01: HERO STATUS CARD + THE ESTABLISHED BOSS CORE VISUAL -->
+      <!-- =================================================================== -->
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-5">
+        
+        <!-- Left Hero Overview (7 Cols) -->
+        <div class="lg:col-span-7 boss-glass rounded-2xl p-5 relative overflow-hidden border border-white/[0.08]">
+          <!-- Ambient Glow Corner -->
+          <div class="absolute -top-16 -left-16 w-48 h-48 bg-boss-cyan/10 rounded-full blur-3xl pointer-events-none"></div>
+
+          <div class="flex items-start justify-between relative z-10 mb-4">
+            <div>
+              <div class="flex items-center gap-2 text-[10px] font-mono tracking-wider uppercase text-boss-cyan mb-1">
+                <span>MASTER MEMORY CONTROL</span>
+                <span>•</span>
+                <span class="text-emerald-400">LOCAL ENCLAVE</span>
+              </div>
+              <h3 class="text-lg font-bold text-white font-sans">Transparent Knowledge Vault</h3>
+              <p class="text-xs text-slate-400 font-sans mt-0.5">
+                "BOSS remembers only what you allow it to remember." No silent logging, no opaque cloud telemetry.
+              </p>
+            </div>
+
+            <!-- Master Toggle -->
+            <div class="flex items-center gap-3 bg-black/40 px-3 py-1.5 rounded-xl border border-white/[0.08]">
+              <span class="text-xs font-mono text-slate-300 font-medium">MEMORY ENGINE</span>
+              <label class="relative inline-flex items-center cursor-pointer">
+                <input type="checkbox" checked class="sr-only peer">
+                <div class="w-9 h-5 bg-slate-800 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-boss-cyan shadow-[0_0_10px_rgba(0,245,255,0.3)]"></div>
+              </label>
+            </div>
+          </div>
+
+          <!-- Metrics Matrix -->
+          <div class="grid grid-cols-4 gap-3 my-4 relative z-10 font-mono">
+            <div class="p-3 rounded-xl bg-black/40 border border-white/[0.06]">
+              <div class="text-[10px] text-slate-500 uppercase">STORED MEMORIES</div>
+              <div class="text-lg font-bold text-boss-cyan mt-1">12 <span class="text-[10px] text-slate-500 font-normal">ITEMS</span></div>
+              <div class="text-[9px] text-emerald-400 mt-0.5">Local SQLite</div>
+            </div>
+            <div class="p-3 rounded-xl bg-black/40 border border-white/[0.06]">
+              <div class="text-[10px] text-slate-500 uppercase">STORAGE TYPE</div>
+              <div class="text-lg font-bold text-slate-200 mt-1">AES-256</div>
+              <div class="text-[9px] text-slate-400 mt-0.5">On-Device Key</div>
+            </div>
+            <div class="p-3 rounded-xl bg-black/40 border border-white/[0.06]">
+              <div class="text-[10px] text-slate-500 uppercase">CONTEXT INJECTION</div>
+              <div class="text-lg font-bold text-emerald-400 mt-1">WHEN RELEVANT</div>
+              <div class="text-[9px] text-slate-500 mt-0.5">Selective RAG</div>
+            </div>
+            <div class="p-3 rounded-xl bg-black/40 border border-white/[0.06]">
+              <div class="text-[10px] text-slate-500 uppercase">AUTONOMY</div>
+              <div class="text-lg font-bold text-boss-violet mt-1">CONSENT-FIRST</div>
+              <div class="text-[9px] text-slate-400 mt-0.5">Prompts on detect</div>
+            </div>
+          </div>
+
+          <!-- Bottom Control Bar -->
+          <div class="flex items-center justify-between pt-3 border-t border-white/[0.06] text-xs relative z-10">
+            <div class="flex items-center gap-2 text-slate-400 text-[11px] font-sans">
+              <svg class="w-4 h-4 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+              <span>Zero external synchronization configured</span>
+            </div>
+            <div class="flex items-center gap-2 font-mono text-xs">
+              <button class="px-3 py-1.5 rounded-lg bg-white/[0.04] hover:bg-white/[0.08] text-slate-300 transition-colors border border-white/[0.06]">
+                EXPORT JSON
+              </button>
+              <button class="px-3 py-1.5 rounded-lg bg-rose-500/10 hover:bg-rose-500/20 text-rose-400 border border-rose-500/25 transition-colors">
+                CLEAR ALL MEMORY
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Right Side: The Established Holographic Orbital BOSS Core (5 Cols) -->
+        <div class="lg:col-span-5 boss-glass rounded-2xl p-5 flex flex-col items-center justify-center relative overflow-hidden border border-white/[0.08]">
+          <div class="absolute -bottom-10 -right-10 w-44 h-44 bg-boss-violet/15 rounded-full blur-3xl pointer-events-none"></div>
+
+          <!-- Header Tag -->
+          <div class="w-full flex items-center justify-between text-[10px] font-mono text-slate-400 mb-2">
+            <span>BOSS CORE // RESONANCE</span>
+            <span class="text-boss-cyan flex items-center gap-1">
+              <span class="w-1.5 h-1.5 rounded-full bg-boss-cyan animate-ping"></span>
+              IDLE OBSERVATION
+            </span>
+          </div>
+
+          <!-- Holographic Orbital Sphere Graphic -->
+          <div class="relative w-40 h-40 flex items-center justify-center my-1">
+            <!-- Outermost Gyro Ring with Trajectory Markers -->
+            <div class="absolute inset-0 rounded-full border border-boss-cyan/25 anim-gyro-slow">
+              <div class="absolute top-1 left-7 w-1.5 h-1.5 rounded-full bg-boss-cyan shadow-[0_0_8px_#00f5ff]"></div>
+              <div class="absolute bottom-3 right-8 w-1 h-1 rounded-full bg-boss-cyan"></div>
+            </div>
+            <!-- Secondary Elliptical Ring (Reverse Orbit) -->
+            <div class="absolute inset-2.5 rounded-full border border-dashed border-boss-violet/40 anim-gyro-reverse">
+              <div class="absolute bottom-2 left-6 w-1.5 h-1.5 rounded-full bg-boss-violet shadow-[0_0_8px_#8a2be2]"></div>
+            </div>
+            <!-- Tertiary Inner Orbital Glass Track -->
+            <div class="absolute inset-6 rounded-full border border-white/10"></div>
+            <!-- Center Holographic Acoustic Sphere -->
+            <div class="w-16 h-16 rounded-full bg-gradient-to-tr from-boss-cyan/20 via-boss-violet/30 to-boss-cyan/30 backdrop-blur-md border border-boss-cyan/50 flex items-center justify-center shadow-[0_0_25px_rgba(0,245,255,0.25)] anim-core-pulse">
+              <!-- Acoustic Frequency Waveform Bars -->
+              <div class="flex items-center gap-0.5 h-6">
+                <span class="w-0.5 h-2 bg-boss-cyan rounded-full"></span>
+                <span class="w-0.5 h-4 bg-boss-cyan rounded-full"></span>
+                <span class="w-0.5 h-6 bg-white rounded-full"></span>
+                <span class="w-0.5 h-3 bg-boss-cyan rounded-full"></span>
+                <span class="w-0.5 h-5 bg-boss-violet rounded-full"></span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Status Footer beneath Core -->
+          <div class="text-center mt-2">
+            <div class="text-xs font-mono font-semibold tracking-wider text-slate-200">
+              STATE: READY // <span class="text-boss-cyan">MEMORY BOUND</span>
+            </div>
+            <p class="text-[11px] text-slate-500 font-sans mt-0.5 max-w-xs">
+              Subtle pulse on new memory save • Contractive fade on forget.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <!-- =================================================================== -->
+      <!-- SECTION 02: EXPLICIT MEMORY SUGGESTION BANNER (CONSENT-FIRST PROMPT) -->
+      <!-- =================================================================== -->
+      <div class="boss-glass rounded-xl p-4 border border-boss-cyan/30 bg-gradient-to-r from-boss-cyan/[0.05] via-transparent to-boss-violet/[0.05] flex flex-col md:flex-row md:items-center justify-between gap-4">
+        <div class="flex items-start gap-3.5">
+          <div class="w-8 h-8 rounded-lg bg-boss-cyan/15 border border-boss-cyan/40 flex items-center justify-center text-boss-cyan shrink-0 mt-0.5">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+          </div>
+          <div>
+            <div class="flex items-center gap-2">
+              <span class="text-[10px] font-mono tracking-wider uppercase text-boss-cyan font-bold">RECENT INFERENCE PROMPT</span>
+              <span class="text-[9px] font-mono px-1.5 py-0.2 rounded bg-amber-500/15 text-amber-300 border border-amber-500/30">PENDING CONFIRMATION</span>
+            </div>
+            <div class="text-xs font-medium text-slate-200 mt-1 font-sans">
+              BOSS detected a recurring pattern: <span class="text-boss-cyan font-mono font-normal">"Developer always specifies strict TypeScript types with noImplicitAny=true"</span>
+            </div>
+            <div class="text-[11px] text-slate-400 mt-0.5">
+              Source: Neural Chat Session #4921 • Would you like BOSS to remember this preference?
+            </div>
+          </div>
+        </div>
+
+        <div class="flex items-center gap-2 shrink-0 font-mono text-xs">
+          <button class="px-3.5 py-1.5 rounded-lg bg-boss-cyan text-black font-semibold hover:bg-cyan-300 transition-colors shadow-sm">
+            APPROVE &amp; SAVE
+          </button>
+          <button class="px-3 py-1.5 rounded-lg bg-white/[0.04] text-slate-400 hover:text-slate-200 transition-colors border border-white/[0.06]">
+            NOT NOW
+          </button>
+          <button class="px-2 py-1.5 text-slate-500 hover:text-slate-300" title="Dismiss suggestion">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+          </button>
+        </div>
+      </div>
+
+      <!-- =================================================================== -->
+      <!-- SECTION 03: MEMORY SUBSYSTEM CATEGORIES (5 SEGMENTS) -->
+      <!-- =================================================================== -->
+      <div>
+        <div class="flex items-center justify-between mb-3">
+          <div class="flex items-center gap-2">
+            <h2 class="text-xs font-mono font-bold tracking-wider uppercase text-slate-300">01 // MEMORY CATEGORIES</h2>
+            <span class="text-slate-600">|</span>
+            <span class="text-[11px] text-slate-500 font-sans">Categorized context boundaries</span>
+          </div>
+          <span class="text-[10px] font-mono text-slate-500">5 ACTIVE SCHEMAS</span>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-5 gap-3 font-sans">
+          <!-- 1. Preferences -->
+          <div class="boss-glass rounded-xl p-3.5 border border-boss-cyan/30 bg-boss-cyan/[0.02]">
+            <div class="flex items-center justify-between mb-2">
+              <span class="text-[10px] font-mono font-bold text-boss-cyan uppercase">PREFERENCES</span>
+              <span class="text-xs font-mono px-1.5 py-0.2 rounded bg-boss-cyan/10 text-boss-cyan border border-boss-cyan/20">4</span>
+            </div>
+            <p class="text-[11px] text-slate-400 leading-snug">
+              Coding style, indentation, type strictness, and tooling defaults.
+            </p>
+            <div class="mt-3 pt-2 border-t border-white/[0.05] flex justify-between items-center text-[10px] font-mono">
+              <span class="text-emerald-400">● ENABLED</span>
+              <a href="#" class="text-slate-400 hover:text-boss-cyan">FILTER &rarr;</a>
+            </div>
+          </div>
+
+          <!-- 2. Project Context -->
+          <div class="boss-glass rounded-xl p-3.5 border border-white/[0.07]">
+            <div class="flex items-center justify-between mb-2">
+              <span class="text-[10px] font-mono font-bold text-slate-200 uppercase">PROJECT CONTEXT</span>
+              <span class="text-xs font-mono px-1.5 py-0.2 rounded bg-white/[0.05] text-slate-300 border border-white/10">3</span>
+            </div>
+            <p class="text-[11px] text-slate-400 leading-snug">
+              Architecture decisions, crate dependencies, and repository conventions.
+            </p>
+            <div class="mt-3 pt-2 border-t border-white/[0.05] flex justify-between items-center text-[10px] font-mono">
+              <span class="text-emerald-400">● ENABLED</span>
+              <a href="#" class="text-slate-400 hover:text-boss-cyan">FILTER &rarr;</a>
+            </div>
+          </div>
+
+          <!-- 3. Conversation Context -->
+          <div class="boss-glass rounded-xl p-3.5 border border-white/[0.07]">
+            <div class="flex items-center justify-between mb-2">
+              <span class="text-[10px] font-mono font-bold text-slate-200 uppercase">CONVERSATION</span>
+              <span class="text-xs font-mono px-1.5 py-0.2 rounded bg-white/[0.05] text-slate-300 border border-white/10">2</span>
+            </div>
+            <p class="text-[11px] text-slate-400 leading-snug">
+              Ongoing thread context and developer feedback checkpoints.
+            </p>
+            <div class="mt-3 pt-2 border-t border-white/[0.05] flex justify-between items-center text-[10px] font-mono">
+              <span class="text-emerald-400">● ENABLED</span>
+              <a href="#" class="text-slate-400 hover:text-boss-cyan">FILTER &rarr;</a>
+            </div>
+          </div>
+
+          <!-- 4. Workflow Patterns -->
+          <div class="boss-glass rounded-xl p-3.5 border border-white/[0.07]">
+            <div class="flex items-center justify-between mb-2">
+              <span class="text-[10px] font-mono font-bold text-slate-200 uppercase">WORKFLOW</span>
+              <span class="text-xs font-mono px-1.5 py-0.2 rounded bg-white/[0.05] text-slate-300 border border-white/10">2</span>
+            </div>
+            <p class="text-[11px] text-slate-400 leading-snug">
+              Terminal command velocity, test runner preferences, and diff formats.
+            </p>
+            <div class="mt-3 pt-2 border-t border-white/[0.05] flex justify-between items-center text-[10px] font-mono">
+              <span class="text-emerald-400">● ENABLED</span>
+              <a href="#" class="text-slate-400 hover:text-boss-cyan">FILTER &rarr;</a>
+            </div>
+          </div>
+
+          <!-- 5. System State -->
+          <div class="boss-glass rounded-xl p-3.5 border border-white/[0.07]">
+            <div class="flex items-center justify-between mb-2">
+              <span class="text-[10px] font-mono font-bold text-slate-200 uppercase">SYSTEM STATE</span>
+              <span class="text-xs font-mono px-1.5 py-0.2 rounded bg-white/[0.05] text-slate-300 border border-white/10">1</span>
+            </div>
+            <p class="text-[11px] text-slate-400 leading-snug">
+              Hardware profile, Metal FFI binding flags, and local paths.
+            </p>
+            <div class="mt-3 pt-2 border-t border-white/[0.05] flex justify-between items-center text-[10px] font-mono">
+              <span class="text-emerald-400">● ENABLED</span>
+              <a href="#" class="text-slate-400 hover:text-boss-cyan">FILTER &rarr;</a>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- =================================================================== -->
+      <!-- SECTION 04: MEMORY REPOSITORY EXPLORER (SEARCH + TABLE + DETAIL) -->
+      <!-- =================================================================== -->
+      <div class="space-y-3">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+          <div class="flex items-center gap-2">
+            <h2 class="text-xs font-mono font-bold tracking-wider uppercase text-slate-300">02 // MEMORY REPOSITORY &amp; INSPECTION</h2>
+            <span class="text-slate-600">|</span>
+            <span class="text-[11px] text-slate-500 font-sans">Inspect, modify, or permanently forget entries</span>
+          </div>
+
+          <!-- Filter Pills -->
+          <div class="flex items-center gap-1.5 text-[11px] font-mono">
+            <button class="px-2.5 py-1 rounded-md bg-boss-cyan/15 text-boss-cyan border border-boss-cyan/30">ALL (12)</button>
+            <button class="px-2.5 py-1 rounded-md bg-white/[0.03] text-slate-400 hover:text-slate-200 border border-white/[0.06]">PREFERENCES (4)</button>
+            <button class="px-2.5 py-1 rounded-md bg-white/[0.03] text-slate-400 hover:text-slate-200 border border-white/[0.06]">PROJECTS (3)</button>
+            <button class="px-2.5 py-1 rounded-md bg-white/[0.03] text-slate-400 hover:text-slate-200 border border-white/[0.06]">WORKFLOW (2)</button>
+          </div>
+        </div>
+
+        <!-- Search Bar -->
+        <div class="relative">
+          <svg class="w-4 h-4 text-slate-500 absolute left-3.5 top-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+          <input type="text" placeholder="Search memory repository by key, phrase, category, or project..." class="w-full bg-[#060b14] border border-white/[0.08] rounded-xl pl-10 pr-4 py-2.5 text-xs text-slate-200 placeholder-slate-500 focus:border-boss-cyan/50 focus:outline-none font-sans">
+        </div>
+
+        <!-- Split View: Table List (8 Cols) and Selected Item Detail (4 Cols) -->
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-4">
+          
+          <!-- Memory List (8 Cols) -->
+          <div class="lg:col-span-8 boss-glass rounded-xl overflow-hidden border border-white/[0.07]">
+            <div class="divide-y divide-white/[0.05]">
+
+              <!-- Item 1 (Selected State) -->
+              <div class="p-3.5 bg-boss-cyan/[0.06] border-l-2 border-boss-cyan flex items-center justify-between hover:bg-boss-cyan/[0.09] transition-colors cursor-pointer">
+                <div class="space-y-1">
+                  <div class="flex items-center gap-2">
+                    <span class="text-[9px] font-mono uppercase px-1.5 py-0.2 rounded bg-boss-cyan/15 text-boss-cyan border border-boss-cyan/30">Preference</span>
+                    <span class="text-xs font-medium text-slate-100 font-sans">Developer prefers TypeScript with strict explicit interfaces</span>
+                  </div>
+                  <div class="flex items-center gap-3 text-[10px] font-mono text-slate-400">
+                    <span>SOURCE: <strong class="text-slate-300">Conversation #4880</strong></span>
+                    <span>•</span>
+                    <span>ADDED: <span class="text-slate-300">2 hours ago</span></span>
+                    <span>•</span>
+                    <span class="text-emerald-400">ACTIVE IN CONTEXT</span>
+                  </div>
+                </div>
+                <div class="flex items-center gap-2 font-mono text-xs">
+                  <button class="px-2.5 py-1 rounded bg-white/[0.05] hover:bg-white/[0.1] text-slate-300 transition-colors">EDIT</button>
+                  <button class="px-2.5 py-1 rounded bg-rose-500/10 hover:bg-rose-500/20 text-rose-400 transition-colors border border-rose-500/20">FORGET</button>
+                </div>
+              </div>
+
+              <!-- Item 2 -->
+              <div class="p-3.5 hover:bg-white/[0.02] transition-colors flex items-center justify-between cursor-pointer">
+                <div class="space-y-1">
+                  <div class="flex items-center gap-2">
+                    <span class="text-[9px] font-mono uppercase px-1.5 py-0.2 rounded bg-purple-500/15 text-purple-300 border border-purple-500/30">Project Context</span>
+                    <span class="text-xs font-medium text-slate-200 font-sans">BOSS Core repository operates on local Apple Silicon Metal FFI</span>
+                  </div>
+                  <div class="flex items-center gap-3 text-[10px] font-mono text-slate-500">
+                    <span>SOURCE: <strong class="text-slate-400">boss-core-engine/Cargo.toml</strong></span>
+                    <span>•</span>
+                    <span>ADDED: <span class="text-slate-400">Yesterday</span></span>
+                  </div>
+                </div>
+                <div class="flex items-center gap-2 font-mono text-xs opacity-70 hover:opacity-100">
+                  <button class="px-2.5 py-1 rounded bg-white/[0.03] hover:bg-white/[0.08] text-slate-300 transition-colors">EDIT</button>
+                  <button class="px-2.5 py-1 rounded bg-rose-500/5 hover:bg-rose-500/15 text-rose-400 transition-colors">FORGET</button>
+                </div>
+              </div>
+
+              <!-- Item 3 -->
+              <div class="p-3.5 hover:bg-white/[0.02] transition-colors flex items-center justify-between cursor-pointer">
+                <div class="space-y-1">
+                  <div class="flex items-center gap-2">
+                    <span class="text-[9px] font-mono uppercase px-1.5 py-0.2 rounded bg-amber-500/15 text-amber-300 border border-amber-500/30">Workflow</span>
+                    <span class="text-xs font-medium text-slate-200 font-sans">Prefers ultra-concise terminal commands with zero introductory text</span>
+                  </div>
+                  <div class="flex items-center gap-3 text-[10px] font-mono text-slate-500">
+                    <span>SOURCE: <strong class="text-slate-400">Developer Instruction</strong></span>
+                    <span>•</span>
+                    <span>ADDED: <span class="text-slate-400">3 days ago</span></span>
+                  </div>
+                </div>
+                <div class="flex items-center gap-2 font-mono text-xs opacity-70 hover:opacity-100">
+                  <button class="px-2.5 py-1 rounded bg-white/[0.03] hover:bg-white/[0.08] text-slate-300 transition-colors">EDIT</button>
+                  <button class="px-2.5 py-1 rounded bg-rose-500/5 hover:bg-rose-500/15 text-rose-400 transition-colors">FORGET</button>
+                </div>
+              </div>
+
+              <!-- Item 4 -->
+              <div class="p-3.5 hover:bg-white/[0.02] transition-colors flex items-center justify-between cursor-pointer">
+                <div class="space-y-1">
+                  <div class="flex items-center gap-2">
+                    <span class="text-[9px] font-mono uppercase px-1.5 py-0.2 rounded bg-boss-cyan/15 text-boss-cyan border border-boss-cyan/30">Preference</span>
+                    <span class="text-xs font-medium text-slate-200 font-sans">Always format Git commits using the Conventional Commits specification</span>
+                  </div>
+                  <div class="flex items-center gap-3 text-[10px] font-mono text-slate-500">
+                    <span>SOURCE: <strong class="text-slate-400">Developer Direct Input</strong></span>
+                    <span>•</span>
+                    <span>ADDED: <span class="text-slate-400">5 days ago</span></span>
+                  </div>
+                </div>
+                <div class="flex items-center gap-2 font-mono text-xs opacity-70 hover:opacity-100">
+                  <button class="px-2.5 py-1 rounded bg-white/[0.03] hover:bg-white/[0.08] text-slate-300 transition-colors">EDIT</button>
+                  <button class="px-2.5 py-1 rounded bg-rose-500/5 hover:bg-rose-500/15 text-rose-400 transition-colors">FORGET</button>
+                </div>
+              </div>
+
+              <!-- Item 5 -->
+              <div class="p-3.5 hover:bg-white/[0.02] transition-colors flex items-center justify-between cursor-pointer">
+                <div class="space-y-1">
+                  <div class="flex items-center gap-2">
+                    <span class="text-[9px] font-mono uppercase px-1.5 py-0.2 rounded bg-emerald-500/15 text-emerald-300 border border-emerald-500/30">System State</span>
+                    <span class="text-xs font-medium text-slate-200 font-sans">ARM Cortex cross-compiler toolchain bound to /usr/local/opt/arm-none-eabi</span>
+                  </div>
+                  <div class="flex items-center gap-3 text-[10px] font-mono text-slate-500">
+                    <span>SOURCE: <strong class="text-slate-400">Terminal Auto-Discovery</strong></span>
+                    <span>•</span>
+                    <span>ADDED: <span class="text-slate-400">1 week ago</span></span>
+                  </div>
+                </div>
+                <div class="flex items-center gap-2 font-mono text-xs opacity-70 hover:opacity-100">
+                  <button class="px-2.5 py-1 rounded bg-white/[0.03] hover:bg-white/[0.08] text-slate-300 transition-colors">EDIT</button>
+                  <button class="px-2.5 py-1 rounded bg-rose-500/5 hover:bg-rose-500/15 text-rose-400 transition-colors">FORGET</button>
+                </div>
+              </div>
+            </div>
+
+            <!-- Table Footer -->
+            <div class="p-2.5 bg-black/40 border-t border-white/[0.05] flex items-center justify-between text-[11px] font-mono text-slate-400 px-4">
+              <span>Displaying 5 of 12 memories</span>
+              <div class="flex items-center gap-2">
+                <button class="hover:text-slate-200 disabled:opacity-30" disabled>&larr; Prev</button>
+                <span class="text-boss-cyan">Page 1/3</span>
+                <button class="hover:text-slate-200">Next &rarr;</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Detail Panel (4 Cols) -->
+          <div class="lg:col-span-4 boss-glass rounded-xl p-4 border border-white/[0.08] space-y-4">
+            <div class="flex items-center justify-between pb-2 border-b border-white/[0.06]">
+              <span class="text-[10px] font-mono uppercase tracking-wider text-boss-cyan font-bold">MEMORY DETAIL</span>
+              <span class="text-[9px] font-mono px-1.5 py-0.2 rounded bg-emerald-500/10 text-emerald-400">ID: mem_8f92a</span>
+            </div>
+
+            <div class="space-y-3 font-sans text-xs">
+              <div>
+                <label class="text-[10px] font-mono uppercase text-slate-500">STORED STATEMENT</label>
+                <div class="mt-1 p-2.5 rounded-lg bg-black/40 border border-white/[0.06] text-slate-100 text-xs font-medium leading-relaxed">
+                  "Developer prefers TypeScript with strict explicit interfaces"
+                </div>
+              </div>
+
+              <div class="grid grid-cols-2 gap-2 font-mono text-[11px]">
+                <div class="p-2 rounded bg-black/30 border border-white/[0.04]">
+                  <div class="text-[9px] text-slate-500">CATEGORY</div>
+                  <div class="text-boss-cyan font-semibold mt-0.5">Preference</div>
+                </div>
+                <div class="p-2 rounded bg-black/30 border border-white/[0.04]">
+                  <div class="text-[9px] text-slate-500">SCOPE</div>
+                  <div class="text-slate-200 font-semibold mt-0.5">Global User</div>
+                </div>
+                <div class="p-2 rounded bg-black/30 border border-white/[0.04]">
+                  <div class="text-[9px] text-slate-500">ORIGIN</div>
+                  <div class="text-slate-300 mt-0.5">Chat #4880</div>
+                </div>
+                <div class="p-2 rounded bg-black/30 border border-white/[0.04]">
+                  <div class="text-[9px] text-slate-500">CONFIDENCE</div>
+                  <div class="text-emerald-400 mt-0.5">100% Explicit</div>
+                </div>
+              </div>
+
+              <div>
+                <label class="text-[10px] font-mono uppercase text-slate-500">INFERENCE INJECTION BEHAVIOR</label>
+                <p class="text-[11px] text-slate-400 mt-1 leading-relaxed">
+                  Inserted into the system prompt whenever generating or refactoring code files with <code class="text-boss-cyan font-mono text-[10px]">.ts</code>, <code class="text-boss-cyan font-mono text-[10px]">.tsx</code>, or <code class="text-boss-cyan font-mono text-[10px]">package.json</code>.
+                </p>
+              </div>
+
+              <div class="pt-2 border-t border-white/[0.06] flex items-center gap-2 font-mono">
+                <button class="flex-1 py-1.5 rounded-lg bg-boss-cyan/15 text-boss-cyan hover:bg-boss-cyan/25 border border-boss-cyan/30 text-xs font-semibold transition-colors">
+                  EDIT CONTENT
+                </button>
+                <button class="px-3 py-1.5 rounded-lg bg-rose-500/10 hover:bg-rose-500/20 text-rose-400 border border-rose-500/30 text-xs transition-colors">
+                  FORGET
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- =================================================================== -->
+      <!-- SECTION 05: INTENTIONAL MEMORY CREATION FORM -->
+      <!-- =================================================================== -->
+      <div class="boss-glass rounded-xl p-5 border border-white/[0.07] space-y-4">
+        <div class="flex items-center justify-between">
+          <div class="flex items-center gap-2">
+            <h2 class="text-xs font-mono font-bold tracking-wider uppercase text-slate-300">03 // ADD INTENTIONAL MEMORY</h2>
+            <span class="text-slate-600">|</span>
+            <span class="text-[11px] text-slate-500 font-sans">Explicitly instruct BOSS to retain something permanently</span>
+          </div>
+          <span class="text-[10px] font-mono text-emerald-400">INSTANT LOCAL PERSIST</span>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-4 items-end">
+          <!-- Text Input (7 cols) -->
+          <div class="lg:col-span-7 space-y-1.5">
+            <label class="text-[11px] font-mono text-slate-400">WHAT SHOULD BOSS REMEMBER?</label>
+            <input type="text" placeholder="e.g., Always use Tailwind CSS v3 arbitrary values or prefer async/await over raw Promises..." class="w-full bg-[#060b14] border border-white/[0.09] rounded-xl px-4 py-2 text-xs text-slate-200 placeholder-slate-600 focus:border-boss-cyan focus:outline-none font-sans">
+          </div>
+
+          <!-- Category Selector (3 cols) -->
+          <div class="lg:col-span-3 space-y-1.5">
+            <label class="text-[11px] font-mono text-slate-400">TARGET CATEGORY</label>
+            <select class="w-full bg-[#060b14] border border-white/[0.09] rounded-xl px-3 py-2 text-xs text-slate-200 focus:border-boss-cyan focus:outline-none font-mono">
+              <option>Preference (Style &amp; Defaults)</option>
+              <option>Project Context (Repository Specific)</option>
+              <option>Workflow (CLI &amp; Execution)</option>
+              <option>System State (Hardware &amp; Toolchains)</option>
+            </select>
+          </div>
+
+          <!-- Save Button (2 cols) -->
+          <div class="lg:col-span-2">
+            <button class="w-full py-2 rounded-xl bg-boss-cyan text-black font-bold text-xs hover:bg-cyan-300 transition-all shadow-[0_0_15px_rgba(0,245,255,0.25)] flex items-center justify-center gap-1.5 font-mono">
+              <span>SAVE MEMORY</span>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- =================================================================== -->
+      <!-- SECTION 06: PROJECT SCOPED MEMORY & DISTINCTION WITH HISTORY -->
+      <!-- =================================================================== -->
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        
+        <!-- Project Scoped Memory Card -->
+        <div class="boss-glass rounded-xl p-4 border border-white/[0.07] space-y-3">
+          <div class="flex items-center justify-between">
+            <div class="flex items-center gap-2">
+              <svg class="w-4 h-4 text-boss-cyan" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-6l-2-2H5a2 2 0 00-2 2z"/></svg>
+              <span class="text-xs font-mono font-bold uppercase text-slate-200">PROJECT-SCOPED MEMORY</span>
+            </div>
+            <span class="text-[9px] font-mono px-2 py-0.5 rounded bg-boss-cyan/10 text-boss-cyan border border-boss-cyan/20">ACTIVE REPO</span>
+          </div>
+
+          <div class="p-3 rounded-lg bg-black/40 border border-white/[0.05] flex items-center justify-between text-xs">
+            <div>
+              <div class="font-bold text-slate-200 font-sans">boss-core-engine</div>
+              <div class="text-[10px] text-slate-500 font-mono">Branch: main • 3 Project Memories Stored</div>
+            </div>
+            <div class="flex items-center gap-2 font-mono text-[11px]">
+              <button class="px-2.5 py-1 rounded bg-white/[0.05] text-slate-300 hover:text-white">MANAGE</button>
+              <button class="px-2.5 py-1 rounded bg-rose-500/10 text-rose-400 hover:bg-rose-500/20">PURGE</button>
+            </div>
+          </div>
+          <p class="text-[11px] text-slate-400 font-sans">
+            Project memory is strictly isolated and automatically unloads when you switch to another repository.
+          </p>
+        </div>
+
+        <!-- Explanatory Card: MEMORY ≠ CHAT HISTORY -->
+        <div class="boss-glass rounded-xl p-4 border border-white/[0.07] space-y-3">
+          <div class="flex items-center justify-between">
+            <div class="flex items-center gap-2">
+              <svg class="w-4 h-4 text-boss-violet" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+              <span class="text-xs font-mono font-bold uppercase text-slate-200">ARCHITECTURE: MEMORY ≠ HISTORY</span>
+            </div>
+            <span class="text-[9px] font-mono px-2 py-0.5 rounded bg-purple-500/10 text-purple-300 border border-purple-500/20">CRITICAL DISTINCTION</span>
+          </div>
+
+          <div class="grid grid-cols-2 gap-2 text-xs font-sans">
+            <div class="p-2.5 rounded bg-black/30 border border-white/[0.04]">
+              <div class="font-bold text-boss-cyan font-mono text-[11px]">MEMORY</div>
+              <p class="text-[10px] text-slate-400 mt-1 leading-snug">
+                Persistent facts, rules, and preferences BOSS retains across sessions.
+              </p>
+            </div>
+            <div class="p-2.5 rounded bg-black/30 border border-white/[0.04]">
+              <div class="font-bold text-slate-300 font-mono text-[11px]">HISTORY</div>
+              <p class="text-[10px] text-slate-400 mt-1 leading-snug">
+                Chronological logs of conversations and terminal commands.
+              </p>
+            </div>
+          </div>
+
+          <div class="flex items-center justify-between pt-1">
+            <span class="text-[10px] text-slate-500 font-mono">Clearing memory does not delete history.</span>
+            <a href="#" class="text-xs font-mono text-boss-cyan hover:underline flex items-center gap-1">
+              <span>OPEN HISTORY WORKSPACE</span>
+              <span>&rarr;</span>
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <!-- =================================================================== -->
+      <!-- SECTION 07: MEMORY SAFETY & SENSITIVE DATA PREVENTION -->
+      <!-- =================================================================== -->
+      <div class="boss-glass rounded-xl p-4 border border-emerald-500/20 bg-emerald-950/10 flex items-center justify-between gap-4">
+        <div class="flex items-center gap-3">
+          <div class="w-8 h-8 rounded-lg bg-emerald-500/10 border border-emerald-500/30 flex items-center justify-center text-emerald-400 shrink-0">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg>
+          </div>
+          <div>
+            <div class="text-xs font-bold text-slate-200 font-sans">Automatic Secret &amp; Credential Redaction</div>
+            <p class="text-[11px] text-slate-400 font-sans mt-0.5">
+              BOSS automatically rejects and scrubs API keys, auth tokens, passwords, private keys, and sensitive environment variables from entering the memory vault.
+            </p>
+          </div>
+        </div>
+        <div class="shrink-0 font-mono text-[10px] px-3 py-1.5 rounded-lg bg-black/40 border border-emerald-500/30 text-emerald-400">
+          ● ZERO SECRETS POLICY
+        </div>
+      </div>
+
+    </main>
+  </div>
+
+  <!-- ========================================================================= -->
+  <!-- GLOBAL DESKTOP FOOTER (DOCTRINE & HARDWARE VERIFICATION) -->
+  <!-- ========================================================================= -->
+  <footer class="h-8 border-t border-white/[0.06] bg-[#020409] flex items-center justify-between px-4 text-[10px] font-mono text-slate-500 shrink-0 z-40 select-none">
+    <div class="flex items-center gap-2">
+      <span class="text-slate-400 font-semibold">BHANU OPEN SOURCE SYSTEM</span>
+      <span>•</span>
+      <span>PHASE 10.5 — MEMORY &amp; KNOWLEDGE CONTROL CENTER</span>
+    </div>
+    <div class="flex items-center gap-3">
+      <span class="flex items-center gap-1 text-boss-cyan">
+        <span class="w-1.5 h-1.5 rounded-full bg-boss-cyan"></span>
+        LOCAL ENCRYPTED SQLITE
+      </span>
+      <span>•</span>
+      <span class="text-slate-400">ZERO CLOUD EGRESS</span>
+      <span>•</span>
+      <span class="text-emerald-400">CONSENT-FIRST PROMPTING</span>
+      <span>•</span>
+      <span class="text-slate-400">AES-256 ENCLAVE</span>
+    </div>
+  </footer>
+
+</body>
+</html>

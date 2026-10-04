@@ -1,0 +1,169 @@
+/* ==========================================================================
+   BOSS MOTION ENGINE — PREVIEW SURFACE
+   ========================================================================== */
+
+.motion-preview {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  max-width: 960px;
+  margin: 0 auto;
+  border-radius: var(--radius-lg, 14px);
+  background: #040409;
+  border: 1px solid rgba(0, 217, 255, 0.2);
+  box-shadow: 0 16px 48px rgba(0, 0, 0, 0.6), 0 0 32px rgba(0, 217, 255, 0.08);
+  overflow: hidden;
+}
+
+.motion-preview__canvas-wrapper {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  background: #020205;
+  overflow: hidden;
+}
+
+.motion-preview__canvas {
+  width: 100% !important;
+  height: 100% !important;
+  display: block;
+}
+
+.motion-preview__overlay-badge {
+  position: absolute;
+  top: 14px;
+  left: 16px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 4px 10px;
+  background: rgba(6, 12, 20, 0.75);
+  border: 1px solid rgba(0, 217, 255, 0.3);
+  border-radius: 999px;
+  backdrop-filter: blur(8px);
+  font: 11px/1 "JetBrains Mono", monospace;
+  color: var(--accent, #00d9ff);
+  letter-spacing: 0.05em;
+  pointer-events: none;
+  z-index: 5;
+}
+
+.motion-preview__overlay-badge::before {
+  content: "";
+  display: inline-block;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--accent, #00d9ff);
+  box-shadow: 0 0 8px var(--accent, #00d9ff);
+}
+
+.motion-preview__controls {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  padding: 12px 18px;
+  background: rgba(6, 9, 15, 0.95);
+  border-top: 1px solid rgba(255, 255, 255, 0.06);
+  gap: 12px;
+  z-index: 10;
+}
+
+.motion-preview__scrubber {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+}
+
+.motion-preview__slider {
+  flex: 1;
+  height: 4px;
+  appearance: none;
+  background: rgba(255, 255, 255, 0.12);
+  border-radius: 2px;
+  outline: none;
+  cursor: pointer;
+  transition: background 200ms ease;
+}
+
+.motion-preview__slider::-webkit-slider-thumb {
+  appearance: none;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: var(--accent, #00d9ff);
+  box-shadow: 0 0 10px var(--accent, #00d9ff);
+  cursor: pointer;
+  border: none;
+}
+
+.motion-preview__timecode {
+  font: 12px/1 "JetBrains Mono", monospace;
+  color: var(--text-muted, #7c889b);
+  white-space: nowrap;
+}
+
+.motion-preview__timecode b {
+  color: var(--text-bright, #ffffff);
+  font-weight: 500;
+}
+
+.motion-preview__actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.motion-preview__btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 14px;
+  background: rgba(14, 23, 38, 0.8);
+  border: 1px solid rgba(0, 217, 255, 0.25);
+  border-radius: var(--radius-sm, 6px);
+  color: var(--text-main, #d9e6f2);
+  font: 12px/1.2 system-ui, sans-serif;
+  cursor: pointer;
+  transition: all 180ms ease;
+}
+
+.motion-preview__btn:hover {
+  background: rgba(0, 217, 255, 0.15);
+  border-color: rgba(0, 217, 255, 0.5);
+  color: #ffffff;
+}
+
+.motion-preview__btn--primary {
+  background: rgba(0, 217, 255, 0.2);
+  border-color: var(--accent, #00d9ff);
+  color: var(--accent, #00d9ff);
+}
+
+.motion-preview__btn--primary:hover {
+  background: var(--accent, #00d9ff);
+  color: #020810;
+  box-shadow: 0 0 12px rgba(0, 217, 255, 0.4);
+}
+
+.motion-preview__phase-meta {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font: 11px "JetBrains Mono", monospace;
+  color: var(--text-muted, #7c889b);
+}
+
+.motion-preview__phase-tag {
+  display: inline-block;
+  padding: 3px 8px;
+  border-radius: 4px;
+  background: rgba(139, 92, 255, 0.15);
+  border: 1px solid rgba(139, 92, 255, 0.35);
+  color: #c7b5ff;
+}

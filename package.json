@@ -1,0 +1,34 @@
+{
+  "name": "boss-desktop",
+  "private": true,
+  "version": "0.1.0",
+  "description": "BOSS — Bhanu Open Source System: Local-First Desktop AI Developer Operating Environment",
+  "author": "Bhanu",
+  "license": "MIT",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc -b && vite build",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "package": "npm run build && tauri build"
+  },
+  "dependencies": {
+    "@tanstack/react-router": "^1.132.0",
+    "@tauri-apps/api": "^2.8.0",
+    "react": "^19.1.1",
+    "react-dom": "^19.1.1",
+    "three": "^0.186.0",
+    "zustand": "^5.0.7"
+  },
+  "devDependencies": {
+    "@tauri-apps/cli": "^2.11.4",
+    "@types/react": "^19.1.12",
+    "@types/react-dom": "^19.1.9",
+    "@types/three": "^0.186.0",
+    "@vitejs/plugin-react": "^5.0.2",
+    "typescript": "^5.9.2",
+    "vite": "^7.1.3",
+    "vitest": "^3.2.4"
+  }
+}

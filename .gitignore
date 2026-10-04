@@ -1,0 +1,10 @@
+node_modules/
+dist/
+*.tsbuildinfo
+src-tauri/target/
+.env
+.env.*
+!.env.example
+
+# Local/downloaded executables
+*.exe

@@ -1,0 +1,786 @@
+<!DOCTYPE html>
+
+<html class="h-full bg-[#020408] text-slate-200 antialiased selection:bg-cyan-500/30 selection:text-cyan-200" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>BOSS AI Operating System - Projects &amp; Workspaces</title>
+<!-- Tailwind CSS v3 with plugins -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<!-- Tailwind Configuration matching BOSS system theme -->
+<script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            boss: {
+              bg: '#020408',
+              surface: '#070a12',
+              card: '#0b0f19',
+              border: '#161e2e',
+              borderHover: '#26354d',
+              cyan: '#06b6d4',
+              violet: '#8b5cf6',
+              emerald: '#10b981',
+              amber: '#f59e0b',
+              fuchsia: '#d946ef'
+            }
+          },
+          fontFamily: {
+            mono: ['JetBrains Mono', 'Menlo', 'Monaco', 'Courier New', 'monospace'],
+            sans: ['Inter', 'system-ui', '-apple-system', 'BlinkMacSystemFont', 'Segoe UI', 'Roboto', 'sans-serif']
+          }
+        }
+      }
+    };
+  </script>
+<!-- BEGIN: Custom Atmospheric Styles -->
+<style data-purpose="atmospheric-effects">
+    /* Subtle dot grid overlay matching screen 1 and 2 */
+    .bg-boss-grid {
+      background-size: 28px 28px;
+      background-image: 
+        radial-gradient(circle, rgba(255, 255, 255, 0.05) 1px, transparent 1px);
+    }
+
+    /* Holographic Orbital Pulsing Effects */
+    @keyframes orbit-rotate {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+    @keyframes orbit-pulse {
+      0%, 100% { transform: scale(1); opacity: 0.8; }
+      50% { transform: scale(1.08); opacity: 1; }
+    }
+    .animate-orbit {
+      animation: orbit-rotate 18s linear infinite;
+    }
+    .animate-pulse-glow {
+      animation: orbit-pulse 3s ease-in-out infinite;
+    }
+
+    /* Custom subtle scrollbars */
+    ::-webkit-scrollbar {
+      width: 5px;
+      height: 5px;
+    }
+    ::-webkit-scrollbar-track {
+      background: rgba(4, 7, 13, 0.6);
+    }
+    ::-webkit-scrollbar-thumb {
+      background: rgba(30, 41, 59, 0.8);
+      border-radius: 9999px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: rgba(6, 182, 212, 0.4);
+    }
+  </style>
+<!-- END: Custom Atmospheric Styles -->
+</head>
+<body class="h-full w-full flex flex-col font-sans overflow-hidden bg-[#020408] text-slate-300 relative select-none">
+<!-- Ambient Glow Backdrop -->
+<div class="fixed inset-0 pointer-events-none z-0">
+<div class="absolute -top-32 left-1/4 w-[650px] h-[450px] bg-cyan-600/10 rounded-full blur-[140px]"></div>
+<div class="absolute top-1/3 right-1/4 w-[550px] h-[450px] bg-violet-600/10 rounded-full blur-[160px]"></div>
+<div class="absolute bottom-0 left-1/2 -translate-x-1/2 w-[750px] h-[250px] bg-cyan-500/5 rounded-full blur-[130px]"></div>
+</div>
+<!-- BEGIN: Native App Header Bar -->
+<header class="h-10 shrink-0 bg-[#03060c] border-b border-white/[0.08] flex items-center justify-between px-3 z-30 font-mono text-xs">
+<!-- Left: Mac Window Controls & Workspace ID -->
+<div class="flex items-center gap-3">
+<div class="flex items-center space-x-1.5 pl-1">
+<div class="w-3 h-3 rounded-full bg-[#ff5f56] border border-[#e0443e]/40 shadow-sm"></div>
+<div class="w-3 h-3 rounded-full bg-[#ffbd2e] border border-[#dea123]/40 shadow-sm"></div>
+<div class="w-3 h-3 rounded-full bg-[#27c93f] border border-[#1aab29]/40 shadow-sm"></div>
+</div>
+<div class="h-3 w-px bg-white/10 mx-1"></div>
+<div class="flex items-center gap-1.5 font-medium tracking-wide text-slate-300">
+<span class="inline-block w-2 h-2 rounded-full bg-cyan-400 animate-ping"></span>
+<span class="text-white font-semibold">BOSS</span>
+<span class="text-slate-500">v0.1.0-preview</span>
+<span class="text-slate-600 mx-1">•</span>
+<span class="text-cyan-400/90 font-mono">BHANU_WORKSPACE</span>
+<span class="text-slate-600">//</span>
+<span class="text-slate-400">PROD</span>
+</div>
+</div>
+<!-- Center: Enclave Status Indicator -->
+<div class="flex items-center">
+<div class="px-3 py-1 rounded-full bg-white/[0.03] border border-white/10 flex items-center gap-2 shadow-inner">
+<span class="text-[10px] text-slate-400 uppercase tracking-wider">ENCLAVE:</span>
+<span class="w-1.5 h-1.5 rounded-full bg-emerald-400 shadow-[0_0_6px_#34d399]"></span>
+<span class="text-[11px] font-semibold text-emerald-300 tracking-wide">ISOLATED ZERO-CLOUD</span>
+</div>
+</div>
+<!-- Right: Telemetry & Hardware Stats -->
+<div class="flex items-center gap-4 text-[11px] text-slate-400">
+<div>TTFT: <span class="text-cyan-400 font-semibold">12ms</span></div>
+<div class="text-slate-600">•</div>
+<div>MEMORY: <span class="text-slate-200 font-semibold">4.2</span> / 16 GB</div>
+<button class="text-slate-400 hover:text-slate-200 transition-colors p-1" title="System Settings">
+<svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+<path d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+<path d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+</svg>
+</button>
+</div>
+</header>
+<!-- END: Native App Header Bar -->
+<!-- Body Viewport Area (Sidebar + Main + Inspector) -->
+<div class="flex-1 flex overflow-hidden relative z-10">
+<!-- BEGIN: Left Persistent Sidebar -->
+<aside class="w-64 shrink-0 bg-[#04070e] border-r border-white/[0.08] flex flex-col justify-between select-none">
+<div class="flex flex-col p-3 space-y-4 overflow-y-auto">
+<!-- Omni Search Input Trigger -->
+<div class="relative">
+<svg class="w-3.5 h-3.5 absolute left-3 top-1/2 -translate-y-1/2 text-slate-500" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+<path d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+</svg>
+<input class="w-full bg-[#080d1a] border border-white/[0.08] rounded-md py-1.5 pl-8 pr-9 text-xs text-slate-300 placeholder-slate-500 focus:outline-none cursor-pointer" placeholder="Omni Search..." readonly="" type="text"/>
+<span class="absolute right-2 top-1/2 -translate-y-1/2 px-1.5 py-0.5 rounded text-[9px] font-mono bg-white/[0.07] border border-white/10 text-slate-400">⌘K</span>
+</div>
+<!-- Primary Navigation Links -->
+<nav class="space-y-1 text-xs">
+<!-- Workspace Home -->
+<a class="flex items-center justify-between px-2.5 py-1.5 rounded-md text-slate-400 hover:text-slate-200 hover:bg-white/[0.03] transition-colors group" href="#">
+<div class="flex items-center gap-2.5">
+<svg class="w-4 h-4 text-slate-400 group-hover:text-slate-300" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+<path d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8"></path>
+</svg>
+<span>Workspace Home</span>
+</div>
+</a>
+<!-- Neural Chat -->
+<a class="flex items-center justify-between px-2.5 py-1.5 rounded-md text-slate-400 hover:text-slate-200 hover:bg-white/[0.03] transition-colors group" href="#">
+<div class="flex items-center gap-2.5">
+<svg class="w-4 h-4 text-slate-400 group-hover:text-cyan-400" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+<path d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8"></path>
+</svg>
+<span>Neural Chat</span>
+</div>
+<span class="text-[10px] font-mono text-slate-500">⌘1</span>
+</a>
+<!-- Projects (ACTIVE WORKSPACE) -->
+<a class="flex items-center justify-between px-2.5 py-1.5 rounded-md bg-cyan-500/10 border border-cyan-500/25 text-white font-medium shadow-[0_0_12px_rgba(6,182,212,0.15)] group" href="#">
+<div class="flex items-center gap-2.5">
+<svg class="w-4 h-4 text-cyan-400" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+<path d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-6l-2-2H5a2 2 0 00-2 2z" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8"></path>
+</svg>
+<span class="text-cyan-300">Projects</span>
+</div>
+<div class="flex items-center gap-1.5">
+<span class="w-1.5 h-1.5 rounded-full bg-cyan-400 shadow-[0_0_8px_#22d3ee]"></span>
+<span class="text-[10px] font-mono text-cyan-400">⌘2</span>
+</div>
+</a>
+<!-- Coding Studio -->
+<a class="flex items-center justify-between px-2.5 py-1.5 rounded-md text-slate-400 hover:text-slate-200 hover:bg-white/[0.03] transition-colors group" href="#">
+<div class="flex items-center gap-2.5">
+<svg class="w-4 h-4 text-slate-400 group-hover:text-emerald-400" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+<path d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8"></path>
+</svg>
+<span>Coding Studio</span>
+</div>
+<span class="text-[9px] px-1.5 py-0.2 rounded bg-emerald-500/20 text-emerald-300 font-mono">Live</span>
+</a>
+<!-- Terminal Session -->
+<a class="flex items-center justify-between px-2.5 py-1.5 rounded-md text-slate-400 hover:text-slate-200 hover:bg-white/[0.03] transition-colors group" href="#">
+<div class="flex items-center gap-2.5">
+<svg class="w-4 h-4 text-slate-400 group-hover:text-slate-200" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+<path d="M4 17l6-5-6-5m8 10h6" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8"></path>
+</svg>
+<span>Terminal Session</span>
+</div>
+<span class="text-[10px] font-mono text-slate-500">zsh</span>
+</a>
+<!-- Tools & Plugins -->
+<a class="flex items-center justify-between px-2.5 py-1.5 rounded-md text-slate-400 hover:text-slate-200 hover:bg-white/[0.03] transition-colors group" href="#">
+<div class="flex items-center gap-2.5">
+<svg class="w-4 h-4 text-slate-400 group-hover:text-slate-200" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+<path d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8"></path>
+</svg>
+<span>Tools &amp; Plugins</span>
+</div>
+</a>
+<!-- History -->
+<a class="flex items-center justify-between px-2.5 py-1.5 rounded-md text-slate-400 hover:text-slate-200 hover:bg-white/[0.03] transition-colors group" href="#">
+<div class="flex items-center gap-2.5">
+<svg class="w-4 h-4 text-slate-400 group-hover:text-slate-200" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+<path d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8"></path>
+</svg>
+<span>History</span>
+</div>
+</a>
+</nav>
+<!-- Workspaces Section -->
+<div class="pt-3 border-t border-white/[0.06]">
+<div class="flex items-center justify-between px-1 mb-2">
+<span class="text-[10px] font-mono tracking-wider uppercase text-slate-500 font-semibold">Workspaces</span>
+<span class="text-[10px] font-mono text-cyan-400">2 Active</span>
+</div>
+<div class="space-y-1 font-mono text-xs">
+<div class="flex items-center justify-between px-2 py-1 rounded bg-white/[0.02] text-cyan-300">
+<span class="truncate">boss-core-engine</span>
+<span class="w-1.5 h-1.5 rounded-full bg-cyan-400 shadow-[0_0_6px_#22d3ee]"></span>
+</div>
+<div class="flex items-center justify-between px-2 py-1 rounded text-slate-400 hover:text-slate-300">
+<span class="truncate">arm-cortex-firmware</span>
+<span class="w-1.5 h-1.5 rounded-full bg-slate-500"></span>
+</div>
+</div>
+</div>
+</div>
+<!-- Bottom System Enclave Telemetry & User Profile -->
+<div class="p-3 border-t border-white/[0.08] bg-[#02050b]/80 space-y-2.5 text-xs font-mono">
+<div class="space-y-1">
+<div class="flex items-center justify-between text-[11px]">
+<span class="text-slate-400">LLM: <span class="text-slate-200 font-semibold">7B Q4_K_M</span></span>
+<span class="text-emerald-400 font-semibold text-[10px] tracking-wide">ONLINE</span>
+</div>
+<div class="flex items-center justify-between text-[10px] text-slate-500">
+<span>VRAM: 4.2GB</span>
+<span>TEMP: 41°C</span>
+</div>
+</div>
+<div class="pt-2 border-t border-white/[0.06] flex items-center justify-between">
+<div class="flex items-center gap-2">
+<div class="w-7 h-7 rounded-full bg-gradient-to-tr from-cyan-600 to-violet-600 flex items-center justify-center font-semibold text-white text-xs border border-white/20">
+              B
+            </div>
+<div class="flex flex-col">
+<div class="flex items-center gap-1.5">
+<span class="text-xs font-sans font-medium text-slate-200">Bhanu</span>
+<span class="text-[9px] px-1 py-0.2 rounded bg-cyan-950 text-cyan-300 border border-cyan-700/50">DEV</span>
+</div>
+<span class="text-[9px] text-slate-500">Local Enclave Active</span>
+</div>
+</div>
+<button class="text-slate-500 hover:text-slate-300 text-xs">···</button>
+</div>
+</div>
+</aside>
+<!-- END: Left Persistent Sidebar -->
+<!-- BEGIN: Center Main Workspaces Area -->
+<main class="flex-1 flex flex-col min-w-0 bg-[#020408]/90 bg-boss-grid overflow-hidden">
+<!-- Sub-header Location & Action Bar -->
+<div class="h-12 border-b border-white/[0.08] bg-[#04070f]/90 backdrop-blur-md px-5 flex items-center justify-between shrink-0 font-mono text-xs">
+<div class="flex items-center gap-3">
+<div class="flex items-center gap-2 text-slate-400">
+<span class="w-2 h-2 rounded-full bg-cyan-400"></span>
+<span class="text-slate-400">LOCATION:</span>
+<span class="text-white font-semibold">PROJECTS</span>
+<span class="text-slate-600">//</span>
+<span class="text-cyan-400 font-mono">WORKSPACE_REGISTRY</span>
+</div>
+<div class="h-3 w-px bg-white/10"></div>
+<!-- Repository dropdown toggle -->
+<div class="flex items-center gap-1 text-[11px] px-2.5 py-1 rounded bg-white/[0.04] border border-white/10 text-slate-300 cursor-pointer hover:border-cyan-500/40">
+<svg class="w-3.5 h-3.5 text-slate-400" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+<path d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-6l-2-2H5a2 2 0 00-2 2z" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8"></path>
+</svg>
+<span>[WORKSPACE: REPOSITORIES ▾]</span>
+</div>
+</div>
+<!-- Top Right Action Controls with Mini Holographic Indicator -->
+<div class="flex items-center gap-3">
+<!-- Mini BOSS Core Holographic Synced Pill -->
+<div class="px-2.5 py-1 rounded-full bg-cyan-950/40 border border-cyan-500/30 flex items-center gap-2">
+<div class="relative w-3.5 h-3.5 flex items-center justify-center">
+<div class="absolute inset-0 rounded-full border border-cyan-400/60 border-t-transparent animate-spin"></div>
+<div class="w-1.5 h-1.5 rounded-full bg-cyan-300"></div>
+</div>
+<span class="text-[10px] font-mono text-cyan-300 tracking-wide">BOSS SYNCED</span>
+</div>
+<!-- Open Directory Shortcut -->
+<button class="px-3 py-1.5 rounded-md bg-white/[0.04] hover:bg-white/[0.07] border border-white/10 text-slate-300 hover:text-white transition-all text-xs font-mono flex items-center gap-2">
+<span>Open Directory</span>
+<span class="text-slate-500 text-[10px]">⌘O</span>
+</button>
+<!-- Primary Glow New Project Button -->
+<button class="px-3.5 py-1.5 rounded-md bg-gradient-to-r from-cyan-500 to-violet-600 hover:from-cyan-400 hover:to-violet-500 text-white font-medium transition-all shadow-[0_0_16px_rgba(6,182,212,0.35)] flex items-center gap-1.5 text-xs">
+<svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+<path d="M12 4v16m8-8H4" stroke-linecap="round" stroke-linejoin="round" stroke-width="2.2"></path>
+</svg>
+<span>New Project</span>
+<span class="text-cyan-200 text-[10px] font-mono ml-1">⌘N</span>
+</button>
+</div>
+</div>
+<!-- Main Project Explorer Content (Scrollable) -->
+<div class="flex-1 overflow-y-auto p-6 space-y-6">
+<!-- Header Banner & Search / Filter Controls -->
+<div class="space-y-4">
+<div>
+<div class="flex items-center gap-2.5">
+<h1 class="text-2xl font-bold tracking-tight text-white">PROJECTS</h1>
+<span class="px-2 py-0.5 rounded text-[11px] font-mono bg-cyan-500/10 border border-cyan-500/20 text-cyan-300">4 Registered</span>
+</div>
+<p class="text-xs text-slate-400 mt-1">Your local development workspaces deeply indexed into the BOSS neural context runtime.</p>
+</div>
+<!-- Filter & Search Tooling Bar -->
+<div class="flex flex-wrap items-center justify-between gap-3 pt-1">
+<!-- Search bar with glass styling -->
+<div class="relative flex-1 max-w-lg">
+<svg class="w-4 h-4 absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-500" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+<path d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+</svg>
+<input class="w-full bg-[#080d19]/80 border border-white/10 rounded-lg py-2 pl-9 pr-4 text-xs text-slate-200 placeholder-slate-500 focus:outline-none focus:border-cyan-500/50 shadow-inner" placeholder="Search projects by name, stack, or neural memory..." type="text"/>
+</div>
+<!-- Tab Filters -->
+<div class="flex items-center gap-1.5 p-1 rounded-lg bg-[#060a14] border border-white/[0.08] text-xs">
+<button class="px-3 py-1 rounded-md bg-white/[0.08] text-white font-medium shadow-sm">All Workspaces</button>
+<button class="px-3 py-1 rounded-md text-slate-400 hover:text-slate-200 transition-colors">Recent (4)</button>
+<button class="px-3 py-1 rounded-md text-slate-400 hover:text-slate-200 transition-colors">Active Enclave</button>
+<button class="px-3 py-1 rounded-md text-slate-400 hover:text-slate-200 transition-colors">Local Only</button>
+</div>
+<!-- Sort pill selector -->
+<div class="flex items-center gap-1 text-xs font-mono px-3 py-1.5 rounded-lg bg-[#060a14] border border-white/[0.08] text-slate-300 cursor-pointer hover:border-white/20">
+<span class="text-slate-500">Sort:</span>
+<span class="text-slate-200">Recently Active ▾</span>
+</div>
+</div>
+</div>
+<!-- BEGIN: Project Grid (2-Column Responsive Layout) -->
+<div class="grid grid-cols-1 xl:grid-cols-2 gap-4">
+<!-- Card 1: BOSS Core Engine (Selected / Active) -->
+<article class="relative group rounded-xl border border-cyan-500/40 bg-gradient-to-b from-[#091020]/90 to-[#060b16]/90 p-5 backdrop-blur-md shadow-[0_0_20px_rgba(6,182,212,0.1)] hover:border-cyan-400/60 transition-all flex flex-col justify-between">
+<div class="absolute -top-px left-8 right-8 h-px bg-gradient-to-r from-transparent via-cyan-400 to-transparent"></div>
+<div class="space-y-3.5">
+<!-- Top Card Header -->
+<div class="flex items-start justify-between">
+<div class="flex items-center gap-3">
+<!-- Geometric Neural Glyph -->
+<div class="w-10 h-10 rounded-lg bg-cyan-950/60 border border-cyan-500/30 flex items-center justify-center text-cyan-400 shadow-[0_0_12px_rgba(6,182,212,0.2)]">
+<svg class="w-5 h-5" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+<path d="M13 10V3L4 14h7v7l9-11h-7z" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8"></path>
+</svg>
+</div>
+<div>
+<div class="flex items-center gap-2">
+<h3 class="text-sm font-semibold text-white group-hover:text-cyan-200 transition-colors">BOSS Core Engine</h3>
+<span class="text-[10px] font-mono text-slate-500">boss-core-engine</span>
+</div>
+<div class="flex items-center gap-1.5 mt-0.5">
+<span class="w-1.5 h-1.5 rounded-full bg-emerald-400 shadow-[0_0_6px_#34d399]"></span>
+<span class="text-[10px] font-mono text-emerald-400">● ACTIVE</span>
+<span class="text-slate-600">•</span>
+<span class="text-[10px] font-mono text-slate-400">LOCAL ENCLAVE</span>
+<span class="text-slate-600">•</span>
+<span class="text-[10px] font-mono text-cyan-400">32K TOKENS INDEXED</span>
+</div>
+</div>
+</div>
+<span class="text-xs font-mono text-slate-500">12m ago</span>
+</div>
+<!-- Subtitle & Description -->
+<p class="text-xs text-slate-300 leading-relaxed">
+                Local autonomous coding agent runtime, neural execution pipeline, and Abstract Syntax Tree (AST) analyzer.
+              </p>
+<!-- Tech Tag Pills -->
+<div class="flex flex-wrap gap-1.5">
+<span class="px-2 py-0.5 rounded text-[11px] font-mono bg-cyan-950/50 text-cyan-300 border border-cyan-800/40">TypeScript</span>
+<span class="px-2 py-0.5 rounded text-[11px] font-mono bg-white/[0.04] text-slate-300 border border-white/10">Bun</span>
+<span class="px-2 py-0.5 rounded text-[11px] font-mono bg-white/[0.04] text-slate-300 border border-white/10">Rust</span>
+<span class="px-2 py-0.5 rounded text-[11px] font-mono bg-violet-950/40 text-violet-300 border border-violet-800/40">Metal FFI</span>
+</div>
+<!-- AI Context Pill (BOSS Neural Context) -->
+<div class="p-2.5 rounded-lg bg-[#040813] border border-cyan-500/20 text-[11px] font-mono text-cyan-300/90 flex items-center justify-between">
+<div class="flex items-center gap-2 truncate">
+<span class="text-cyan-400">✦</span>
+<span class="truncate">Context Ready: 128 files indexed • AST graph mapped • 0 cloud leaks</span>
+</div>
+<span class="text-[10px] text-slate-500 shrink-0">100% Valid</span>
+</div>
+<!-- Recent Activity Note -->
+<div class="text-[11px] text-slate-400 font-mono flex items-center gap-2">
+<span class="text-slate-500">Recent action:</span>
+<span class="text-slate-300">BOSS patched auth middleware</span>
+<span class="text-slate-500">(12m ago)</span>
+</div>
+</div>
+<!-- Card Bottom Actions -->
+<div class="pt-4 mt-4 border-t border-white/[0.06] flex items-center justify-between">
+<div class="flex items-center gap-2">
+<button class="px-3 py-1 rounded bg-cyan-500/20 hover:bg-cyan-500/30 text-cyan-200 border border-cyan-500/40 text-xs font-mono font-medium flex items-center gap-1.5 transition-colors">
+<span>Open Studio</span>
+<span class="text-[10px] text-cyan-400">⌘↵</span>
+</button>
+<button class="px-3 py-1 rounded bg-white/[0.04] hover:bg-white/[0.08] text-slate-300 text-xs font-mono transition-colors flex items-center gap-1.5">
+<span>Ask BOSS</span>
+<span class="text-[10px] text-slate-500">⌘L</span>
+</button>
+</div>
+<button class="text-slate-400 hover:text-white p-1" title="More Options">···</button>
+</div>
+</article>
+<!-- Card 2: Portfolio Immersive 3D -->
+<article class="relative group rounded-xl border border-white/[0.08] hover:border-violet-500/40 bg-gradient-to-b from-[#090e1a]/80 to-[#050912]/80 p-5 backdrop-blur-md transition-all flex flex-col justify-between">
+<div class="space-y-3.5">
+<!-- Top Card Header -->
+<div class="flex items-start justify-between">
+<div class="flex items-center gap-3">
+<!-- Wireframe 3D Prism Glyph -->
+<div class="w-10 h-10 rounded-lg bg-violet-950/40 border border-violet-500/30 flex items-center justify-center text-violet-400 shadow-[0_0_12px_rgba(139,92,246,0.15)]">
+<svg class="w-5 h-5" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+<path d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8"></path>
+</svg>
+</div>
+<div>
+<div class="flex items-center gap-2">
+<h3 class="text-sm font-semibold text-white group-hover:text-violet-200 transition-colors">Portfolio Immersive 3D</h3>
+<span class="text-[10px] font-mono text-slate-500">portfolio-web</span>
+</div>
+<div class="flex items-center gap-1.5 mt-0.5">
+<span class="w-1.5 h-1.5 rounded-full bg-cyan-400"></span>
+<span class="text-[10px] font-mono text-cyan-300">● ACTIVE</span>
+<span class="text-slate-600">•</span>
+<span class="text-[10px] font-mono text-slate-400">SYNCED</span>
+</div>
+</div>
+</div>
+<span class="text-xs font-mono text-slate-500">Yesterday</span>
+</div>
+<!-- Subtitle & Description -->
+<p class="text-xs text-slate-300 leading-relaxed">
+                Interactive developer portfolio with WebGL post-processing shaders and dynamic Three.js canvas.
+              </p>
+<!-- Tech Tag Pills -->
+<div class="flex flex-wrap gap-1.5">
+<span class="px-2 py-0.5 rounded text-[11px] font-mono bg-white/[0.04] text-slate-300 border border-white/10">React</span>
+<span class="px-2 py-0.5 rounded text-[11px] font-mono bg-violet-950/40 text-violet-300 border border-violet-800/40">Three.js</span>
+<span class="px-2 py-0.5 rounded text-[11px] font-mono bg-white/[0.04] text-slate-300 border border-white/10">Vite</span>
+<span class="px-2 py-0.5 rounded text-[11px] font-mono bg-fuchsia-950/40 text-fuchsia-300 border border-fuchsia-800/40">GLSL</span>
+</div>
+<!-- AI Context Pill -->
+<div class="p-2.5 rounded-lg bg-[#040813] border border-white/[0.07] text-[11px] font-mono text-slate-300 flex items-center justify-between">
+<div class="flex items-center gap-2 truncate">
+<span class="text-violet-400">✦</span>
+<span class="truncate">Context Ready: 42 files • Shader pipeline validated</span>
+</div>
+<span class="text-[10px] text-slate-500 shrink-0">12k Tokens</span>
+</div>
+<!-- Recent Activity Note -->
+<div class="text-[11px] text-slate-400 font-mono flex items-center gap-2">
+<span class="text-slate-500">Recent action:</span>
+<span class="text-slate-300">Scaffolded bloom pass shader</span>
+<span class="text-slate-500">(Yesterday)</span>
+</div>
+</div>
+<!-- Card Bottom Actions -->
+<div class="pt-4 mt-4 border-t border-white/[0.06] flex items-center justify-between">
+<div class="flex items-center gap-2">
+<button class="px-3 py-1 rounded bg-white/[0.04] hover:bg-white/[0.08] text-slate-300 hover:text-white text-xs font-mono transition-colors">
+                  Open Studio
+                </button>
+<button class="px-3 py-1 rounded bg-white/[0.04] hover:bg-white/[0.08] text-slate-300 text-xs font-mono transition-colors">
+                  Ask BOSS
+                </button>
+</div>
+<button class="text-slate-400 hover:text-white p-1" title="More Options">···</button>
+</div>
+</article>
+<!-- Card 3: LPC1788 HAL Drivers (Embedded) -->
+<article class="relative group rounded-xl border border-white/[0.08] hover:border-emerald-500/40 bg-gradient-to-b from-[#090e1a]/80 to-[#050912]/80 p-5 backdrop-blur-md transition-all flex flex-col justify-between">
+<div class="space-y-3.5">
+<!-- Top Card Header -->
+<div class="flex items-start justify-between">
+<div class="flex items-center gap-3">
+<!-- Microchip Circuit Glyph -->
+<div class="w-10 h-10 rounded-lg bg-emerald-950/40 border border-emerald-500/30 flex items-center justify-center text-emerald-400 shadow-[0_0_12px_rgba(16,185,129,0.15)]">
+<svg class="w-5 h-5" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+<path d="M9 3v2m6-2v2M9 19v2m6-2v2M3 9h2m-2 6h2m14-6h2m-2 6h2M7 7h10v10H7V7z" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8"></path>
+</svg>
+</div>
+<div>
+<div class="flex items-center gap-2">
+<h3 class="text-sm font-semibold text-white group-hover:text-emerald-200 transition-colors">LPC1788 HAL Drivers</h3>
+<span class="text-[10px] font-mono text-slate-500">arm-cortex-firmware</span>
+</div>
+<div class="flex items-center gap-1.5 mt-0.5">
+<span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span>
+<span class="text-[10px] font-mono text-emerald-400">● ACTIVE</span>
+<span class="text-slate-600">•</span>
+<span class="text-[10px] font-mono text-slate-400">BARE-METAL</span>
+</div>
+</div>
+</div>
+<span class="text-xs font-mono text-slate-500">2d ago</span>
+</div>
+<!-- Subtitle & Description -->
+<p class="text-xs text-slate-300 leading-relaxed">
+                Embedded C HAL drivers, UART interrupt routines, and DMA memory buffers for NXP Cortex-M3.
+              </p>
+<!-- Tech Tag Pills -->
+<div class="flex flex-wrap gap-1.5">
+<span class="px-2 py-0.5 rounded text-[11px] font-mono bg-emerald-950/40 text-emerald-300 border border-emerald-800/40">Embedded C</span>
+<span class="px-2 py-0.5 rounded text-[11px] font-mono bg-white/[0.04] text-slate-300 border border-white/10">ARM GCC</span>
+<span class="px-2 py-0.5 rounded text-[11px] font-mono bg-white/[0.04] text-slate-300 border border-white/10">OpenOCD</span>
+<span class="px-2 py-0.5 rounded text-[11px] font-mono bg-white/[0.04] text-slate-300 border border-white/10">Make</span>
+</div>
+<!-- AI Context Pill -->
+<div class="p-2.5 rounded-lg bg-[#040813] border border-white/[0.07] text-[11px] font-mono text-slate-300 flex items-center justify-between">
+<div class="flex items-center gap-2 truncate">
+<span class="text-emerald-400">✦</span>
+<span class="truncate">Context Ready: 64 headers • Memory map verified</span>
+</div>
+<span class="text-[10px] text-slate-500 shrink-0">18k Tokens</span>
+</div>
+<!-- Recent Activity Note -->
+<div class="text-[11px] text-slate-400 font-mono flex items-center gap-2">
+<span class="text-slate-500">Recent action:</span>
+<span class="text-slate-300">Analyzed register map overlap</span>
+<span class="text-slate-500">(2d ago)</span>
+</div>
+</div>
+<!-- Card Bottom Actions -->
+<div class="pt-4 mt-4 border-t border-white/[0.06] flex items-center justify-between">
+<div class="flex items-center gap-2">
+<button class="px-3 py-1 rounded bg-white/[0.04] hover:bg-white/[0.08] text-slate-300 hover:text-white text-xs font-mono transition-colors">
+                  Open Studio
+                </button>
+<button class="px-3 py-1 rounded bg-white/[0.04] hover:bg-white/[0.08] text-slate-300 text-xs font-mono transition-colors">
+                  Ask BOSS
+                </button>
+</div>
+<button class="text-slate-400 hover:text-white p-1" title="More Options">···</button>
+</div>
+</article>
+<!-- Card 4: Neural Shader Lab -->
+<article class="relative group rounded-xl border border-white/[0.08] hover:border-fuchsia-500/40 bg-gradient-to-b from-[#090e1a]/80 to-[#050912]/80 p-5 backdrop-blur-md transition-all flex flex-col justify-between">
+<div class="space-y-3.5">
+<!-- Top Card Header -->
+<div class="flex items-start justify-between">
+<div class="flex items-center gap-3">
+<!-- Radiant Magenta Aperture Glyph -->
+<div class="w-10 h-10 rounded-lg bg-fuchsia-950/40 border border-fuchsia-500/30 flex items-center justify-center text-fuchsia-400 shadow-[0_0_12px_rgba(217,70,239,0.15)]">
+<svg class="w-5 h-5" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+<path d="M11 4a2 2 0 114 0v1a1 1 0 001 1h3a1 1 0 011 1v3a1 1 0 01-1 1h-1a2 2 0 100 4h1a1 1 0 011 1v3a1 1 0 01-1 1h-3a1 1 0 01-1-1v-1a2 2 0 10-4 0v1a1 1 0 01-1 1H7a1 1 0 01-1-1v-3a1 1 0 00-1-1H4a2 2 0 110-4h1a1 1 0 001-1V7a1 1 0 011-1h3a1 1 0 001-1V4z" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8"></path>
+</svg>
+</div>
+<div>
+<div class="flex items-center gap-2">
+<h3 class="text-sm font-semibold text-white group-hover:text-fuchsia-200 transition-colors">Neural Shader Lab</h3>
+<span class="text-[10px] font-mono text-slate-500">neural-shaders</span>
+</div>
+<div class="flex items-center gap-1.5 mt-0.5">
+<span class="w-1.5 h-1.5 rounded-full bg-slate-500"></span>
+<span class="text-[10px] font-mono text-slate-400">● IDLE</span>
+<span class="text-slate-600">•</span>
+<span class="text-[10px] font-mono text-slate-400">EXPERIMENTAL</span>
+</div>
+</div>
+</div>
+<span class="text-xs font-mono text-slate-500">4d ago</span>
+</div>
+<!-- Subtitle & Description -->
+<p class="text-xs text-slate-300 leading-relaxed">
+                Realtime raymarching experiment testing volumetric SDF lighting and fluid simulations on WebGPU.
+              </p>
+<!-- Tech Tag Pills -->
+<div class="flex flex-wrap gap-1.5">
+<span class="px-2 py-0.5 rounded text-[11px] font-mono bg-fuchsia-950/40 text-fuchsia-300 border border-fuchsia-800/40">WGSL</span>
+<span class="px-2 py-0.5 rounded text-[11px] font-mono bg-white/[0.04] text-slate-300 border border-white/10">WebGPU</span>
+<span class="px-2 py-0.5 rounded text-[11px] font-mono bg-white/[0.04] text-slate-300 border border-white/10">TypeScript</span>
+</div>
+<!-- AI Context Pill -->
+<div class="p-2.5 rounded-lg bg-[#040813] border border-white/[0.07] text-[11px] font-mono text-slate-300 flex items-center justify-between">
+<div class="flex items-center gap-2 truncate">
+<span class="text-fuchsia-400">✦</span>
+<span class="truncate">Context Ready: 16 shaders • GPU compute profile</span>
+</div>
+<span class="text-[10px] text-slate-500 shrink-0">8k Tokens</span>
+</div>
+<!-- Recent Activity Note -->
+<div class="text-[11px] text-slate-400 font-mono flex items-center gap-2">
+<span class="text-slate-500">Recent action:</span>
+<span class="text-slate-300">Benchmarked 60fps compute pipeline</span>
+<span class="text-slate-500">(4d ago)</span>
+</div>
+</div>
+<!-- Card Bottom Actions -->
+<div class="pt-4 mt-4 border-t border-white/[0.06] flex items-center justify-between">
+<div class="flex items-center gap-2">
+<button class="px-3 py-1 rounded bg-white/[0.04] hover:bg-white/[0.08] text-slate-300 hover:text-white text-xs font-mono transition-colors">
+                  Open Studio
+                </button>
+<button class="px-3 py-1 rounded bg-white/[0.04] hover:bg-white/[0.08] text-slate-300 text-xs font-mono transition-colors">
+                  Ask BOSS
+                </button>
+</div>
+<button class="text-slate-400 hover:text-white p-1" title="More Options">···</button>
+</div>
+</article>
+</div>
+<!-- END: Project Grid -->
+<!-- BEGIN: Inline Scaffold / New Workspace Drawer -->
+<div class="mt-4 p-4 rounded-xl bg-[#060a14]/90 border border-white/[0.08] relative overflow-hidden backdrop-blur-md">
+<div class="flex items-center justify-between mb-3">
+<div class="flex items-center gap-2">
+<span class="text-xs font-semibold text-white uppercase tracking-wider font-mono">Quick Scaffold Local Workspace</span>
+<span class="text-[10px] font-mono px-2 py-0.5 rounded bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">● 100% On-Device</span>
+</div>
+<span class="text-[11px] font-mono text-slate-500">Preset: TypeScript + Bun runtime</span>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-3 gap-3">
+<div>
+<label class="block text-[10px] font-mono text-slate-400 mb-1">PROJECT NAME</label>
+<input class="w-full bg-[#03060c] border border-white/10 rounded px-2.5 py-1.5 text-xs text-slate-200 font-mono focus:border-cyan-500 focus:outline-none" type="text" value="neuro-ast-compiler"/>
+</div>
+<div>
+<label class="block text-[10px] font-mono text-slate-400 mb-1">SYSTEM PATH</label>
+<input class="w-full bg-[#03060c] border border-white/10 rounded px-2.5 py-1.5 text-xs text-slate-400 font-mono focus:border-cyan-500 focus:outline-none" type="text" value="~/dev/bhanu/neuro-ast-compiler"/>
+</div>
+<div class="flex items-end gap-2">
+<button class="flex-1 py-1.5 px-3 rounded bg-cyan-600/30 hover:bg-cyan-600/40 border border-cyan-500/40 text-cyan-200 font-mono text-xs transition-colors flex items-center justify-center gap-2">
+<svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+<path d="M12 6v6m0 0v6m0-6h6m-6 0H6" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+</svg>
+<span>Scaffold Project</span>
+</button>
+<button class="py-1.5 px-3 rounded bg-white/[0.03] hover:bg-white/[0.08] text-slate-400 font-mono text-xs">
+                Templates ▾
+              </button>
+</div>
+</div>
+</div>
+<!-- END: Inline Scaffold -->
+</div>
+</main>
+<!-- END: Center Main Workspaces Area -->
+<!-- BEGIN: Right Contextual Inspector Panel -->
+<aside class="w-80 shrink-0 bg-[#04070e] border-l border-white/[0.08] flex flex-col justify-between overflow-y-auto text-xs font-mono">
+<div class="p-4 space-y-5">
+<!-- Top Status of Context Inspector -->
+<div class="flex items-center justify-between border-b border-white/[0.06] pb-3">
+<span class="text-[11px] font-semibold uppercase tracking-wider text-slate-400">PROJECT CONTEXT</span>
+<span class="px-2 py-0.5 rounded-full text-[10px] bg-emerald-500/20 text-emerald-300 font-semibold border border-emerald-500/30">● ACTIVE</span>
+</div>
+<!-- Mini Holographic BOSS Core Orb Widget -->
+<div class="p-4 rounded-xl bg-gradient-to-b from-[#091124] to-[#040813] border border-cyan-500/30 relative overflow-hidden flex flex-col items-center text-center shadow-[0_0_24px_rgba(6,182,212,0.12)]">
+<!-- Orbital rings container -->
+<div class="relative w-24 h-24 my-2 flex items-center justify-center">
+<!-- Outermost orbit ring -->
+<div class="absolute inset-0 rounded-full border border-cyan-500/20 border-dashed animate-orbit"></div>
+<!-- Middle counter ring -->
+<div class="absolute inset-2 rounded-full border border-violet-500/30 border-t-transparent animate-spin" style="animation-duration: 9s;"></div>
+<!-- Inner glowing nucleus -->
+<div class="w-12 h-12 rounded-full bg-gradient-to-tr from-cyan-600/40 via-violet-600/30 to-cyan-400/20 backdrop-blur-sm border border-cyan-400/50 flex items-center justify-center animate-pulse-glow">
+<div class="flex items-center gap-0.5">
+<span class="w-1 h-3 rounded-full bg-cyan-300 animate-pulse"></span>
+<span class="w-1 h-5 rounded-full bg-violet-400 animate-pulse" style="animation-delay: 150ms;"></span>
+<span class="w-1 h-2 rounded-full bg-cyan-200 animate-pulse" style="animation-delay: 300ms;"></span>
+</div>
+</div>
+<!-- Floating nodes -->
+<div class="absolute top-1 left-2 w-1.5 h-1.5 rounded-full bg-cyan-400 shadow-[0_0_6px_#22d3ee]"></div>
+<div class="absolute bottom-2 right-3 w-1.5 h-1.5 rounded-full bg-violet-400 shadow-[0_0_6px_#a855f7]"></div>
+</div>
+<div class="mt-1 font-sans font-semibold text-white text-xs tracking-wide">BOSS KERNEL CONNECTED</div>
+<div class="text-[10px] font-mono text-cyan-400 mt-0.5">Listening to main branch AST</div>
+</div>
+<!-- Selected Project Indexing Breakdown -->
+<div class="space-y-2.5">
+<div class="text-[10px] uppercase tracking-wider text-slate-500 font-semibold">SELECTED: BOSS-CORE-ENGINE</div>
+<div class="p-3 rounded-lg bg-[#070c18] border border-white/[0.06] space-y-2 text-[11px]">
+<div class="flex items-center justify-between">
+<span class="text-slate-400">Files Indexed:</span>
+<span class="text-slate-200 font-semibold">142 source files</span>
+</div>
+<div class="flex items-center justify-between">
+<span class="text-slate-400">Context Memory:</span>
+<span class="text-cyan-400 font-semibold">32,768 / 32k</span>
+</div>
+<div class="flex items-center justify-between">
+<span class="text-slate-400">Dependencies:</span>
+<span class="text-emerald-400 font-semibold">Clean (0 vulns)</span>
+</div>
+<div class="flex items-center justify-between">
+<span class="text-slate-400">Git HEAD:</span>
+<span class="text-violet-300 font-mono">main [7f001a]</span>
+</div>
+</div>
+</div>
+<!-- AI Memory Trail (Recent Actions) -->
+<div class="space-y-2">
+<div class="flex items-center justify-between">
+<span class="text-[10px] uppercase tracking-wider text-slate-500 font-semibold">AI EXECUTION TRAIL</span>
+<span class="text-[10px] text-cyan-400">3 logged</span>
+</div>
+<div class="space-y-1.5 text-[11px]">
+<div class="p-2 rounded bg-white/[0.02] border border-white/[0.04]">
+<div class="text-cyan-300 text-[10px]">12m ago</div>
+<div class="text-slate-300 text-[11px]">Synthesized zero-dep JWT patch</div>
+</div>
+<div class="p-2 rounded bg-white/[0.02] border border-white/[0.04]">
+<div class="text-slate-400 text-[10px]">2h ago</div>
+<div class="text-slate-300 text-[11px]">Profiled clock-skew vulnerability</div>
+</div>
+<div class="p-2 rounded bg-white/[0.02] border border-white/[0.04]">
+<div class="text-slate-400 text-[10px]">Yesterday</div>
+<div class="text-slate-300 text-[11px]">Scanned 12 auth unit test specs</div>
+</div>
+</div>
+</div>
+<!-- Quick Launch Actions -->
+<div class="space-y-2 pt-2 border-t border-white/[0.06]">
+<div class="text-[10px] uppercase tracking-wider text-slate-500 font-semibold">WORKSPACE ACTIONS</div>
+<button class="w-full py-2 px-3 rounded-lg bg-cyan-500/15 hover:bg-cyan-500/25 border border-cyan-500/40 text-cyan-200 font-medium transition-all flex items-center justify-between">
+<div class="flex items-center gap-2">
+<svg class="w-4 h-4 text-cyan-400" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+<path d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8"></path>
+</svg>
+<span>Open in Coding Studio</span>
+</div>
+<span class="text-[10px] text-cyan-400">⌘↵</span>
+</button>
+<button class="w-full py-2 px-3 rounded-lg bg-white/[0.03] hover:bg-white/[0.07] border border-white/10 text-slate-300 hover:text-white transition-all flex items-center justify-between">
+<div class="flex items-center gap-2">
+<svg class="w-4 h-4 text-slate-400" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+<path d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8"></path>
+</svg>
+<span>Ask in Neural Chat</span>
+</div>
+<span class="text-[10px] text-slate-500">⌘L</span>
+</button>
+<button class="w-full py-2 px-3 rounded-lg bg-white/[0.03] hover:bg-white/[0.07] border border-white/10 text-slate-300 hover:text-white transition-all flex items-center justify-between">
+<div class="flex items-center gap-2">
+<svg class="w-4 h-4 text-slate-400" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+<path d="M4 17l6-5-6-5m8 10h6" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8"></path>
+</svg>
+<span>Open in Terminal</span>
+</div>
+<span class="text-[10px] text-slate-500">zsh</span>
+</button>
+</div>
+</div>
+<!-- Local Enclave Privacy Assurance Pill -->
+<div class="p-3 border-t border-white/[0.08] bg-[#02050b]/90">
+<div class="flex items-center gap-2 text-[10px] text-emerald-400/90 font-mono">
+<svg class="w-3.5 h-3.5 shrink-0" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+<path d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+</svg>
+<span class="leading-tight">100% OFFLINE • ZERO TELEMETRY EXPORT</span>
+</div>
+</div>
+</aside>
+<!-- END: Right Contextual Inspector Panel -->
+</div>
+<!-- BEGIN: Bottom System Status Bar -->
+<footer class="h-7 shrink-0 bg-[#020409] border-t border-white/[0.08] flex items-center justify-between px-4 z-30 font-mono text-[11px] text-slate-400">
+<div class="flex items-center gap-2">
+<span class="w-2 h-2 rounded-full bg-cyan-400"></span>
+<span class="text-slate-300 font-semibold">BHANU OPEN SOURCE SYSTEM</span>
+<span class="text-slate-600">•</span>
+<span class="text-cyan-400">PHASE 2.6 - PROJECTS &amp; WORKSPACE REGISTRY</span>
+</div>
+<div class="flex items-center gap-3">
+<span class="text-cyan-400 font-medium">LOCAL FIRST</span>
+<span class="text-slate-600">•</span>
+<span class="text-violet-300 font-medium">PRIVATE</span>
+<span class="text-slate-600">•</span>
+<span class="text-slate-300">BUILT FOR DEVELOPERS</span>
+<span class="text-slate-600">•</span>
+<span class="text-emerald-400 font-medium">100% OFFLINE CAPABLE</span>
+</div>
+</footer>
+<!-- END: Bottom System Status Bar -->
+</body></html>

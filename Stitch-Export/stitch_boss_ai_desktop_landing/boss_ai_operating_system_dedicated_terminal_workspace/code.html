@@ -1,0 +1,722 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>BOSS AI Operating System - Dedicated Terminal Workspace</title>
+<!-- Load Tailwind CSS v3 with forms and container queries -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<!-- Tailwind Configuration -->
+<script data-purpose="tailwind-config">
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            obsidian: {
+              950: '#020408',
+              900: '#05070d',
+              850: '#090d16',
+              800: '#0f1422',
+              700: '#171e31',
+              600: '#232d48'
+            },
+            cyan: {
+              350: '#22d3ee',
+              450: '#00f2fe',
+              550: '#06b6d4'
+            },
+            amber: {
+              450: '#f59e0b'
+            }
+          },
+          fontFamily: {
+            mono: ['"JetBrains Mono"', 'ui-monospace', 'SFMono-Regular', 'Menlo', 'Monaco', 'Consolas', 'monospace'],
+            sans: ['"SF Pro Display"', '-apple-system', 'BlinkMacSystemFont', '"Segoe UI"', 'Roboto', 'sans-serif']
+          },
+          boxShadow: {
+            'glow-cyan': '0 0 20px -3px rgba(6, 182, 212, 0.28)',
+            'glow-cyan-sm': '0 0 10px -2px rgba(6, 182, 212, 0.35)',
+            'glow-amber': '0 0 16px -2px rgba(245, 158, 11, 0.25)',
+            'inner-glow': 'inset 0 1px 1px 0 rgba(255, 255, 255, 0.08)'
+          }
+        }
+      }
+    };
+  </script>
+<!-- Typography and Custom Micro-Styles -->
+<style data-purpose="typography">
+    @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&family=Space+Grotesk:wght@400;500;600;700&display=swap');
+
+    body {
+      font-feature-settings: "cv02", "cv03", "cv04", "cv11";
+      text-rendering: optimizeLegibility;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+
+    /* Custom subtle scrollbar */
+    ::-webkit-scrollbar {
+      width: 5px;
+      height: 5px;
+    }
+    ::-webkit-scrollbar-track {
+      background: rgba(5, 7, 13, 0.6);
+    }
+    ::-webkit-scrollbar-thumb {
+      background: rgba(255, 255, 255, 0.12);
+      border-radius: 4px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: rgba(6, 182, 212, 0.35);
+    }
+  </style>
+<!-- Visual Effects and Animations -->
+<style data-purpose="terminal-fx">
+    @keyframes cursorPulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0; }
+    }
+    .cursor-blink {
+      animation: cursorPulse 1s ease-in-out infinite;
+    }
+
+    @keyframes wavePulse {
+      0%, 100% { transform: scaleY(0.4); }
+      50% { transform: scaleY(1.1); }
+    }
+    .waveform-bar-1 { animation: wavePulse 1.2s ease-in-out infinite; }
+    .waveform-bar-2 { animation: wavePulse 0.9s ease-in-out 0.2s infinite; }
+    .waveform-bar-3 { animation: wavePulse 1.4s ease-in-out 0.4s infinite; }
+    .waveform-bar-4 { animation: wavePulse 1.0s ease-in-out 0.1s infinite; }
+    .waveform-bar-5 { animation: wavePulse 1.3s ease-in-out 0.3s infinite; }
+
+    /* Scanline overlay for subtle cyber-terminal feel */
+    .scanlines-overlay {
+      background: linear-gradient(
+        rgba(18, 16, 16, 0) 50%, 
+        rgba(0, 0, 0, 0.22) 50%
+      ), linear-gradient(
+        90deg,
+        rgba(255, 0, 0, 0.015),
+        rgba(0, 255, 0, 0.01),
+        rgba(0, 0, 255, 0.015)
+      );
+      background-size: 100% 3px, 6px 100%;
+      pointer-events: none;
+    }
+  </style>
+</head>
+<body class="bg-obsidian-950 text-slate-300 font-mono text-[13px] h-screen w-screen overflow-hidden select-none flex flex-col antialiased">
+<!-- BEGIN: macOSWindowChrome -->
+<header class="h-9 min-h-[36px] bg-obsidian-900 border-b border-white/[0.08] px-3.5 flex items-center justify-between text-xs tracking-tight z-30 select-none" data-purpose="window-titlebar">
+<!-- macOS Traffic Light controls & Brand Identity -->
+<div class="flex items-center gap-2.5">
+<div class="flex items-center gap-1.5 mr-2">
+<div class="w-3 h-3 rounded-full bg-[#ff5f56] border border-[#e0443e]/50 cursor-pointer shadow-sm"></div>
+<div class="w-3 h-3 rounded-full bg-[#ffbd2e] border border-[#dea123]/50 cursor-pointer shadow-sm"></div>
+<div class="w-3 h-3 rounded-full bg-[#27c93f] border border-[#1aab29]/50 cursor-pointer shadow-sm"></div>
+</div>
+<div class="flex items-center gap-2 pl-1 border-l border-white/[0.08]">
+<span class="w-2 h-2 rounded-full bg-cyan-400 shadow-glow-cyan-sm"></span>
+<span class="font-bold tracking-wider text-slate-100 font-sans text-[12.5px]">BOSS</span>
+<span class="text-[11px] text-slate-500 font-mono">v0.1.0-preview</span>
+</div>
+<div class="hidden sm:flex items-center gap-1.5 ml-2 text-slate-400 text-[11px]">
+<span class="text-slate-600">//</span>
+<span class="text-slate-300 font-mono font-medium tracking-wide">BHANU_WORKSPACE</span>
+<span class="text-slate-600">//</span>
+<span class="text-emerald-400 font-semibold text-[10px] tracking-wider uppercase px-1.5 py-0.5 rounded bg-emerald-950/40 border border-emerald-500/20">PROD</span>
+</div>
+</div>
+<!-- Center Enclave Security Pill -->
+<div class="flex items-center justify-center">
+<div class="px-2.5 py-0.5 rounded-full bg-obsidian-850 border border-white/[0.08] flex items-center gap-2 text-[11px]">
+<span class="text-slate-500 uppercase tracking-widest text-[9.5px]">ENCLAVE:</span>
+<div class="flex items-center gap-1.5">
+<span class="relative flex h-2 w-2">
+<span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-60"></span>
+<span class="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
+</span>
+<span class="font-semibold text-emerald-400 tracking-wider text-[10px]">ISOLATED ZERO-CLOUD</span>
+</div>
+</div>
+</div>
+<!-- Right Telemetry & Window Actions -->
+<div class="flex items-center gap-4 text-slate-400 text-[11px]">
+<div class="flex items-center gap-2 font-mono">
+<span class="text-slate-500">TTFT:</span>
+<span class="text-cyan-400 font-semibold">12ms</span>
+</div>
+<div class="h-3 w-px bg-white/[0.08]"></div>
+<div class="flex items-center gap-2 font-mono">
+<span class="text-slate-500">MEMORY:</span>
+<span class="text-slate-200 font-medium">4.2 <span class="text-slate-500">/</span> 16 GB</span>
+</div>
+<div class="h-3 w-px bg-white/[0.08]"></div>
+<button class="p-1 text-slate-400 hover:text-cyan-400 transition-colors" title="Settings">
+<svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24">
+<circle cx="12" cy="12" r="3"></circle>
+<path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
+</svg>
+</button>
+</div>
+</header>
+<!-- END: macOSWindowChrome -->
+<!-- Primary Workspace Content (Sidebar + Terminal Viewport + BOSS Assistant) -->
+<div class="flex-1 flex overflow-hidden">
+<!-- BEGIN: LeftNavigationSidebar -->
+<aside class="w-60 min-w-[240px] bg-obsidian-900 border-r border-white/[0.08] flex flex-col justify-between select-none z-20" data-purpose="system-sidebar">
+<div class="flex flex-col">
+<!-- Omni Search trigger -->
+<div class="p-3 border-b border-white/[0.05]">
+<div class="h-8 px-2.5 rounded-md bg-obsidian-950/80 border border-white/[0.08] flex items-center justify-between text-slate-400 hover:border-cyan-500/30 transition-colors cursor-pointer group">
+<div class="flex items-center gap-2">
+<svg class="w-3.5 h-3.5 text-slate-500 group-hover:text-cyan-400" fill="none" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24">
+<circle cx="11" cy="11" r="8"></circle>
+<line x1="21" x2="16.65" y1="21" y2="16.65"></line>
+</svg>
+<span class="text-xs text-slate-400">Omni Search...</span>
+</div>
+<kbd class="px-1.5 py-0.5 text-[10px] bg-obsidian-800 text-slate-400 border border-white/10 rounded font-mono">⌘K</kbd>
+</div>
+</div>
+<!-- Primary Navigation Items -->
+<nav class="p-2 space-y-1">
+<!-- Workspace Home -->
+<a class="flex items-center justify-between px-2.5 py-2 rounded-md text-slate-400 hover:text-slate-200 hover:bg-white/[0.04] transition-all group" href="#">
+<div class="flex items-center gap-2.5">
+<svg class="w-4 h-4 text-slate-500 group-hover:text-slate-300" fill="none" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24">
+<path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+</svg>
+<span class="text-xs">Workspace Home</span>
+</div>
+</a>
+<!-- Neural Chat -->
+<a class="flex items-center justify-between px-2.5 py-2 rounded-md text-slate-400 hover:text-slate-200 hover:bg-white/[0.04] transition-all group" href="#">
+<div class="flex items-center gap-2.5">
+<svg class="w-4 h-4 text-slate-500 group-hover:text-slate-300" fill="none" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24">
+<path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+</svg>
+<span class="text-xs">Neural Chat</span>
+</div>
+<span class="text-[10px] text-slate-500 font-mono">⌘1</span>
+</a>
+<!-- Projects -->
+<a class="flex items-center justify-between px-2.5 py-2 rounded-md text-slate-400 hover:text-slate-200 hover:bg-white/[0.04] transition-all group" href="#">
+<div class="flex items-center gap-2.5">
+<svg class="w-4 h-4 text-slate-500 group-hover:text-slate-300" fill="none" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24">
+<path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"></path>
+</svg>
+<span class="text-xs">Projects</span>
+</div>
+<span class="text-[10px] text-slate-500 font-mono">⌘2</span>
+</a>
+<!-- Coding Studio -->
+<a class="flex items-center justify-between px-2.5 py-2 rounded-md text-slate-400 hover:text-slate-200 hover:bg-white/[0.04] transition-all group" href="#">
+<div class="flex items-center gap-2.5">
+<svg class="w-4 h-4 text-slate-500 group-hover:text-slate-300" fill="none" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24">
+<polyline points="16 18 22 12 16 6"></polyline>
+<polyline points="8 6 2 12 8 18"></polyline>
+</svg>
+<span class="text-xs">Coding Studio</span>
+</div>
+<span class="text-[9.5px] px-1.5 py-0.5 rounded bg-emerald-950/60 text-emerald-400 border border-emerald-500/20 font-mono uppercase">Live</span>
+</a>
+<!-- Terminal Session: ACTIVE HIGHLIGHTED -->
+<a class="relative flex items-center justify-between px-2.5 py-2 rounded-md bg-cyan-950/30 text-cyan-300 border border-cyan-500/30 shadow-glow-cyan-sm transition-all font-medium" href="#">
+<div class="absolute -left-2 top-1.5 bottom-1.5 w-1 bg-cyan-400 rounded-r shadow-glow-cyan"></div>
+<div class="flex items-center gap-2.5">
+<svg class="w-4 h-4 text-cyan-400" fill="none" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24">
+<polyline points="4 17 10 11 4 5"></polyline>
+<line x1="12" x2="20" y1="19" y2="19"></line>
+</svg>
+<span class="text-xs font-semibold tracking-wide text-cyan-200">Terminal Session</span>
+</div>
+<span class="text-[10px] px-1.5 py-0.2 rounded bg-cyan-500/20 border border-cyan-400/30 text-cyan-300 font-mono">zsh</span>
+</a>
+<!-- Tools & Plugins -->
+<a class="flex items-center justify-between px-2.5 py-2 rounded-md text-slate-400 hover:text-slate-200 hover:bg-white/[0.04] transition-all group" href="#">
+<div class="flex items-center gap-2.5">
+<svg class="w-4 h-4 text-slate-500 group-hover:text-slate-300" fill="none" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24">
+<path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"></path>
+</svg>
+<span class="text-xs">Tools &amp; Plugins</span>
+</div>
+</a>
+<!-- History -->
+<a class="flex items-center justify-between px-2.5 py-2 rounded-md text-slate-400 hover:text-slate-200 hover:bg-white/[0.04] transition-all group" href="#">
+<div class="flex items-center gap-2.5">
+<svg class="w-4 h-4 text-slate-500 group-hover:text-slate-300" fill="none" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24">
+<circle cx="12" cy="12" r="10"></circle>
+<polyline points="12 6 12 12 14 14"></polyline>
+</svg>
+<span class="text-xs">History</span>
+</div>
+</a>
+</nav>
+<!-- Workspaces Category List -->
+<div class="px-3 pt-4 pb-2">
+<div class="flex items-center justify-between text-[10px] uppercase font-mono tracking-wider text-slate-500 mb-2">
+<span>Workspaces</span>
+<span class="text-cyan-400/80 font-semibold">2 Active</span>
+</div>
+<div class="space-y-1">
+<div class="flex items-center justify-between px-2 py-1.5 rounded text-xs bg-obsidian-850/80 text-cyan-300 border border-cyan-500/20">
+<div class="flex items-center gap-2 truncate">
+<span class="w-1.5 h-1.5 rounded-full bg-cyan-400 shadow-glow-cyan-sm"></span>
+<span class="truncate font-mono">boss-core-engine</span>
+</div>
+</div>
+<div class="flex items-center justify-between px-2 py-1.5 rounded text-xs text-slate-400 hover:bg-white/[0.03] transition-colors cursor-pointer">
+<div class="flex items-center gap-2 truncate">
+<span class="w-1.5 h-1.5 rounded-full bg-slate-600"></span>
+<span class="truncate font-mono">arm-cortex-firmware</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Bottom Profile & Local Enclave Status Card -->
+<div class="p-3 border-t border-white/[0.08] bg-obsidian-950/70">
+<!-- Hardware / Engine Telemetry -->
+<div class="mb-3 space-y-1 text-[11px] font-mono">
+<div class="flex items-center justify-between text-slate-400">
+<span>LLM: <strong class="text-slate-200">7B Q4_K_M</strong></span>
+<span class="text-emerald-400 text-[10px] font-bold tracking-wider">ONLINE</span>
+</div>
+<div class="flex items-center justify-between text-[10.5px] text-slate-500">
+<span>VRAM: 4.2GB</span>
+<span>TEMP: 41°C</span>
+</div>
+</div>
+<!-- User Signature -->
+<div class="flex items-center justify-between pt-2 border-t border-white/[0.06]">
+<div class="flex items-center gap-2">
+<div class="w-7 h-7 rounded-md bg-gradient-to-tr from-cyan-600 to-indigo-600 flex items-center justify-center font-bold text-xs text-white shadow-inner">
+              B
+            </div>
+<div class="flex flex-col">
+<div class="flex items-center gap-1.5">
+<span class="text-xs font-semibold text-slate-200">Bhanu</span>
+<span class="text-[9px] px-1 py-0.2 bg-cyan-950 text-cyan-400 border border-cyan-500/30 rounded font-mono">DEV</span>
+</div>
+<span class="text-[10px] text-emerald-400 font-mono tracking-tight">Local Enclave Active</span>
+</div>
+</div>
+<button class="text-slate-500 hover:text-slate-300">
+<svg class="w-4 h-4" fill="currentColor" viewbox="0 0 24 24">
+<circle cx="12" cy="12" r="1.5"></circle>
+<circle cx="19" cy="12" r="1.5"></circle>
+<circle cx="5" cy="12" r="1.5"></circle>
+</svg>
+</button>
+</div>
+</div>
+</aside>
+<!-- END: LeftNavigationSidebar -->
+<!-- BEGIN: MainTerminalWorkspaceArea -->
+<main class="flex-1 flex flex-col bg-obsidian-950 min-w-0 relative" data-purpose="terminal-viewport">
+<!-- Scanline background texture for real terminal authenticity -->
+<div class="absolute inset-0 scanlines-overlay opacity-30 z-0"></div>
+<!-- Header: Breadcrumb & Terminal Workspace Controls -->
+<section class="h-11 min-h-[44px] bg-obsidian-900/90 backdrop-blur border-b border-white/[0.08] px-4 flex items-center justify-between select-none z-10" data-purpose="terminal-header">
+<div class="flex items-center gap-3">
+<span class="w-2 h-2 rounded-full bg-cyan-400 shadow-glow-cyan-sm"></span>
+<div class="flex items-center gap-1.5 text-xs font-mono">
+<span class="text-slate-500 uppercase tracking-wider text-[10px]">LOCATION:</span>
+<span class="font-bold text-slate-200">TERMINAL</span>
+<span class="text-slate-600">//</span>
+<span class="text-cyan-400 font-medium">SESSIONS</span>
+<span class="text-slate-600">//</span>
+<span class="text-slate-300 bg-obsidian-800 px-1.5 py-0.5 rounded border border-white/[0.06]">boss-core-engine <span class="text-cyan-400">[main]</span></span>
+</div>
+<span class="hidden md:inline-block text-[11px] text-slate-500 font-mono pl-2 border-l border-white/[0.08]">
+            ~/projects/boss-core-engine <span class="text-slate-600">(zsh 5.9 • Apple Silicon ARM64)</span>
+</span>
+</div>
+<!-- Terminal Workspace Action Ribbon -->
+<div class="flex items-center gap-2">
+<button class="px-2.5 py-1 rounded bg-cyan-500/10 hover:bg-cyan-500/20 text-cyan-300 border border-cyan-500/30 text-xs flex items-center gap-1.5 shadow-glow-cyan-sm transition-all">
+<span class="text-sm leading-none">+</span>
+<span>New Session</span>
+</button>
+<button class="px-2 py-1 rounded bg-obsidian-850 hover:bg-obsidian-800 text-slate-300 border border-white/[0.08] text-xs flex items-center gap-1.5 transition-colors" title="Split Terminal Side-by-Side">
+<span class="font-mono text-[11px]">◫ Split</span>
+</button>
+<div class="h-4 w-px bg-white/[0.08] mx-0.5"></div>
+<button class="p-1 px-2 rounded hover:bg-white/[0.05] text-slate-400 hover:text-slate-200 text-xs font-mono flex items-center gap-1">
+<span>Find</span>
+<kbd class="text-[9px] bg-obsidian-800 px-1 py-0.5 rounded border border-white/10 text-slate-400">⌘F</kbd>
+</button>
+<button class="p-1 px-2 rounded hover:bg-white/[0.05] text-slate-400 hover:text-slate-200 text-xs font-mono flex items-center gap-1">
+<span>Clear</span>
+<kbd class="text-[9px] bg-obsidian-800 px-1 py-0.5 rounded border border-white/10 text-slate-400">⌘K</kbd>
+</button>
+<button class="p-1 text-slate-400 hover:text-slate-200" title="Terminal Profile &amp; Shell Config">
+<svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24">
+<path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"></path>
+<circle cx="12" cy="12" r="3"></circle>
+</svg>
+</button>
+</div>
+</section>
+<!-- Terminal Tabs Sub-Bar -->
+<div class="h-8 min-h-[32px] bg-obsidian-900/60 border-b border-white/[0.08] px-2 flex items-center gap-1.5 text-xs select-none z-10" data-purpose="terminal-tabs-bar">
+<!-- Tab 1: Active ZSH -->
+<div class="h-7 px-3 rounded-t bg-obsidian-950 border-t-2 border-t-cyan-400 border-x border-white/[0.08] text-slate-200 flex items-center gap-2 font-mono shadow-sm">
+<span class="w-1.5 h-1.5 rounded-full bg-cyan-400 shadow-glow-cyan-sm"></span>
+<span class="font-medium text-cyan-300">01: zsh (dev)</span>
+<button class="hover:text-red-400 text-slate-500 ml-1">×</button>
+</div>
+<!-- Tab 2: Test Runner -->
+<div class="h-7 px-3 rounded-t hover:bg-obsidian-850/60 text-slate-400 flex items-center gap-2 font-mono cursor-pointer border-t-2 border-t-transparent transition-colors">
+<span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span>
+<span>02: bun test</span>
+<span class="text-[9.5px] px-1 bg-emerald-950/60 text-emerald-400 border border-emerald-500/20 rounded">Passing 14/14</span>
+</div>
+<!-- Tab 3: Cargo Build -->
+<div class="h-7 px-3 rounded-t hover:bg-obsidian-850/60 text-slate-400 flex items-center gap-2 font-mono cursor-pointer border-t-2 border-t-transparent transition-colors">
+<span class="w-1.5 h-1.5 rounded-full bg-slate-600"></span>
+<span>03: cargo build</span>
+<span class="text-[9.5px] text-slate-500 font-mono">idle</span>
+</div>
+<!-- Add Tab Button -->
+<button class="h-6 w-6 rounded flex items-center justify-center text-slate-500 hover:text-cyan-400 hover:bg-white/[0.04] transition-colors ml-1" title="New Tab">
+<span class="text-sm">+</span>
+</button>
+</div>
+<!-- Interactive Shell Execution Log Area -->
+<div class="flex-1 overflow-y-auto p-5 font-mono text-[13px] leading-relaxed space-y-4 text-slate-300 z-10 relative selection:bg-cyan-500/30 selection:text-white" data-purpose="terminal-scroll-container">
+<!-- Terminal Session Banner Info -->
+<div class="text-xs text-slate-500 pb-2 border-b border-white/[0.06] flex items-center justify-between">
+<div>
+<span>BOSS Zero-Cloud Enclave PTY session initialized • </span>
+<span class="text-emerald-400">Isolation Layer: POSIX-Mach VM</span>
+</div>
+<span class="text-slate-600 font-mono">PID: 84920 (pty/3)</span>
+</div>
+<!-- Command 1: git status -->
+<div class="space-y-1">
+<div class="flex items-center gap-2 flex-wrap">
+<span class="text-slate-500 font-medium">~/projects/boss-core-engine</span>
+<span class="text-cyan-400 font-semibold">boss-core-engine <span class="text-slate-400">(main)</span> ❯</span>
+<span class="text-slate-100 font-medium">git status</span>
+</div>
+<div class="text-slate-400 pl-4 space-y-0.5 text-[12.5px] border-l border-white/[0.05]">
+<p>On branch <span class="text-cyan-300">main</span></p>
+<p>Your branch is up to date with '<span class="text-slate-300">origin/main</span>'.</p>
+<p class="pt-1 text-slate-400">Changes not staged for commit:</p>
+<p class="pl-4 text-amber-400">modified:   src/auth/jwt-middleware.ts</p>
+<p class="pl-4 text-amber-400">modified:   src/core/telemetry.ts</p>
+<p class="pt-1 text-slate-400">Untracked files:</p>
+<p class="pl-4 text-emerald-400">src/agent/sandbox.ts</p>
+</div>
+</div>
+<!-- Command 2: bun test src/auth/ -->
+<div class="space-y-1 pt-1">
+<div class="flex items-center gap-2 flex-wrap">
+<span class="text-slate-500 font-medium">~/projects/boss-core-engine</span>
+<span class="text-cyan-400 font-semibold">boss-core-engine <span class="text-slate-400">(main)</span> ❯</span>
+<span class="text-slate-100 font-medium">bun test src/auth/</span>
+</div>
+<div class="text-slate-300 pl-4 space-y-1 text-[12.5px] border-l border-emerald-500/20">
+<p class="text-slate-500">bun test v1.1.8 (arm64-darwin)</p>
+<div class="space-y-0.5">
+<p class="text-emerald-400 flex items-center gap-2">
+<span>✓</span>
+<span class="text-slate-200">src/auth/auth.test.ts</span>
+<span class="text-slate-400">&gt; should accept tokens within ±60s clock skew window</span>
+<span class="text-slate-500 text-xs">[1.42ms]</span>
+</p>
+<p class="text-emerald-400 flex items-center gap-2">
+<span>✓</span>
+<span class="text-slate-200">src/auth/auth.test.ts</span>
+<span class="text-slate-400">&gt; should reject expired sessions beyond skew tolerance</span>
+<span class="text-slate-500 text-xs">[0.81ms]</span>
+</p>
+<p class="text-emerald-400 flex items-center gap-2">
+<span>✓</span>
+<span class="text-slate-200">src/auth/auth.test.ts</span>
+<span class="text-slate-400">&gt; should enforce local enclave zero-cloud signature</span>
+<span class="text-slate-500 text-xs">[2.10ms]</span>
+</p>
+</div>
+<div class="pt-1 text-slate-400 text-xs">
+<span class="text-emerald-400 font-bold">3 pass</span> • 
+              <span class="text-slate-500">0 fail</span> • 
+              <span class="text-slate-500">Ran 3 tests across 1 files. [12.00ms]</span>
+</div>
+</div>
+</div>
+<!-- Command 3: Failed command with BOSS AI Error Hook -->
+<div class="space-y-1 pt-1">
+<div class="flex items-center gap-2 flex-wrap">
+<span class="text-slate-500 font-medium">~/projects/boss-core-engine</span>
+<span class="text-cyan-400 font-semibold">boss-core-engine <span class="text-slate-400">(main)</span> ❯</span>
+<span class="text-slate-100 font-medium">bun run build:native</span>
+</div>
+<div class="text-slate-300 pl-4 space-y-1 text-[12.5px] border-l border-rose-500/30">
+<p class="text-slate-400">[build] Compiling Metal FFI bindings for arm64...</p>
+<p class="text-rose-400 font-medium">error: Could not resolve package '@boss/metal-bridge'</p>
+<p class="text-slate-400 pl-4">at src/core/metal-accelerator.ts:14:28</p>
+<div class="pl-4 py-1 text-slate-300 bg-obsidian-900/80 rounded border border-white/[0.06] font-mono w-fit my-1">
+<span class="text-slate-500">14 | </span><span class="text-indigo-300">import</span> { MetalPipeline } <span class="text-indigo-300">from</span> <span class="text-amber-300">'@boss/metal-bridge'</span>;
+              <div class="text-rose-400 pl-16">^</div>
+</div>
+<p class="text-rose-400">error: package '@boss/metal-bridge' is not linked in local workspace registry</p>
+<p class="text-rose-400/80 text-xs">error: script "build:native" exited with code 1</p>
+<!-- BOSS AI Inline Context Action Ribbon -->
+<div class="pt-2 pb-1" data-purpose="inline-error-ribbon">
+<div class="inline-flex items-center gap-2 p-1.5 px-3 rounded-lg bg-obsidian-850/90 border border-cyan-500/30 shadow-glow-cyan-sm backdrop-blur">
+<div class="flex items-center gap-1.5 text-cyan-300 font-sans font-medium text-xs">
+<span class="text-cyan-400 text-sm">✦</span>
+<span>BOSS Detected Dependency Gap</span>
+</div>
+<div class="h-3 w-px bg-white/[0.1] mx-1"></div>
+<button class="px-2 py-0.5 rounded bg-cyan-500/10 hover:bg-cyan-500/20 text-cyan-300 text-xs border border-cyan-400/20 transition-all">
+                  Explain Error
+                </button>
+<button class="px-2 py-0.5 rounded bg-emerald-500/10 hover:bg-emerald-500/20 text-emerald-300 text-xs border border-emerald-400/20 transition-all font-medium">
+                  Generate Link Fix
+                </button>
+<button class="px-2 py-0.5 rounded hover:bg-white/[0.05] text-slate-400 hover:text-slate-200 text-xs transition-colors">
+                  Inspect AST
+                </button>
+</div>
+</div>
+</div>
+</div>
+<!-- Command 4: Active prompt with Inline Ghost Completion & Autocomplete Menu -->
+<div class="space-y-2 pt-2">
+<div class="flex items-center gap-2 flex-wrap">
+<span class="text-slate-500 font-medium">~/projects/boss-core-engine</span>
+<span class="text-cyan-400 font-semibold">boss-core-engine <span class="text-slate-400">(main)</span> ❯</span>
+<!-- Input simulation with ghost text -->
+<div class="relative inline-flex items-center">
+<span class="text-slate-100 font-medium">bun link @boss/metal-</span>
+<!-- Ghost text completion -->
+<span class="text-slate-600 select-none">bridge --enclave-local</span>
+<!-- Pulsing Cursor -->
+<span class="w-2 h-4 ml-0.5 bg-cyan-400 cursor-blink inline-block align-middle shadow-glow-cyan-sm"></span>
+</div>
+</div>
+<!-- Floating Terminal Autocomplete Popover -->
+<div class="ml-6 w-96 rounded-lg bg-obsidian-900/95 border border-cyan-500/30 shadow-2xl backdrop-blur-md p-1 z-30 font-mono text-xs" data-purpose="terminal-autocomplete-popup">
+<div class="px-2 py-1 text-[10px] uppercase tracking-wider text-slate-500 flex justify-between border-b border-white/[0.05] pb-1 mb-1">
+<span>Workspace Package Resolver</span>
+<span class="text-cyan-400">Tab to accept</span>
+</div>
+<!-- Suggestion Item 1 (Selected) -->
+<div class="px-2.5 py-1.5 rounded bg-cyan-950/60 border border-cyan-400/30 text-cyan-200 flex items-center justify-between cursor-pointer">
+<div class="flex items-center gap-2">
+<span class="text-cyan-400 font-bold">❯</span>
+<span class="font-semibold text-slate-100">bun link @boss/metal-bridge</span>
+</div>
+<span class="text-[10px] text-cyan-300 font-sans px-1.5 py-0.2 bg-cyan-500/20 rounded">Local Monorepo</span>
+</div>
+<!-- Suggestion Item 2 -->
+<div class="px-2.5 py-1.5 rounded hover:bg-white/[0.04] text-slate-300 flex items-center justify-between cursor-pointer transition-colors">
+<div class="flex items-center gap-2">
+<span class="text-transparent">❯</span>
+<span class="text-slate-300">bun link @boss/neural-security</span>
+</div>
+<span class="text-[10px] text-slate-500 font-mono">Installed v0.2.1</span>
+</div>
+<!-- Suggestion Item 3 -->
+<div class="px-2.5 py-1.5 rounded hover:bg-white/[0.04] text-slate-300 flex items-center justify-between cursor-pointer transition-colors">
+<div class="flex items-center gap-2">
+<span class="text-transparent">❯</span>
+<span class="text-slate-300">bun link @boss/telemetry</span>
+</div>
+<span class="text-[10px] text-emerald-400 font-mono">Built</span>
+</div>
+</div>
+</div>
+</div>
+</main>
+<!-- END: MainTerminalWorkspaceArea -->
+<!-- BEGIN: RightContextualAssistantPanel -->
+<aside class="w-96 min-w-[380px] bg-obsidian-900 border-l border-white/[0.08] flex flex-col justify-between select-none z-20" data-purpose="boss-terminal-assistant">
+<!-- Top Assistant Header with Holographic Core State -->
+<div class="p-3.5 border-b border-white/[0.08] bg-obsidian-900/90 flex flex-col gap-3">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-2.5">
+<span class="text-cyan-400 text-base">✦</span>
+<div>
+<h2 class="text-xs font-bold text-slate-100 uppercase tracking-wider font-sans">BOSS Terminal Assistant</h2>
+<p class="text-[10.5px] text-slate-500 font-mono">Autonomous Shell Pair-Engineer</p>
+</div>
+</div>
+<span class="text-[9.5px] px-2 py-0.5 rounded-full bg-cyan-950 text-cyan-300 border border-cyan-400/30 font-mono font-medium tracking-wide">
+            ● ACTIVE
+          </span>
+</div>
+<!-- BOSS Orbital Waveform Visualizer -->
+<div class="p-2 rounded-lg bg-obsidian-950/80 border border-white/[0.06] flex items-center gap-3">
+<div class="relative w-12 h-12 flex-shrink-0 flex items-center justify-center">
+<!-- Concentric rings -->
+<div class="absolute inset-0 rounded-full border border-cyan-500/20 animate-pulse"></div>
+<div class="absolute inset-1.5 rounded-full border border-cyan-400/40"></div>
+<!-- Dynamic Mini Waveform -->
+<div class="flex items-center gap-0.5 h-5">
+<span class="w-1 bg-cyan-400 rounded-full h-full waveform-bar-1"></span>
+<span class="w-1 bg-cyan-300 rounded-full h-full waveform-bar-2"></span>
+<span class="w-1 bg-cyan-400 rounded-full h-full waveform-bar-3"></span>
+<span class="w-1 bg-cyan-200 rounded-full h-full waveform-bar-4"></span>
+<span class="w-1 bg-cyan-400 rounded-full h-full waveform-bar-5"></span>
+</div>
+</div>
+<div class="flex-1 min-w-0 font-mono text-[11px]">
+<div class="flex items-center gap-1.5 text-cyan-300 font-semibold">
+<span class="w-1.5 h-1.5 rounded-full bg-cyan-400"></span>
+<span>BOSS LISTENING</span>
+</div>
+<p class="text-slate-400 text-[10.5px] truncate">Context aware of exit code 1 &amp; PTY stream</p>
+<div class="flex items-center gap-2 mt-1 text-[10px] text-slate-500">
+<span class="bg-obsidian-850 px-1.5 py-0.2 rounded border border-white/5">Session: zsh-01</span>
+<span class="bg-obsidian-850 px-1.5 py-0.2 rounded border border-white/5 truncate">CWD: boss-core-engine</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Assistant Body Content (Error Card + Command Inspector + Execution Trail) -->
+<div class="flex-1 overflow-y-auto p-3.5 space-y-3.5">
+<!-- Contextual Error Diagnostics Card -->
+<section class="rounded-lg bg-obsidian-950 border border-amber-500/30 p-3 shadow-glow-amber space-y-2.5" data-purpose="error-diagnostic-card">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-1.5 text-amber-400 font-medium text-xs">
+<svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24">
+<path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path>
+<line x1="12" x2="12" y1="9" y2="13"></line>
+<line x1="12" x2="12.01" y1="17" y2="17"></line>
+</svg>
+<span class="uppercase tracking-wider font-semibold text-[11px]">Terminal Error Detected</span>
+</div>
+<span class="text-[10px] text-amber-400/80 font-mono">Exit Code 1</span>
+</div>
+<p class="text-xs text-slate-300 font-sans leading-snug">
+            Package <code class="text-cyan-300 bg-obsidian-850 px-1 rounded font-mono">@boss/metal-bridge</code> is compiled in <code class="text-slate-400 font-mono text-[11px]">../packages/metal-bridge</code> but missing a local workspace symlink in this enclave.
+          </p>
+<!-- Suggested Terminal Command Box -->
+<div class="rounded-md bg-obsidian-900 border border-white/[0.08] p-2 font-mono text-[11.5px] text-emerald-300 select-text">
+<code>bun link ../packages/metal-bridge &amp;&amp; bun run build:native</code>
+</div>
+<!-- Explicit Human-in-the-Loop Action Buttons -->
+<div class="grid grid-cols-2 gap-2 pt-1">
+<button class="px-2.5 py-1.5 rounded bg-emerald-500/15 hover:bg-emerald-500/25 text-emerald-300 border border-emerald-500/30 text-xs font-semibold flex items-center justify-center gap-1.5 transition-all shadow-sm">
+<span>Run In Terminal</span>
+<kbd class="text-[9px] bg-emerald-950/80 px-1 py-0.2 rounded border border-emerald-400/30 text-emerald-300 font-mono">⌘↵</kbd>
+</button>
+<button class="px-2 py-1.5 rounded bg-obsidian-850 hover:bg-obsidian-800 text-slate-300 border border-white/[0.08] text-xs font-medium flex items-center justify-center gap-1.5 transition-colors">
+<span>Copy Command</span>
+<kbd class="text-[9px] bg-obsidian-900 px-1 py-0.2 rounded border border-white/10 text-slate-400 font-mono">⌘C</kbd>
+</button>
+</div>
+</section>
+<!-- Command Safety Inspector Card -->
+<section class="rounded-lg bg-obsidian-950/60 border border-white/[0.06] p-3 space-y-1.5" data-purpose="safety-inspector-card">
+<div class="flex items-center gap-2 text-xs font-semibold text-slate-300 font-sans">
+<svg class="w-3.5 h-3.5 text-emerald-400" fill="none" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24">
+<path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+</svg>
+<span>Safety Audit: Enclave Protected</span>
+</div>
+<p class="text-[11.5px] text-slate-400 font-sans leading-normal">
+            Outbound network sockets restricted to <code class="text-cyan-300 font-mono text-[10.5px]">localhost:8080</code>. Shell subprocess runs with isolated root jail privileges.
+          </p>
+</section>
+<!-- AI Terminal Execution Trail -->
+<section class="rounded-lg bg-obsidian-950/60 border border-white/[0.06] p-3 space-y-2" data-purpose="execution-trail">
+<div class="flex items-center justify-between text-[11px] font-mono text-slate-400 border-b border-white/[0.05] pb-1.5">
+<span class="uppercase tracking-wider">AI Execution Trail</span>
+<span class="text-cyan-400">180ms</span>
+</div>
+<div class="space-y-1.5 text-xs font-mono text-slate-400">
+<div class="flex items-start gap-2">
+<span class="text-emerald-400">✓</span>
+<span>Captured exit code 1 (build:native)</span>
+</div>
+<div class="flex items-start gap-2">
+<span class="text-emerald-400">✓</span>
+<span>Scanned monorepo package manifests</span>
+</div>
+<div class="flex items-start gap-2">
+<span class="text-emerald-400">✓</span>
+<span>Located target package in <span class="text-slate-300">/packages</span></span>
+</div>
+<div class="flex items-start gap-2 text-cyan-300 font-medium">
+<span class="text-cyan-400">●</span>
+<span>Ready to dispatch command</span>
+</div>
+</div>
+</section>
+</div>
+<!-- BEGIN: AskBossTerminalDock -->
+<footer class="p-3 border-t border-white/[0.08] bg-obsidian-950/90 space-y-2" data-purpose="ask-boss-dock">
+<!-- Quick Action Chips -->
+<div class="flex items-center gap-1.5 overflow-x-auto pb-1 text-[11px] font-mono no-scrollbar">
+<button class="px-2 py-0.5 rounded-full bg-cyan-950/60 hover:bg-cyan-900/60 text-cyan-300 border border-cyan-500/30 whitespace-nowrap transition-colors flex items-center gap-1">
+<span>⚡</span> Explain Exit Code 1
+          </button>
+<button class="px-2 py-0.5 rounded-full bg-obsidian-850 hover:bg-obsidian-800 text-slate-300 border border-white/[0.08] whitespace-nowrap transition-colors flex items-center gap-1">
+<span>✦</span> Fix Monorepo Links
+          </button>
+<button class="px-2 py-0.5 rounded-full bg-obsidian-850 hover:bg-obsidian-800 text-slate-300 border border-white/[0.08] whitespace-nowrap transition-colors flex items-center gap-1">
+<span>⚙</span> Scaffold Makefile
+          </button>
+</div>
+<!-- Terminal Chat / Prompt Input -->
+<div class="relative flex items-center">
+<input class="w-full bg-obsidian-900 border border-white/[0.1] focus:border-cyan-400/50 focus:ring-1 focus:ring-cyan-400/40 rounded-lg pl-3 pr-20 py-2 text-xs text-slate-200 placeholder-slate-500 font-mono transition-all outline-none" placeholder="Ask BOSS about commands, logs, scripts..." type="text"/>
+<!-- Input Actions (Mic + Send) -->
+<div class="absolute right-1.5 flex items-center gap-1">
+<button class="p-1 text-slate-400 hover:text-cyan-400 transition-colors" title="Voice Input">
+<svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24">
+<path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"></path>
+<path d="M19 10v2a7 7 0 0 1-14 0v-2"></path>
+<line x1="12" x2="12" y1="19" y2="23"></line>
+<line x1="8" x2="16" y1="23" y2="23"></line>
+</svg>
+</button>
+<button class="px-2 py-1 rounded bg-cyan-500 hover:bg-cyan-400 text-obsidian-950 font-bold text-xs flex items-center gap-1 transition-all shadow-glow-cyan-sm">
+<span>SEND</span>
+<span>→</span>
+</button>
+</div>
+</div>
+</footer>
+<!-- END: AskBossTerminalDock -->
+</aside>
+<!-- END: RightContextualAssistantPanel -->
+</div>
+<!-- BEGIN: BottomGlobalTelemetryBar -->
+<footer class="h-6 min-h-[24px] bg-obsidian-950 border-t border-white/[0.08] px-3.5 flex items-center justify-between text-[10.5px] text-slate-500 font-mono select-none z-30" data-purpose="global-status-bar">
+<!-- System Version & Phase tag -->
+<div class="flex items-center gap-2">
+<span class="w-1.5 h-1.5 rounded-full bg-cyan-400 shadow-glow-cyan-sm"></span>
+<span class="text-slate-300 font-medium">BHANU OPEN SOURCE SYSTEM</span>
+<span class="text-slate-600">•</span>
+<span class="text-cyan-400 tracking-wide font-medium">PHASE 2.8 - DEDICATED TERMINAL WORKSPACE</span>
+</div>
+<!-- Center Session Diagnostics -->
+<div class="hidden lg:flex items-center gap-2 text-slate-400">
+<span>SHELL: <strong class="text-slate-200">zsh 5.9</strong></span>
+<span class="text-slate-600">•</span>
+<span>ENCLAVE: <strong class="text-emerald-400 font-semibold">ISOLATED</strong></span>
+<span class="text-slate-600">•</span>
+<span>CWD: <strong class="text-slate-300">~/projects/boss-core-engine</strong></span>
+</div>
+<!-- Privacy & Verification Guarantee -->
+<div class="flex items-center gap-2">
+<span class="text-cyan-400/90 font-medium tracking-wide">LOCAL FIRST</span>
+<span class="text-slate-700">•</span>
+<span class="text-slate-400">PRIVATE</span>
+<span class="text-slate-700">•</span>
+<span class="text-slate-400">BUILT FOR DEVELOPERS</span>
+<span class="text-slate-700">•</span>
+<span class="text-emerald-400 font-medium">ZERO TELEMETRY EXPORT</span>
+</div>
+</footer>
+<!-- END: BottomGlobalTelemetryBar -->
+</body></html>

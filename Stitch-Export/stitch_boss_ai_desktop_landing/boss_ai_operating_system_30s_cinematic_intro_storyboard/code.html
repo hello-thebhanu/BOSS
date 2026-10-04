@@ -1,0 +1,963 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>BOSS // Phase 2.2 — 30-Second Cinematic Introduction Storyboard</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,300;0,400;0,500;0,700;1,400&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-dark: #030407;
+      --panel-bg: rgba(8, 11, 18, 0.75);
+      --cyan-glow: #06b6d4;
+      --violet-glow: #8b5cf6;
+      --white-glow: #f8fafc;
+    }
+    body {
+      background-color: var(--bg-dark);
+      font-family: 'Plus Jakarta Sans', -apple-system, sans-serif;
+      color: #e2e8f0;
+      overflow-x: hidden;
+    }
+    .font-mono-tech {
+      font-family: 'JetBrains Mono', monospace;
+    }
+    .font-heading {
+      font-family: 'Space Grotesk', sans-serif;
+    }
+    .glass-card {
+      background: linear-gradient(135deg, rgba(13, 18, 30, 0.85) 0%, rgba(6, 9, 16, 0.9) 100%);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.6), inset 0 1px 0 rgba(255, 255, 255, 0.06);
+      backdrop-filter: blur(16px);
+    }
+    .glass-card-active {
+      border-color: rgba(6, 182, 212, 0.35);
+      box-shadow: 0 0 35px rgba(6, 182, 212, 0.15), inset 0 0 20px rgba(139, 92, 246, 0.1);
+    }
+    .timeline-track {
+      background: linear-gradient(90deg, 
+        rgba(6, 182, 212, 0.15) 0%, 
+        rgba(139, 92, 246, 0.3) 50%, 
+        rgba(6, 182, 212, 0.6) 80%,
+        rgba(255, 255, 255, 0.8) 100%);
+    }
+    /* Keyframe orbital animations for visual previews */
+    @keyframes spin-cw {
+      from { transform: rotate(0deg); }
+      to { transform: rotate(360deg); }
+    }
+    @keyframes spin-ccw {
+      from { transform: rotate(360deg); }
+      to { transform: rotate(0deg); }
+    }
+    @keyframes pulse-subtle {
+      0%, 100% { opacity: 0.7; transform: scale(1); }
+      50% { opacity: 1; transform: scale(1.04); }
+    }
+    @keyframes wave-float {
+      0%, 100% { transform: scaleY(0.6); }
+      50% { transform: scaleY(1.3); }
+    }
+    .animate-spin-slow {
+      animation: spin-cw 24s linear infinite;
+    }
+    .animate-spin-reverse {
+      animation: spin-ccw 30s linear infinite;
+    }
+    .animate-pulse-core {
+      animation: pulse-subtle 4s ease-in-out infinite;
+    }
+    /* Subtle grid background overlay */
+    .bg-grid-tech {
+      background-size: 40px 40px;
+      background-image: 
+        linear-gradient(to right, rgba(255, 255, 255, 0.02) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(255, 255, 255, 0.02) 1px, transparent 1px);
+    }
+  </style>
+</head>
+<body class="bg-grid-tech min-h-screen text-slate-200 antialiased selection:bg-cyan-500 selection:text-black">
+
+  <!-- TOP PRODUCTION HEADER BAR -->
+  <header class="sticky top-0 z-50 border-b border-white/10 bg-[#04060b]/90 backdrop-blur-md px-6 py-3.5 flex items-center justify-between">
+    <div class="flex items-center space-x-4">
+      <div class="flex items-center space-x-2">
+        <span class="inline-block w-2.5 h-2.5 rounded-full bg-cyan-400 shadow-[0_0_8px_#22d3ee]"></span>
+        <span class="font-heading font-bold tracking-[0.25em] text-white text-lg">B O S S</span>
+      </div>
+      <span class="text-white/20">/</span>
+      <div class="flex items-center space-x-2">
+        <span class="text-xs font-mono-tech px-2.5 py-0.5 rounded bg-cyan-950/60 border border-cyan-500/30 text-cyan-300 font-medium">PHASE 2.2</span>
+        <span class="text-xs font-mono-tech text-slate-400">30-SECOND CINEMATIC INTRO STORYBOARD</span>
+      </div>
+    </div>
+
+    <!-- Production Meta Pills -->
+    <div class="hidden md:flex items-center space-x-6 text-xs font-mono-tech text-slate-400">
+      <div>TARGET ASPECT: <span class="text-white font-medium">16:9 [2.39:1 MATTE READY]</span></div>
+      <div>AUDIO: <span class="text-white font-medium">24-BIT 48kHz ATMOS</span></div>
+      <div>PRODUCTION PIPELINE: <span class="text-cyan-400">BLENDER 3D + AFTER EFFECTS + NEURAL AUDIO</span></div>
+      <div class="px-3 py-1 rounded-full border border-purple-500/30 bg-purple-950/40 text-purple-300 flex items-center space-x-1.5">
+        <span class="w-1.5 h-1.5 rounded-full bg-purple-400 animate-ping"></span>
+        <span>PRODUCTION SPEC READY</span>
+      </div>
+    </div>
+  </header>
+
+  <!-- MAIN STORYBOARD CANVAS -->
+  <main class="max-w-[1720px] mx-auto px-6 py-8 space-y-12">
+
+    <!-- HERO INTRODUCTION / DIRECTOR'S BRIEF -->
+    <section class="glass-card rounded-2xl p-8 relative overflow-hidden">
+      <div class="absolute -right-24 -top-24 w-96 h-96 bg-cyan-500/10 rounded-full blur-3xl pointer-events-none"></div>
+      <div class="absolute -left-24 -bottom-24 w-96 h-96 bg-purple-600/10 rounded-full blur-3xl pointer-events-none"></div>
+      
+      <div class="relative z-10 flex flex-col lg:flex-row lg:items-center justify-between gap-8">
+        <div class="space-y-3 max-w-3xl">
+          <div class="flex items-center space-x-3 text-xs font-mono-tech tracking-widest text-cyan-400 uppercase">
+            <span>// CINEMATIC SEQUENCE SPECIFICATION</span>
+            <span>•</span>
+            <span>TOTAL DURATION: 00:30:00</span>
+            <span>•</span>
+            <span>SCENES: 09 FRAMES</span>
+          </div>
+          <h1 class="text-3xl lg:text-4xl font-heading font-bold tracking-tight text-white">
+            The Birth & Activation of BOSS
+          </h1>
+          <p class="text-slate-400 text-sm leading-relaxed">
+            A shot-by-shot visual sequence mapping the 30-second cold launch trailer for <span class="text-white font-medium">Bhanu Open Source System (BOSS)</span>. Transitioning from primordial obsidian void to full holographic orbital presence, culminating in BOSS’s first spoken words and seamlessly delivering the developer directly into the Home workspace.
+          </p>
+          <div class="flex flex-wrap gap-2 pt-2">
+            <span class="text-xs font-mono-tech px-2.5 py-1 rounded bg-white/5 border border-white/10 text-slate-300">Emotional Curve: Void → Curiosity → Wonder → Connection → Immersion</span>
+            <span class="text-xs font-mono-tech px-2.5 py-1 rounded bg-white/5 border border-white/10 text-slate-300">Lighting Curve: 0% → 15% → 45% → 100% [Peak] → 70% Steady</span>
+          </div>
+        </div>
+
+        <!-- 30-Second Timeline Bar Overview -->
+        <div class="w-full lg:w-[480px] bg-[#070b14]/90 rounded-xl p-5 border border-white/10 space-y-3">
+          <div class="flex justify-between items-center text-xs font-mono-tech">
+            <span class="text-slate-400 uppercase tracking-wider">30s Sequence Timeline</span>
+            <span class="text-cyan-400 font-semibold">00:00 → 00:30</span>
+          </div>
+          <!-- Progress Track -->
+          <div class="h-3 w-full bg-slate-800/80 rounded-full overflow-hidden p-0.5 flex relative">
+            <div class="timeline-track h-full w-full rounded-full"></div>
+          </div>
+          <!-- Segment Markers -->
+          <div class="grid grid-cols-5 text-[10px] font-mono-tech text-slate-400 text-center gap-1">
+            <div class="border-r border-white/10">00-06s<br><span class="text-white/60">VOID</span></div>
+            <div class="border-r border-white/10">06-14s<br><span class="text-cyan-400/80">FORMATION</span></div>
+            <div class="border-r border-white/10">14-21s<br><span class="text-purple-400/80">PEAK ORBIT</span></div>
+            <div class="border-r border-white/10">21-28s<br><span class="text-cyan-300 font-bold">VOICE</span></div>
+            <div>28-30s<br><span class="text-white">WARP TO UI</span></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SCENE-BY-SCENE STORYBOARD GRID -->
+    <div class="space-y-10">
+
+      <!-- SECTION TITLE -->
+      <div class="flex items-center justify-between border-b border-white/10 pb-4">
+        <div>
+          <h2 class="text-xl font-heading font-semibold text-white tracking-wide flex items-center space-x-3">
+            <span>SCENIC BREAKDOWN & VISUAL DIRECTIVES</span>
+            <span class="text-xs font-mono-tech text-cyan-400 bg-cyan-950/40 border border-cyan-800/40 px-2 py-0.5 rounded">9 SEQUENCES</span>
+          </h2>
+          <p class="text-xs font-mono-tech text-slate-400 mt-1">Detailed animatic frames, camera choreographies, sound design beds, lighting evolution, and visual directives.</p>
+        </div>
+        <div class="text-xs font-mono-tech text-slate-400 hidden sm:block">
+          TOTAL PRODUCTION SHOTS: 9 BLENDER / COMP SETUPS
+        </div>
+      </div>
+
+      <!-- STORYBOARD CARDS 3x3 GRID -->
+      <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
+
+        <!-- ============================================== -->
+        <!-- SCENE 01: 00:00 - 00:03 -->
+        <!-- ============================================== -->
+        <div class="glass-card rounded-xl overflow-hidden flex flex-col transition hover:border-cyan-500/40 group">
+          <!-- Cinematic Frame (16:9) -->
+          <div class="relative w-full aspect-video bg-[#010204] border-b border-white/10 overflow-hidden flex items-center justify-center">
+            <!-- Scene Specific Visual: Total Obsidian Void with Faintest Micro-Grain -->
+            <div class="absolute inset-0 bg-[#000000]"></div>
+            <div class="absolute inset-0 bg-radial from-slate-900/10 via-transparent to-black opacity-30"></div>
+            <!-- Barely perceptible floating dust -->
+            <div class="w-1 h-1 rounded-full bg-cyan-400/20 absolute top-1/3 left-1/4 animate-pulse"></div>
+            <div class="w-0.5 h-0.5 rounded-full bg-purple-400/20 absolute bottom-1/3 right-1/3"></div>
+            
+            <!-- Technical HUD Overlay for storyboard director -->
+            <div class="absolute top-3 left-3 font-mono-tech text-[10px] text-white/50 bg-black/80 px-2 py-0.5 rounded border border-white/10">
+              FRAME 001 // SHOT 01
+            </div>
+            <div class="absolute top-3 right-3 font-mono-tech text-[10px] text-cyan-400 font-bold bg-cyan-950/80 px-2 py-0.5 rounded border border-cyan-500/30">
+              00:00 – 00:03 [3.0s]
+            </div>
+            <div class="text-center space-y-1 select-none">
+              <span class="text-slate-600 font-mono-tech text-xs tracking-widest uppercase block">// PRIMORDIAL VOID</span>
+              <span class="text-white/20 text-[10px] font-mono-tech">[NO LOGO • NO UI • NO SOUND PEAKS]</span>
+            </div>
+            <div class="absolute bottom-3 left-3 text-[10px] font-mono-tech text-slate-400 flex items-center space-x-1.5">
+              <span class="w-1.5 h-1.5 rounded-full bg-slate-600"></span>
+              <span>CAM: STATIC LOCK</span>
+            </div>
+          </div>
+
+          <!-- Scene Production Data -->
+          <div class="p-5 flex-1 flex flex-col justify-between space-y-4">
+            <div class="space-y-2">
+              <div class="flex items-center justify-between">
+                <h3 class="text-base font-heading font-bold text-white tracking-wide">SCENE 01 — BLACK</h3>
+                <span class="text-[11px] font-mono-tech text-slate-400">ATMOSPHERIC ZERO</span>
+              </div>
+              <p class="text-xs text-slate-300 leading-relaxed">
+                Complete black screen. Pure obsidian darkness. No UI, no logo, no branding. Only an almost imperceptible low-frequency atmospheric rumble and infinitesimal microscopic spatial dust.
+              </p>
+            </div>
+
+            <div class="space-y-2.5 pt-2 border-t border-white/5 text-[11px] font-mono-tech">
+              <div class="flex items-start justify-between text-slate-400">
+                <span class="text-cyan-400">CAMERA:</span>
+                <span class="text-slate-200 text-right">Locked off 50mm, 0 parallax</span>
+              </div>
+              <div class="flex items-start justify-between text-slate-400">
+                <span class="text-purple-400">LIGHTING:</span>
+                <span class="text-slate-200 text-right">0% Lumens, pure #000000 black</span>
+              </div>
+              <div class="flex items-start justify-between text-slate-400">
+                <span class="text-slate-400">SOUND FX:</span>
+                <span class="text-slate-300 text-right">Deep 30Hz sub-bass drone, silent void</span>
+              </div>
+              <div class="p-2 rounded bg-black/40 border border-white/5 text-[10px] text-slate-400">
+                <span class="text-white font-semibold">DIRECTOR NOTE:</span> Cultivate tension and mystery. The audience should wonder if the screen is even on before the first spark of life.
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ============================================== -->
+        <!-- SCENE 02: 00:03 - 00:06 -->
+        <!-- ============================================== -->
+        <div class="glass-card rounded-xl overflow-hidden flex flex-col transition hover:border-cyan-500/40 group">
+          <!-- Cinematic Frame (16:9) -->
+          <div class="relative w-full aspect-video bg-[#020409] border-b border-white/10 overflow-hidden flex items-center justify-center">
+            <!-- Scene Visual: Sparse cyan/violet particles floating inward -->
+            <div class="absolute inset-0 bg-radial from-slate-900/20 via-[#020409] to-black"></div>
+            
+            <!-- Faint Center Reticle Guides -->
+            <div class="w-16 h-16 rounded-full border border-dashed border-white/5 absolute"></div>
+            
+            <!-- Floating cyan & violet particles -->
+            <div class="absolute w-1.5 h-1.5 rounded-full bg-cyan-400 shadow-[0_0_8px_#06b6d4] top-[42%] left-[46%] animate-pulse"></div>
+            <div class="absolute w-1 h-1 rounded-full bg-purple-400 shadow-[0_0_6px_#a855f7] top-[54%] left-[53%]"></div>
+            <div class="absolute w-1 h-1 rounded-full bg-cyan-300 shadow-[0_0_6px_#22d3ee] top-[38%] left-[58%]"></div>
+            <div class="absolute w-1.5 h-1.5 rounded-full bg-violet-400 shadow-[0_0_8px_#8b5cf6] top-[60%] left-[44%]"></div>
+            <!-- Particle subtle trail simulation -->
+            <svg class="absolute inset-0 w-full h-full pointer-events-none opacity-40" xmlns="http://www.w3.org/2000/svg">
+              <line x1="40%" y1="35%" x2="46%" y2="42%" stroke="#06b6d4" stroke-width="0.75" stroke-dasharray="2,3"/>
+              <line x1="65%" y1="62%" x2="53%" y2="54%" stroke="#8b5cf6" stroke-width="0.75" stroke-dasharray="2,3"/>
+            </svg>
+
+            <!-- HUD Overlays -->
+            <div class="absolute top-3 left-3 font-mono-tech text-[10px] text-white/50 bg-black/80 px-2 py-0.5 rounded border border-white/10">
+              FRAME 072 // SHOT 02
+            </div>
+            <div class="absolute top-3 right-3 font-mono-tech text-[10px] text-cyan-400 font-bold bg-cyan-950/80 px-2 py-0.5 rounded border border-cyan-500/30">
+              00:03 – 00:06 [3.0s]
+            </div>
+            <div class="absolute bottom-3 left-3 text-[10px] font-mono-tech text-cyan-300 flex items-center space-x-1.5">
+              <span class="w-1.5 h-1.5 rounded-full bg-cyan-400 animate-pulse"></span>
+              <span>CAM: ULTRA-SLOW PUSH IN (+1.2%)</span>
+            </div>
+          </div>
+
+          <!-- Scene Production Data -->
+          <div class="p-5 flex-1 flex flex-col justify-between space-y-4">
+            <div class="space-y-2">
+              <div class="flex items-center justify-between">
+                <h3 class="text-base font-heading font-bold text-white tracking-wide">SCENE 02 — FIRST PARTICLES</h3>
+                <span class="text-[11px] font-mono-tech text-cyan-400">SPARK OF INTELLECT</span>
+              </div>
+              <p class="text-xs text-slate-300 leading-relaxed">
+                Tiny luminous cyan and electric violet micro-particles appear from the black expanse. Moving slowly through vast 3D coordinates, they subtly curve toward an invisible focal center.
+              </p>
+            </div>
+
+            <div class="space-y-2.5 pt-2 border-t border-white/5 text-[11px] font-mono-tech">
+              <div class="flex items-start justify-between text-slate-400">
+                <span class="text-cyan-400">CAMERA:</span>
+                <span class="text-slate-200 text-right">Slow continuous push (Z-axis +0.5m/s)</span>
+              </div>
+              <div class="flex items-start justify-between text-slate-400">
+                <span class="text-purple-400">LIGHTING:</span>
+                <span class="text-slate-200 text-right">Point emission lights from particles only (5%)</span>
+              </div>
+              <div class="flex items-start justify-between text-slate-400">
+                <span class="text-slate-400">SOUND FX:</span>
+                <span class="text-slate-300 text-right">High-frequency crystalline telemetry blips</span>
+              </div>
+              <div class="p-2 rounded bg-black/40 border border-white/5 text-[10px] text-slate-400">
+                <span class="text-white font-semibold">FEELING:</span> “Something is beginning.” The birth of neural synapse connections in dark computational space.
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ============================================== -->
+        <!-- SCENE 03: 00:06 - 00:10 -->
+        <!-- ============================================== -->
+        <div class="glass-card rounded-xl overflow-hidden flex flex-col transition hover:border-cyan-500/40 group">
+          <!-- Cinematic Frame (16:9) -->
+          <div class="relative w-full aspect-video bg-[#030611] border-b border-white/10 overflow-hidden flex items-center justify-center">
+            <!-- Scene Visual: Converging particles & faint spherical field forming -->
+            <div class="absolute inset-0 bg-radial from-cyan-950/30 via-[#030611] to-black"></div>
+            
+            <!-- Embryonic core sphere forming -->
+            <div class="w-24 h-24 rounded-full border border-cyan-500/20 bg-cyan-900/10 backdrop-blur-sm shadow-[0_0_20px_rgba(6,182,212,0.15)] flex items-center justify-center relative">
+              <div class="w-16 h-16 rounded-full border border-purple-500/20 bg-purple-900/10"></div>
+              <!-- Light trails forming orbits -->
+              <svg class="absolute -inset-4 w-32 h-32 pointer-events-none" viewBox="0 0 120 120">
+                <ellipse cx="60" cy="60" rx="55" ry="24" fill="none" stroke="rgba(6,182,212,0.4)" stroke-width="0.75" stroke-dasharray="8,12" transform="rotate(-20 60 60)"/>
+                <ellipse cx="60" cy="60" rx="50" ry="18" fill="none" stroke="rgba(139,92,246,0.3)" stroke-width="0.75" stroke-dasharray="14,8" transform="rotate(25 60 60)"/>
+              </svg>
+            </div>
+
+            <!-- Inward velocity lines -->
+            <div class="absolute w-2 h-2 rounded-full bg-cyan-300 shadow-[0_0_10px_#22d3ee] top-8 right-16"></div>
+            <div class="absolute w-1.5 h-1.5 rounded-full bg-purple-400 shadow-[0_0_10px_#c084fc] bottom-10 left-16"></div>
+
+            <!-- HUD Overlays -->
+            <div class="absolute top-3 left-3 font-mono-tech text-[10px] text-white/50 bg-black/80 px-2 py-0.5 rounded border border-white/10">
+              FRAME 144 // SHOT 03
+            </div>
+            <div class="absolute top-3 right-3 font-mono-tech text-[10px] text-cyan-400 font-bold bg-cyan-950/80 px-2 py-0.5 rounded border border-cyan-500/30">
+              00:06 – 00:10 [4.0s]
+            </div>
+            <div class="absolute bottom-3 left-3 text-[10px] font-mono-tech text-cyan-300 flex items-center space-x-1.5">
+              <span class="w-1.5 h-1.5 rounded-full bg-cyan-400"></span>
+              <span>CAM: SLIGHT TILT-DOWN PARALLAX</span>
+            </div>
+          </div>
+
+          <!-- Scene Production Data -->
+          <div class="p-5 flex-1 flex flex-col justify-between space-y-4">
+            <div class="space-y-2">
+              <div class="flex items-center justify-between">
+                <h3 class="text-base font-heading font-bold text-white tracking-wide">SCENE 03 — ENERGY FORMATION</h3>
+                <span class="text-[11px] font-mono-tech text-purple-400">GRAVITATIONAL PULL</span>
+              </div>
+              <p class="text-xs text-slate-300 leading-relaxed">
+                Hundreds of micro-particles converge. A faint spherical energy bubble materializes at center. Thin glowing light trails trace the first nascent orbital curves. Still withholding the full core structure.
+              </p>
+            </div>
+
+            <div class="space-y-2.5 pt-2 border-t border-white/5 text-[11px] font-mono-tech">
+              <div class="flex items-start justify-between text-slate-400">
+                <span class="text-cyan-400">CAMERA:</span>
+                <span class="text-slate-200 text-right">Slow spiral approach (15° roll offset)</span>
+              </div>
+              <div class="flex items-start justify-between text-slate-400">
+                <span class="text-purple-400">LIGHTING:</span>
+                <span class="text-slate-200 text-right">Volumetric inner glow (20%), soft falloff</span>
+              </div>
+              <div class="flex items-start justify-between text-slate-400">
+                <span class="text-slate-400">SOUND FX:</span>
+                <span class="text-slate-300 text-right">Harmonic swelling resonance, whooshes</span>
+              </div>
+              <div class="p-2 rounded bg-black/40 border border-white/5 text-[10px] text-slate-400">
+                <span class="text-white font-semibold">PACING NOTE:</span> Build delicious anticipation. Do NOT show the entire core yet. Let energy seek its architectural symmetry.
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ============================================== -->
+        <!-- SCENE 04: 00:10 - 00:14 -->
+        <!-- ============================================== -->
+        <div class="glass-card rounded-xl overflow-hidden flex flex-col transition hover:border-cyan-500/40 group">
+          <!-- Cinematic Frame (16:9) -->
+          <div class="relative w-full aspect-video bg-[#030612] border-b border-white/10 overflow-hidden flex items-center justify-center">
+            <!-- Scene Visual: BOSS Core materializing rings one-by-one -->
+            <div class="absolute inset-0 bg-radial from-cyan-950/40 via-purple-950/20 to-[#020307]"></div>
+            
+            <!-- Core Sphere with internal nascent waveform -->
+            <div class="w-28 h-28 rounded-full border border-cyan-400/40 bg-[#050e1c]/80 backdrop-blur-md shadow-[0_0_30px_rgba(6,182,212,0.3)] flex items-center justify-center relative">
+              <!-- Internal pulse -->
+              <div class="w-16 h-16 rounded-full bg-gradient-to-tr from-cyan-500/20 to-purple-500/30 animate-pulse-core"></div>
+              <!-- Nascent Waveform bars -->
+              <div class="flex items-center space-x-1 z-10">
+                <span class="w-0.5 h-3 bg-cyan-400/70 rounded-full"></span>
+                <span class="w-0.5 h-6 bg-cyan-300 rounded-full"></span>
+                <span class="w-0.5 h-4 bg-purple-300 rounded-full"></span>
+              </div>
+              
+              <!-- Orbital Rings Lighting Up Sequentially -->
+              <svg class="absolute -inset-10 w-48 h-48 pointer-events-none" viewBox="0 0 200 200">
+                <!-- Ring 1 (Inner luminous) -->
+                <circle cx="100" cy="100" r="64" fill="none" stroke="#06b6d4" stroke-width="1.2" stroke-opacity="0.8"/>
+                <!-- Ring 2 (Segmented arc activating) -->
+                <circle cx="100" cy="100" r="78" fill="none" stroke="#8b5cf6" stroke-width="1.5" stroke-dasharray="35,15,5,15" stroke-opacity="0.6"/>
+                <!-- Elliptical Tilted Path -->
+                <ellipse cx="100" cy="100" rx="90" ry="36" fill="none" stroke="#38bdf8" stroke-width="0.8" stroke-opacity="0.5" transform="rotate(-25 100 100)"/>
+              </svg>
+            </div>
+
+            <!-- HUD Overlays -->
+            <div class="absolute top-3 left-3 font-mono-tech text-[10px] text-white/50 bg-black/80 px-2 py-0.5 rounded border border-white/10">
+              FRAME 240 // SHOT 04
+            </div>
+            <div class="absolute top-3 right-3 font-mono-tech text-[10px] text-cyan-400 font-bold bg-cyan-950/80 px-2 py-0.5 rounded border border-cyan-500/30">
+              00:10 – 00:14 [4.0s]
+            </div>
+            <div class="absolute bottom-3 left-3 text-[10px] font-mono-tech text-cyan-300 flex items-center space-x-1.5">
+              <span class="w-1.5 h-1.5 rounded-full bg-cyan-400"></span>
+              <span>CAM: STEADY FORWARD DOLLY</span>
+            </div>
+          </div>
+
+          <!-- Scene Production Data -->
+          <div class="p-5 flex-1 flex flex-col justify-between space-y-4">
+            <div class="space-y-2">
+              <div class="flex items-center justify-between">
+                <h3 class="text-base font-heading font-bold text-white tracking-wide">SCENE 04 — CORE MATERIALIZES</h3>
+                <span class="text-[11px] font-mono-tech text-cyan-300">SEQUENTIAL IGNITION</span>
+              </div>
+              <p class="text-xs text-slate-300 leading-relaxed">
+                The smoked-glass sphere crystallizes in sharp 3D relief. The orbital rings ignite sequentially: Inner halo → Segmented ring → 3D elliptical tracks → Outer tick-mark boundary. Exact BOSS geometry established.
+              </p>
+            </div>
+
+            <div class="space-y-2.5 pt-2 border-t border-white/5 text-[11px] font-mono-tech">
+              <div class="flex items-start justify-between text-slate-400">
+                <span class="text-cyan-400">CAMERA:</span>
+                <span class="text-slate-200 text-right">Smooth dolly forward, framing Core at optical center</span>
+              </div>
+              <div class="flex items-start justify-between text-slate-400">
+                <span class="text-purple-400">LIGHTING:</span>
+                <span class="text-slate-200 text-right">Sequential rim light ignition (cyan + violet 40%)</span>
+              </div>
+              <div class="flex items-start justify-between text-slate-400">
+                <span class="text-slate-400">SOUND FX:</span>
+                <span class="text-slate-300 text-right">Precision micro-solenoid clicks & magnetic hum</span>
+              </div>
+              <div class="p-2 rounded bg-black/40 border border-white/5 text-[10px] text-slate-400">
+                <span class="text-white font-semibold">CRAFT DIRECTIVE:</span> Rings must activate with mechanical and computational precision, like an ultra-luxury chronometer.
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ============================================== -->
+        <!-- SCENE 05: 00:14 - 00:18 -->
+        <!-- ============================================== -->
+        <div class="glass-card rounded-xl overflow-hidden flex flex-col transition hover:border-cyan-500/40 group">
+          <!-- Cinematic Frame (16:9) -->
+          <div class="relative w-full aspect-video bg-[#040816] border-b border-white/10 overflow-hidden flex items-center justify-center">
+            <!-- Scene Visual: Full holographic orbital system rotating counter-directionally -->
+            <div class="absolute inset-0 bg-radial from-cyan-900/30 via-purple-950/20 to-[#020409]"></div>
+            
+            <div class="w-32 h-32 rounded-full border border-cyan-400/50 bg-[#061224]/90 backdrop-blur-md shadow-[0_0_40px_rgba(6,182,212,0.4)] flex items-center justify-center relative">
+              <!-- Internal pulse waveform active -->
+              <div class="flex items-center space-x-1 z-10">
+                <span class="w-0.5 h-4 bg-cyan-400 rounded-full"></span>
+                <span class="w-0.5 h-8 bg-white shadow-[0_0_8px_#fff] rounded-full"></span>
+                <span class="w-0.5 h-10 bg-cyan-300 shadow-[0_0_8px_#22d3ee] rounded-full"></span>
+                <span class="w-0.5 h-6 bg-purple-400 rounded-full"></span>
+                <span class="w-0.5 h-3 bg-purple-300 rounded-full"></span>
+              </div>
+
+              <!-- Animated Orbital System -->
+              <svg class="absolute -inset-14 w-60 h-60 pointer-events-none" viewBox="0 0 240 240">
+                <!-- Inner segmented CW -->
+                <circle cx="120" cy="120" r="75" fill="none" stroke="#06b6d4" stroke-width="1.2" stroke-dasharray="25,10,50,15" stroke-opacity="0.85"/>
+                <!-- Outer precision CCW -->
+                <circle cx="120" cy="120" r="92" fill="none" stroke="#8b5cf6" stroke-width="1" stroke-dasharray="8,8,60,10" stroke-opacity="0.7"/>
+                <!-- Tilted 3D Orbit with node -->
+                <ellipse cx="120" cy="120" rx="108" ry="42" fill="none" stroke="#38bdf8" stroke-width="1.2" stroke-opacity="0.6" transform="rotate(-30 120 120)"/>
+                <circle cx="195" cy="85" r="3" fill="#22d3ee" filter="drop-shadow(0 0 6px #22d3ee)"/>
+                <circle cx="45" cy="155" r="2.5" fill="#c084fc" filter="drop-shadow(0 0 6px #c084fc)"/>
+                <!-- Cardinal Reticle ticks -->
+                <line x1="120" y1="20" x2="120" y2="28" stroke="#38bdf8" stroke-width="2"/>
+                <line x1="120" y1="212" x2="120" y2="220" stroke="#38bdf8" stroke-width="2"/>
+                <line x1="20" y1="120" x2="28" y2="120" stroke="#a855f7" stroke-width="2"/>
+                <line x1="212" y1="120" x2="220" y2="120" stroke="#a855f7" stroke-width="2"/>
+              </svg>
+            </div>
+
+            <!-- HUD Overlays -->
+            <div class="absolute top-3 left-3 font-mono-tech text-[10px] text-white/50 bg-black/80 px-2 py-0.5 rounded border border-white/10">
+              FRAME 336 // SHOT 05
+            </div>
+            <div class="absolute top-3 right-3 font-mono-tech text-[10px] text-cyan-400 font-bold bg-cyan-950/80 px-2 py-0.5 rounded border border-cyan-500/30">
+              00:14 – 00:18 [4.0s]
+            </div>
+            <div class="absolute bottom-3 left-3 text-[10px] font-mono-tech text-purple-300 flex items-center space-x-1.5">
+              <span class="w-1.5 h-1.5 rounded-full bg-purple-400"></span>
+              <span>CAM: DYNAMIC CLOSE-IN ORBIT (+3°)</span>
+            </div>
+          </div>
+
+          <!-- Scene Production Data -->
+          <div class="p-5 flex-1 flex flex-col justify-between space-y-4">
+            <div class="space-y-2">
+              <div class="flex items-center justify-between">
+                <h3 class="text-base font-heading font-bold text-white tracking-wide">SCENE 05 — SYSTEM ACTIVATION</h3>
+                <span class="text-[11px] font-mono-tech text-cyan-400">KINETIC EQUILIBRIUM</span>
+              </div>
+              <p class="text-xs text-slate-300 leading-relaxed">
+                Full orbital system engages with deliberate intelligence. Counter-rotating segmented rings, luminous telemetry nodes tracking elliptical paths, scanning sweeps, and harmonic internal waveform resonance.
+              </p>
+            </div>
+
+            <div class="space-y-2.5 pt-2 border-t border-white/5 text-[11px] font-mono-tech">
+              <div class="flex items-start justify-between text-slate-400">
+                <span class="text-cyan-400">CAMERA:</span>
+                <span class="text-slate-200 text-right">Slow continuous push-in with subtle orbital roll</span>
+              </div>
+              <div class="flex items-start justify-between text-slate-400">
+                <span class="text-purple-400">LIGHTING:</span>
+                <span class="text-slate-200 text-right">Controlled volumetric bloom, specular glass reflections</span>
+              </div>
+              <div class="flex items-start justify-between text-slate-400">
+                <span class="text-slate-400">SOUND FX:</span>
+                <span class="text-slate-300 text-right">Deep, synchronized harmonic pulse; orbital energy sweeps</span>
+              </div>
+              <div class="p-2 rounded bg-black/40 border border-white/5 text-[10px] text-slate-400">
+                <span class="text-white font-semibold">CORE VITALITY:</span> Not a generic loading spinner—it feels like a multi-tiered supercomputer waking to conscious thought.
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ============================================== -->
+        <!-- SCENE 06: 00:18 - 00:21 -->
+        <!-- ============================================== -->
+        <div class="glass-card rounded-xl overflow-hidden flex flex-col transition hover:border-cyan-500/40 group">
+          <!-- Cinematic Frame (16:9) -->
+          <div class="relative w-full aspect-video bg-[#040816] border-b border-white/10 overflow-hidden flex flex-col items-center justify-center">
+            <!-- Scene Visual: Core at peak with pure white B O S S title reveal -->
+            <div class="absolute inset-0 bg-radial from-cyan-900/40 via-purple-950/30 to-[#020306]"></div>
+            
+            <!-- Scaled Core Centered -->
+            <div class="w-20 h-20 rounded-full border border-cyan-400/60 bg-[#051122]/90 shadow-[0_0_35px_rgba(6,182,212,0.5)] flex items-center justify-center relative mb-4">
+              <div class="w-12 h-12 rounded-full bg-cyan-400/20 animate-pulse"></div>
+              <svg class="absolute -inset-8 w-36 h-36 pointer-events-none" viewBox="0 0 160 160">
+                <circle cx="80" cy="80" r="52" fill="none" stroke="#06b6d4" stroke-width="1" stroke-opacity="0.8"/>
+                <ellipse cx="80" cy="80" rx="70" ry="26" fill="none" stroke="#8b5cf6" stroke-width="1" stroke-opacity="0.6" transform="rotate(-20 80 80)"/>
+              </svg>
+            </div>
+
+            <!-- Typography Reveal -->
+            <div class="text-center z-10 space-y-1">
+              <div class="text-2xl font-bold font-heading tracking-[0.45em] text-white drop-shadow-[0_0_12px_rgba(255,255,255,0.6)]">
+                B O S S
+              </div>
+              <div class="text-[9px] font-mono-tech tracking-[0.25em] text-cyan-300/80">
+                THINK &gt; BUILD &gt; SOLVE &gt; TOGETHER
+              </div>
+            </div>
+
+            <!-- HUD Overlays -->
+            <div class="absolute top-3 left-3 font-mono-tech text-[10px] text-white/50 bg-black/80 px-2 py-0.5 rounded border border-white/10">
+              FRAME 432 // SHOT 06
+            </div>
+            <div class="absolute top-3 right-3 font-mono-tech text-[10px] text-cyan-400 font-bold bg-cyan-950/80 px-2 py-0.5 rounded border border-cyan-500/30">
+              00:18 – 00:21 [3.0s]
+            </div>
+            <div class="absolute bottom-3 left-3 text-[10px] font-mono-tech text-white flex items-center space-x-1.5">
+              <span class="w-1.5 h-1.5 rounded-full bg-white animate-ping"></span>
+              <span>CAM: GENTLE CRANE DOWN REVEAL</span>
+            </div>
+          </div>
+
+          <!-- Scene Production Data -->
+          <div class="p-5 flex-1 flex flex-col justify-between space-y-4">
+            <div class="space-y-2">
+              <div class="flex items-center justify-between">
+                <h3 class="text-base font-heading font-bold text-white tracking-wide">SCENE 06 — IDENTITY REVEAL</h3>
+                <span class="text-[11px] font-mono-tech text-cyan-400">PEAK ILLUMINATION</span>
+              </div>
+              <p class="text-xs text-slate-300 leading-relaxed">
+                Core energy reaches brief crescendo, illuminating deep volumetric atmosphere. Settles gracefully as the pure white typographic identity emerges: <strong class="text-white">B O S S</strong> with <em class="text-cyan-300 not-italic">THINK &gt; BUILD &gt; SOLVE &gt; TOGETHER</em>.
+              </p>
+            </div>
+
+            <div class="space-y-2.5 pt-2 border-t border-white/5 text-[11px] font-mono-tech">
+              <div class="flex items-start justify-between text-slate-400">
+                <span class="text-cyan-400">CAMERA:</span>
+                <span class="text-slate-200 text-right">Elegantly centers identity and Core together</span>
+              </div>
+              <div class="flex items-start justify-between text-slate-400">
+                <span class="text-purple-400">LIGHTING:</span>
+                <span class="text-slate-200 text-right">Flash energy surge (100%) settling to 65%</span>
+              </div>
+              <div class="flex items-start justify-between text-slate-400">
+                <span class="text-slate-400">SOUND FX:</span>
+                <span class="text-slate-300 text-right">Sub-bass boom & crisp glass harmonic chord</span>
+              </div>
+              <div class="p-2 rounded bg-black/40 border border-white/5 text-[10px] text-slate-400">
+                <span class="text-white font-semibold">VERBATIM CHECK:</span> Exactly B O S S and the 4-part mantra. No "Bhanu AI System" subtitle—understated, elite authority.
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ============================================== -->
+        <!-- SCENE 07: 00:21 - 00:25 -->
+        <!-- ============================================== -->
+        <div class="glass-card rounded-xl overflow-hidden flex flex-col transition hover:border-cyan-500/40 group">
+          <!-- Cinematic Frame (16:9) -->
+          <div class="relative w-full aspect-video bg-[#03050c] border-b border-white/10 overflow-hidden flex flex-col items-center justify-center">
+            <!-- Scene Visual: The Presence - calm breathing, pure connection -->
+            <div class="absolute inset-0 bg-radial from-slate-900/30 via-[#03050c] to-black"></div>
+            
+            <div class="text-center z-10 space-y-1 mb-3">
+              <div class="text-xl font-bold font-heading tracking-[0.4em] text-white/90">
+                B O S S
+              </div>
+            </div>
+
+            <div class="w-24 h-24 rounded-full border border-cyan-400/40 bg-[#040a16]/80 backdrop-blur-md shadow-[0_0_25px_rgba(6,182,212,0.25)] flex items-center justify-center relative">
+              <!-- Calm breathing waveform -->
+              <div class="flex items-center space-x-1 z-10">
+                <span class="w-0.5 h-3 bg-cyan-400/60 rounded-full"></span>
+                <span class="w-0.5 h-5 bg-white/90 rounded-full"></span>
+                <span class="w-0.5 h-3 bg-purple-400/60 rounded-full"></span>
+              </div>
+              <svg class="absolute -inset-10 w-44 h-44 pointer-events-none" viewBox="0 0 180 180">
+                <circle cx="90" cy="90" r="58" fill="none" stroke="#06b6d4" stroke-width="1" stroke-opacity="0.5"/>
+                <ellipse cx="90" cy="90" rx="78" ry="30" fill="none" stroke="#8b5cf6" stroke-width="1" stroke-opacity="0.4" transform="rotate(-15 90 90)"/>
+              </svg>
+            </div>
+
+            <!-- HUD Overlays -->
+            <div class="absolute top-3 left-3 font-mono-tech text-[10px] text-white/50 bg-black/80 px-2 py-0.5 rounded border border-white/10">
+              FRAME 504 // SHOT 07
+            </div>
+            <div class="absolute top-3 right-3 font-mono-tech text-[10px] text-cyan-400 font-bold bg-cyan-950/80 px-2 py-0.5 rounded border border-cyan-500/30">
+              00:21 – 00:25 [4.0s]
+            </div>
+            <div class="absolute bottom-3 left-3 text-[10px] font-mono-tech text-slate-300 flex items-center space-x-1.5">
+              <span class="w-1.5 h-1.5 rounded-full bg-cyan-400"></span>
+              <span>CAM: LOCKED RESPIRATORY DRIFT</span>
+            </div>
+          </div>
+
+          <!-- Scene Production Data -->
+          <div class="p-5 flex-1 flex flex-col justify-between space-y-4">
+            <div class="space-y-2">
+              <div class="flex items-center justify-between">
+                <h3 class="text-base font-heading font-bold text-white tracking-wide">SCENE 07 — THE PRESENCE</h3>
+                <span class="text-[11px] font-mono-tech text-purple-300">SENTIENCE & BREATH</span>
+              </div>
+              <p class="text-xs text-slate-300 leading-relaxed">
+                Emotional centerpiece. No UI, no widgets, no distractions. The Core and identity hold the screen in dignified stillness. The Core gently breathes—a living, self-contained intelligence observing the developer.
+              </p>
+            </div>
+
+            <div class="space-y-2.5 pt-2 border-t border-white/5 text-[11px] font-mono-tech">
+              <div class="flex items-start justify-between text-slate-400">
+                <span class="text-cyan-400">CAMERA:</span>
+                <span class="text-slate-200 text-right">Gentle microscopic breathing float (Z +/- 0.05m)</span>
+              </div>
+              <div class="flex items-start justify-between text-slate-400">
+                <span class="text-purple-400">LIGHTING:</span>
+                <span class="text-slate-200 text-right">Quiet cyan/violet rim glow, velvety darkness</span>
+              </div>
+              <div class="flex items-start justify-between text-slate-400">
+                <span class="text-slate-400">SOUND FX:</span>
+                <span class="text-slate-300 text-right">Quiet sub-hum, rhythmic harmonic breathing cycle</span>
+              </div>
+              <div class="p-2 rounded bg-black/40 border border-white/5 text-[10px] text-slate-400">
+                <span class="text-white font-semibold">EMOTIONAL NOTE:</span> “This is an AI system.” A sacred cinematic pause before voice contact is established.
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ============================================== -->
+        <!-- SCENE 08: 00:25 - 00:28 -->
+        <!-- ============================================== -->
+        <div class="glass-card rounded-xl overflow-hidden flex flex-col transition hover:border-cyan-500/40 group border-cyan-500/30">
+          <!-- Cinematic Frame (16:9) -->
+          <div class="relative w-full aspect-video bg-[#030612] border-b border-white/10 overflow-hidden flex flex-col items-center justify-center">
+            <!-- Scene Visual: Voice Introduction with voice reactive waveform -->
+            <div class="absolute inset-0 bg-radial from-cyan-900/30 via-purple-950/20 to-black"></div>
+            
+            <!-- Voice Reactive Core -->
+            <div class="w-24 h-24 rounded-full border border-cyan-400/80 bg-[#051124] shadow-[0_0_40px_rgba(6,182,212,0.45)] flex items-center justify-center relative mb-4">
+              <!-- Acoustic Waveform reacting to vocal line -->
+              <div class="flex items-end space-x-1.5 z-10 h-10 pb-1">
+                <span class="w-1 h-3 bg-cyan-400 rounded-full"></span>
+                <span class="w-1 h-7 bg-white shadow-[0_0_8px_#fff] rounded-full animate-pulse"></span>
+                <span class="w-1 h-9 bg-cyan-300 shadow-[0_0_10px_#22d3ee] rounded-full"></span>
+                <span class="w-1 h-6 bg-purple-400 rounded-full"></span>
+                <span class="w-1 h-2 bg-purple-300 rounded-full"></span>
+              </div>
+              <!-- Voice pulse ring expanding -->
+              <div class="absolute inset-0 rounded-full border-2 border-cyan-400/50 animate-ping opacity-30"></div>
+            </div>
+
+            <!-- Voice Dialogue Subtitle Caption -->
+            <div class="text-center z-10 max-w-sm px-4 py-1.5 rounded-full bg-black/60 border border-white/10 backdrop-blur-md">
+              <span class="text-sm font-heading text-white font-medium tracking-wide">
+                “Hi. I’m BOSS. Let’s build something.”
+              </span>
+            </div>
+
+            <!-- HUD Overlays -->
+            <div class="absolute top-3 left-3 font-mono-tech text-[10px] text-white/50 bg-black/80 px-2 py-0.5 rounded border border-white/10">
+              FRAME 600 // SHOT 08
+            </div>
+            <div class="absolute top-3 right-3 font-mono-tech text-[10px] text-cyan-400 font-bold bg-cyan-950/80 px-2 py-0.5 rounded border border-cyan-500/30">
+              00:25 – 00:28 [3.0s]
+            </div>
+            <div class="absolute bottom-3 left-3 text-[10px] font-mono-tech text-cyan-300 flex items-center space-x-1.5">
+              <span class="w-1.5 h-1.5 rounded-full bg-cyan-400 animate-ping"></span>
+              <span>CAM: INTIMATE SLIGHT PUSH (+0.8%)</span>
+            </div>
+          </div>
+
+          <!-- Scene Production Data -->
+          <div class="p-5 flex-1 flex flex-col justify-between space-y-4">
+            <div class="space-y-2">
+              <div class="flex items-center justify-between">
+                <h3 class="text-base font-heading font-bold text-white tracking-wide">SCENE 08 — VOICE INTRODUCTION</h3>
+                <span class="text-[11px] font-mono-tech text-cyan-300">VOCAL CONTACT 🔊</span>
+              </div>
+              <p class="text-xs text-slate-300 leading-relaxed">
+                BOSS speaks directly to the developer: <strong class="text-white">“Hi. I'm BOSS.”</strong> [deliberate micro-pause] <strong class="text-white">“Let's build something.”</strong> Waveform expands rhythmically with speech cadence.
+              </p>
+            </div>
+
+            <div class="space-y-2.5 pt-2 border-t border-white/5 text-[11px] font-mono-tech">
+              <div class="flex items-start justify-between text-slate-400">
+                <span class="text-cyan-400">VOICE ACTOR:</span>
+                <span class="text-slate-200 text-right">Intelligent, calm, confident, natural (non-robotic)</span>
+              </div>
+              <div class="flex items-start justify-between text-slate-400">
+                <span class="text-purple-400">LIGHTING:</span>
+                <span class="text-slate-200 text-right">Voice-reactive acoustic rim pulses</span>
+              </div>
+              <div class="flex items-start justify-between text-slate-400">
+                <span class="text-slate-400">SOUND FX:</span>
+                <span class="text-slate-300 text-right">Studio dry vocal stem + subtle binaural presence</span>
+              </div>
+              <div class="p-2 rounded bg-cyan-950/30 border border-cyan-500/20 text-[10px] text-cyan-300">
+                <span class="text-white font-semibold">CORE HARMONIC:</span> The orbital rings expand and contract slightly with phonemes, matching the established Phase 1.4 Speaking State.
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ============================================== -->
+        <!-- SCENE 09: 00:28 - 00:30 -->
+        <!-- ============================================== -->
+        <div class="glass-card rounded-xl overflow-hidden flex flex-col transition hover:border-cyan-500/40 group">
+          <!-- Cinematic Frame (16:9) -->
+          <div class="relative w-full aspect-video bg-[#02050f] border-b border-white/10 overflow-hidden flex flex-col items-center justify-center">
+            <!-- Scene Visual: Transition into normal BOSS Home workspace -->
+            <div class="absolute inset-0 bg-radial from-cyan-900/40 via-purple-950/20 to-black"></div>
+            
+            <!-- Grid lines expanding into UI perspective -->
+            <div class="absolute inset-0 bg-grid-tech opacity-30"></div>
+            
+            <!-- Ghosted Sidebar frame starting to dissolve in at left -->
+            <div class="absolute left-0 top-0 bottom-0 w-16 border-r border-white/10 bg-slate-950/60 backdrop-blur-sm opacity-50 flex flex-col items-center py-4 space-y-4">
+              <div class="w-6 h-6 rounded bg-cyan-500/20 border border-cyan-400/30"></div>
+              <div class="w-8 h-1 bg-white/10 rounded"></div>
+              <div class="w-8 h-1 bg-white/10 rounded"></div>
+            </div>
+
+            <!-- Core moving to Home Screen position -->
+            <div class="w-20 h-20 rounded-full border border-cyan-400/80 bg-[#051124] shadow-[0_0_30px_rgba(6,182,212,0.4)] flex items-center justify-center relative">
+              <div class="flex items-center space-x-1 z-10">
+                <span class="w-0.5 h-3 bg-cyan-400 rounded-full"></span>
+                <span class="w-0.5 h-6 bg-white rounded-full"></span>
+                <span class="w-0.5 h-4 bg-cyan-300 rounded-full"></span>
+              </div>
+            </div>
+
+            <!-- Ghosted Prompt Dock beginning to dissolve in at bottom -->
+            <div class="absolute bottom-2 left-24 right-8 h-7 rounded-lg border border-white/10 bg-black/60 backdrop-blur-sm opacity-60 flex items-center px-3 justify-between">
+              <span class="text-[9px] font-mono-tech text-slate-400">Ask BOSS anything...</span>
+              <div class="w-3.5 h-3.5 rounded-full bg-cyan-500/40"></div>
+            </div>
+
+            <!-- HUD Overlays -->
+            <div class="absolute top-3 left-3 font-mono-tech text-[10px] text-white/50 bg-black/80 px-2 py-0.5 rounded border border-white/10">
+              FRAME 672 // SHOT 09
+            </div>
+            <div class="absolute top-3 right-3 font-mono-tech text-[10px] text-cyan-400 font-bold bg-cyan-950/80 px-2 py-0.5 rounded border border-cyan-500/30">
+              00:28 – 00:30 [2.0s]
+            </div>
+            <div class="absolute bottom-3 left-3 text-[10px] font-mono-tech text-white flex items-center space-x-1.5">
+              <span class="w-1.5 h-1.5 rounded-full bg-cyan-400"></span>
+              <span>CAM: SEAMLESS TRANSITION WARP TO DESKTOP</span>
+            </div>
+          </div>
+
+          <!-- Scene Production Data -->
+          <div class="p-5 flex-1 flex flex-col justify-between space-y-4">
+            <div class="space-y-2">
+              <div class="flex items-center justify-between">
+                <h3 class="text-base font-heading font-bold text-white tracking-wide">SCENE 09 — WARP TO HOME SCREEN</h3>
+                <span class="text-[11px] font-mono-tech text-white">WORKSPACE ARRIVAL</span>
+              </div>
+              <p class="text-xs text-slate-300 leading-relaxed">
+                The cinematic letterbox dissolves. The Core eases smoothly into its permanent position on the BOSS Landing Screen. The sidebar, prompt bar, and quick actions fade in seamlessly. The journey begins.
+              </p>
+            </div>
+
+            <div class="space-y-2.5 pt-2 border-t border-white/5 text-[11px] font-mono-tech">
+              <div class="flex items-start justify-between text-slate-400">
+                <span class="text-cyan-400">CAMERA:</span>
+                <span class="text-slate-200 text-right">Match-cut camera transform directly to Desktop UI</span>
+              </div>
+              <div class="flex items-start justify-between text-slate-400">
+                <span class="text-purple-400">LIGHTING:</span>
+                <span class="text-slate-200 text-right">Settles into established obsidian smoked-glass palette</span>
+              </div>
+              <div class="flex items-start justify-between text-slate-400">
+                <span class="text-slate-400">SOUND FX:</span>
+                <span class="text-slate-300 text-right">Satisfying acoustic landing chime, interface online sound</span>
+              </div>
+              <div class="p-2 rounded bg-black/40 border border-white/5 text-[10px] text-slate-400">
+                <span class="text-white font-semibold">CONTINUITY:</span> Zero visual hitch. Connects 1:1 with Screen 12 & Screen 9 Home screen state.
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- TECHNICAL PRODUCTION ROADMAP FOR 3D / MOTION PIPELINE -->
+    <section class="glass-card rounded-2xl p-8 space-y-6">
+      <div class="flex flex-col md:flex-row md:items-center justify-between border-b border-white/10 pb-4 gap-4">
+        <div>
+          <h2 class="text-xl font-heading font-semibold text-white tracking-wide flex items-center space-x-3">
+            <span>TECHNICAL SPECIFICATION MATRIX // BLENDER & SOUND DESIGN PIPELINE</span>
+            <span class="text-xs font-mono-tech text-purple-400 bg-purple-950/40 border border-purple-800/40 px-2 py-0.5 rounded">EXPORT READY</span>
+          </h2>
+          <p class="text-xs font-mono-tech text-slate-400 mt-1">Exact material shaders, geometry setups, particle physics, and audio asset cues for the production team.</p>
+        </div>
+        <div class="flex space-x-2">
+          <span class="text-xs font-mono-tech px-3 py-1 rounded bg-cyan-950/60 border border-cyan-500/30 text-cyan-300">Blender 4.2+ Cycles / EEVEE Next</span>
+          <span class="text-xs font-mono-tech px-3 py-1 rounded bg-purple-950/60 border border-purple-500/30 text-purple-300">Logic Pro / Ableton 12</span>
+        </div>
+      </div>
+
+      <!-- Technical Columns -->
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 text-xs font-mono-tech">
+        
+        <!-- Column 1: Core Shading -->
+        <div class="p-5 rounded-xl bg-black/40 border border-white/5 space-y-3">
+          <div class="text-cyan-400 font-bold tracking-wider uppercase border-b border-white/10 pb-2">
+            01 // 3D SHADER STACK
+          </div>
+          <ul class="space-y-2 text-slate-300">
+            <li class="flex items-start space-x-2">
+              <span class="text-cyan-400">▸</span>
+              <span><strong class="text-white">Outer Sphere:</strong> Glass BSDF (IOR 1.48, Roughness 0.04, Transmission 0.98, Volumetric Smoked Tint #030814).</span>
+            </li>
+            <li class="flex items-start space-x-2">
+              <span class="text-cyan-400">▸</span>
+              <span><strong class="text-white">Inner Plasma:</strong> Emission + Volume Absorption (Cyan #06b6d4, Violet #8b5cf6, Strength 12.0).</span>
+            </li>
+            <li class="flex items-start space-x-2">
+              <span class="text-cyan-400">▸</span>
+              <span><strong class="text-white">Orbital Rings:</strong> Wireframe / Curve Bevel (Metallic 0.1, Emission 4.5, Fresnel Falloff).</span>
+            </li>
+          </ul>
+        </div>
+
+        <!-- Column 2: Camera Rig -->
+        <div class="p-5 rounded-xl bg-black/40 border border-white/5 space-y-3">
+          <div class="text-purple-400 font-bold tracking-wider uppercase border-b border-white/10 pb-2">
+            02 // CAMERA CHOREOGRAPHY
+          </div>
+          <ul class="space-y-2 text-slate-300">
+            <li class="flex items-start space-x-2">
+              <span class="text-purple-400">▸</span>
+              <span><strong class="text-white">Lens:</strong> 65mm Anamorphic Prime (2.0x squeeze factor, subtle horizontal blue/cyan flare).</span>
+            </li>
+            <li class="flex items-start space-x-2">
+              <span class="text-purple-400">▸</span>
+              <span><strong class="text-white">Curve:</strong> Single continuous Bezier curve path. Zero jarring cuts; seamless temporal flow.</span>
+            </li>
+            <li class="flex items-start space-x-2">
+              <span class="text-purple-400">▸</span>
+              <span><strong class="text-white">Motion Blur:</strong> Shutter curve 180° (0.5 frame), crisp sub-frame telemetry precision.</span>
+            </li>
+          </ul>
+        </div>
+
+        <!-- Column 3: Sound Design -->
+        <div class="p-5 rounded-xl bg-black/40 border border-white/5 space-y-3">
+          <div class="text-cyan-300 font-bold tracking-wider uppercase border-b border-white/10 pb-2">
+            03 // SOUND DESIGN CUES
+          </div>
+          <ul class="space-y-2 text-slate-300">
+            <li class="flex items-start space-x-2">
+              <span class="text-cyan-300">▸</span>
+              <span><strong class="text-white">00:00–00:10:</strong> Sub-harmonic 35Hz tone rising to 120Hz; granular granular particle clicks.</span>
+            </li>
+            <li class="flex items-start space-x-2">
+              <span class="text-cyan-300">▸</span>
+              <span><strong class="text-white">00:14–00:21:</strong> Segmented ring activation whirs (servo-harmonic timbre); cinematic sub drop at reveal.</span>
+            </li>
+            <li class="flex items-start space-x-2">
+              <span class="text-cyan-300">▸</span>
+              <span><strong class="text-white">00:25–00:30:</strong> Unprocessed, intimate vocal stem: "Hi. I'm BOSS. Let's build something." → UI boot chime.</span>
+            </li>
+          </ul>
+        </div>
+
+        <!-- Column 4: Voice & Persona -->
+        <div class="p-5 rounded-xl bg-black/40 border border-white/5 space-y-3">
+          <div class="text-white font-bold tracking-wider uppercase border-b border-white/10 pb-2">
+            04 // VOCAL PERSONA DIRECTION
+          </div>
+          <ul class="space-y-2 text-slate-300">
+            <li class="flex items-start space-x-2">
+              <span class="text-white">▸</span>
+              <span><strong class="text-white">Tone:</strong> Mid-baritone or warm resonant tenor. Highly articulate, calm, effortlessly formidable.</span>
+            </li>
+            <li class="flex items-start space-x-2">
+              <span class="text-white">▸</span>
+              <span><strong class="text-white">Cadence:</strong> Unrushed, thoughtful. Natural human cadence with microscopic zero-latency presence.</span>
+            </li>
+            <li class="flex items-start space-x-2">
+              <span class="text-white">▸</span>
+              <span><strong class="text-white">Forbidden:</strong> No robotic vocoder, no theatrical cartoon accents, no sarcastic AI tropes.</span>
+            </li>
+          </ul>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- FOOTER SIGNATURE -->
+    <footer class="border-t border-white/10 pt-6 pb-12 flex flex-col md:flex-row items-center justify-between text-xs font-mono-tech text-slate-400 gap-4">
+      <div class="flex items-center space-x-2">
+        <span class="w-2 h-2 rounded-full bg-cyan-400"></span>
+        <span>BOSS // BHANU OPEN SOURCE SYSTEM • CINEMATIC STORYBOARD SPECIFICATION</span>
+      </div>
+      <div class="flex items-center space-x-4 text-slate-400">
+        <span>PHASE 2.2 COMPLETE</span>
+        <span>•</span>
+        <span>READY FOR BLENDER 3D ANIMATIC PIPELINE</span>
+      </div>
+    </footer>
+
+  </main>
+
+</body>
+</html>

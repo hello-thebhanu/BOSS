@@ -1,0 +1,47 @@
+{
+  "$schema": "https://schema.tauri.app/config/2",
+  "productName": "BOSS",
+  "version": "0.1.0",
+  "identifier": "org.boss.desktop",
+  "build": {
+    "frontendDist": "../dist",
+    "devUrl": "http://localhost:5173"
+  },
+  "app": {
+    "windows": [
+      {
+        "title": "BOSS — Bhanu Open Source System",
+        "width": 1440,
+        "height": 900,
+        "minWidth": 900,
+        "minHeight": 650
+      }
+    ],
+    "security": {
+      "csp": "default-src 'self'; style-src 'self' 'unsafe-inline'; connect-src 'self' http://127.0.0.1:* http://localhost:* https://api.openai.com https://generativelanguage.googleapis.com;"
+    }
+  },
+  "bundle": {
+    "active": true,
+    "targets": "all",
+    "icon": [
+      "icons/32x32.png",
+      "icons/128x128.png",
+      "icons/128x128@2x.png",
+      "icons/icon.icns",
+      "icons/icon.ico"
+    ],
+    "copyright": "Copyright © 2026 Bhanu. All rights reserved.",
+    "shortDescription": "BOSS — Bhanu Open Source System",
+    "longDescription": "BOSS — Bhanu Open Source System: Local-First Desktop AI Developer Operating Environment. Private, air-gapped neural workflows with local and BYOK AI intelligence.",
+    "publisher": "Bhanu",
+    "windows": {
+      "certificateThumbprint": null,
+      "digestAlgorithm": "sha256",
+      "timestampUrl": "",
+      "nsis": {
+        "installMode": "currentUser"
+      }
+    }
+  }
+}

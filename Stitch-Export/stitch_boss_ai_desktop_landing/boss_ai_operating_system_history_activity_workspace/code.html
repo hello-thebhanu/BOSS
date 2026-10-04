@@ -1,0 +1,716 @@
+<!DOCTYPE html>
+
+<html class="h-full bg-[#07090e]" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>BOSS AI Operating System - History &amp; Repository Memory Index</title>
+<!-- Tailwind CSS v3 with Plugins -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            boss: {
+              bg: '#07090e',
+              panel: 'rgba(13, 17, 24, 0.72)',
+              card: 'rgba(18, 23, 34, 0.65)',
+              border: 'rgba(255, 255, 255, 0.08)',
+              borderCyan: 'rgba(56, 189, 248, 0.35)',
+              cyan: '#00e5ff',
+              cyanMuted: '#0284c7',
+              emerald: '#10b981',
+              violet: '#a855f7',
+              amber: '#f59e0b',
+              red: '#f43f5e'
+            }
+          },
+          fontFamily: {
+            mono: ['JetBrains Mono', 'Fira Code', 'Menlo', 'monospace'],
+            sans: ['Inter', '-apple-system', 'BlinkMacSystemFont', 'Segoe UI', 'Roboto', 'sans-serif']
+          }
+        }
+      }
+    }
+  </script>
+<!-- Global & Custom Component Styles -->
+<style data-purpose="custom-scrollbars">
+    ::-webkit-scrollbar {
+      width: 5px;
+      height: 5px;
+    }
+    ::-webkit-scrollbar-track {
+      background: rgba(7, 9, 14, 0.5);
+    }
+    ::-webkit-scrollbar-thumb {
+      background: rgba(255, 255, 255, 0.12);
+      border-radius: 9999px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: rgba(0, 229, 255, 0.35);
+    }
+  </style>
+<style data-purpose="glow-effects">
+    .glow-cyan-subtle {
+      box-shadow: 0 0 24px -6px rgba(0, 229, 255, 0.18);
+    }
+    .glow-cyan-strong {
+      box-shadow: 0 0 30px -4px rgba(0, 229, 255, 0.35);
+    }
+    .hairline-border {
+      border: 1px solid rgba(255, 255, 255, 0.07);
+    }
+    .specular-highlight {
+      background: linear-gradient(180deg, rgba(255, 255, 255, 0.05) 0%, rgba(255, 255, 255, 0.005) 100%);
+    }
+    @keyframes pulseGlow {
+      0%, 100% { opacity: 0.8; transform: scale(1); }
+      50% { opacity: 1; transform: scale(1.04); }
+    }
+    .animate-orbit {
+      animation: pulseGlow 4s ease-in-out infinite;
+    }
+  </style>
+</head>
+<body class="h-full w-full select-none overflow-hidden text-slate-300 font-sans antialiased flex flex-col bg-[#07090e]">
+<!-- BEGIN: TopApplicationChrome -->
+<header class="h-10 w-full flex-none border-b hairline-border bg-[#080b11] px-3.5 flex items-center justify-between text-xs z-30 select-none">
+<!-- Left: macOS Traffic Lights & System Meta -->
+<div class="flex items-center space-x-3">
+<div class="flex items-center space-x-1.5 pr-2">
+<div class="w-3 h-3 rounded-full bg-[#ff5f57] border border-[#e0443e] cursor-pointer"></div>
+<div class="w-3 h-3 rounded-full bg-[#febc2e] border border-[#d89e24] cursor-pointer"></div>
+<div class="w-3 h-3 rounded-full bg-[#28c840] border border-[#1aab29] cursor-pointer"></div>
+</div>
+<div class="flex items-center font-mono space-x-2 text-[11px]">
+<span class="inline-block w-2 h-2 rounded-full bg-[#00e5ff] shadow-[0_0_8px_#00e5ff]"></span>
+<span class="font-semibold text-white tracking-wide">BOSS</span>
+<span class="text-slate-500">v0.1.0-preview</span>
+<span class="text-slate-600">//</span>
+<span class="text-slate-300">BHANU_WORKSPACE</span>
+<span class="text-slate-600">//</span>
+<span class="px-1.5 py-0.5 rounded bg-emerald-950/40 text-emerald-400 border border-emerald-500/30 text-[10px] font-medium tracking-tight">PROD</span>
+<span class="text-slate-600">//</span>
+<span class="text-slate-400 font-medium">LOCATION:</span>
+<span class="text-boss-cyan font-medium">HISTORY // REPOSITORY_MEMORY_INDEX</span>
+</div>
+</div>
+<!-- Right: Telemetry & Enclave Status -->
+<div class="flex items-center space-x-4 font-mono text-[11px]">
+<div class="flex items-center space-x-1.5 px-2.5 py-1 rounded-full bg-cyan-950/40 border border-cyan-500/30 text-cyan-300">
+<span class="w-1.5 h-1.5 rounded-full bg-[#00e5ff] animate-pulse"></span>
+<span class="tracking-wide">ENCLAVE: ISOLATED ZERO-CLOUD</span>
+</div>
+<div class="flex items-center space-x-3 text-slate-400">
+<span>TTFT: <strong class="text-slate-200 font-normal">12ms</strong></span>
+<span class="text-slate-700">|</span>
+<span>MEMORY: <strong class="text-slate-200 font-normal">4.2 / 16 GB</strong></span>
+</div>
+<button aria-label="Settings" class="text-slate-400 hover:text-white transition-colors" title="Workspace Preferences">
+<svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+<path d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+<path d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+</svg>
+</button>
+</div>
+</header>
+<!-- END: TopApplicationChrome -->
+<!-- BEGIN: MainInterfaceLayout -->
+<div class="flex-1 flex overflow-hidden">
+<!-- BEGIN: LeftSidebarNavigation -->
+<aside class="w-64 flex-none border-r hairline-border bg-[#0a0e16]/80 flex flex-col justify-between select-none">
+<div class="p-3 space-y-4">
+<!-- BOSS OS Identity -->
+<div class="flex items-center space-x-2.5 px-2 py-1.5">
+<div class="w-8 h-8 rounded-lg bg-cyan-950/70 border border-cyan-500/40 flex items-center justify-center text-boss-cyan shadow-[0_0_12px_rgba(0,229,255,0.25)]">
+<svg class="w-5 h-5" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+<path d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8"></path>
+</svg>
+</div>
+<div>
+<div class="flex items-center space-x-1.5">
+<span class="font-bold text-white tracking-wider text-xs font-mono">BOSS</span>
+<span class="text-[9px] px-1 py-0.2 rounded bg-cyan-900/60 text-cyan-300 font-mono border border-cyan-700/50">CORE</span>
+</div>
+<div class="text-[10px] text-slate-400 font-mono">Bhanu OS • v0.1.0</div>
+</div>
+</div>
+<!-- Global Command Omni-Search -->
+<div class="px-1">
+<button class="w-full bg-[#0d131f] hover:bg-[#121929] border hairline-border hover:border-slate-700 rounded-lg py-1.5 px-2.5 flex items-center justify-between text-xs text-slate-400 transition-colors">
+<span class="flex items-center space-x-2">
+<svg class="w-3.5 h-3.5 text-slate-500" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+<path d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+</svg>
+<span>Omni-search system...</span>
+</span>
+<kbd class="px-1.5 py-0.5 text-[9px] font-mono bg-slate-800 text-slate-400 rounded border border-slate-700">⌘K</kbd>
+</button>
+</div>
+<!-- Primary Navigation List -->
+<nav class="space-y-1 text-xs">
+<!-- Workspace Home -->
+<a class="flex items-center justify-between px-3 py-2 rounded-lg text-slate-400 hover:text-white hover:bg-slate-800/40 transition-colors" href="#">
+<div class="flex items-center space-x-2.5">
+<svg class="w-4 h-4 text-slate-500" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+<path d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8"></path>
+</svg>
+<span>Workspace Home</span>
+</div>
+</a>
+<!-- Neural Chat -->
+<a class="flex items-center justify-between px-3 py-2 rounded-lg text-slate-400 hover:text-white hover:bg-slate-800/40 transition-colors" href="#">
+<div class="flex items-center space-x-2.5">
+<svg class="w-4 h-4 text-slate-500" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+<path d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8"></path>
+</svg>
+<span>Neural Chat</span>
+</div>
+<span class="text-[10px] font-mono text-slate-500">⌘1</span>
+</a>
+<!-- Projects -->
+<a class="flex items-center justify-between px-3 py-2 rounded-lg text-slate-400 hover:text-white hover:bg-slate-800/40 transition-colors" href="#">
+<div class="flex items-center space-x-2.5">
+<svg class="w-4 h-4 text-slate-500" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+<path d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-6l-2-2H5a2 2 0 00-2 2z" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8"></path>
+</svg>
+<span>Projects</span>
+</div>
+<span class="text-[10px] font-mono text-slate-500">⌘2</span>
+</a>
+<!-- Coding Studio -->
+<a class="flex items-center justify-between px-3 py-2 rounded-lg text-slate-400 hover:text-white hover:bg-slate-800/40 transition-colors" href="#">
+<div class="flex items-center space-x-2.5">
+<svg class="w-4 h-4 text-slate-500" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+<path d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8"></path>
+</svg>
+<span>Coding Studio</span>
+</div>
+<span class="px-1.5 py-0.2 rounded text-[9px] font-mono bg-emerald-950/60 text-emerald-400 border border-emerald-500/40">LIVE</span>
+</a>
+<!-- Terminal Session -->
+<a class="flex items-center justify-between px-3 py-2 rounded-lg text-slate-400 hover:text-white hover:bg-slate-800/40 transition-colors" href="#">
+<div class="flex items-center space-x-2.5">
+<svg class="w-4 h-4 text-slate-500" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+<path d="M8 9l3 3-3 3m5 0h3M5 20h14a2 2 0 002-2V6a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8"></path>
+</svg>
+<span>Terminal Session</span>
+</div>
+<span class="text-[10px] font-mono text-slate-500">zsh</span>
+</a>
+<!-- Tools & Plugins -->
+<a class="flex items-center justify-between px-3 py-2 rounded-lg text-slate-400 hover:text-white hover:bg-slate-800/40 transition-colors" href="#">
+<div class="flex items-center space-x-2.5">
+<svg class="w-4 h-4 text-slate-500" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+<path d="M11 4a2 2 0 114 0v1a1 1 0 001 1h3a1 1 0 011 1v3a1 1 0 01-1 1h-1a2 2 0 100 4h1a1 1 0 011 1v3a1 1 0 01-1 1h-3a1 1 0 01-1-1v-1a2 2 0 10-4 0v1a1 1 0 01-1 1H7a1 1 0 01-1-1v-3a1 1 0 00-1-1H4a2 2 0 110-4h1a1 1 0 001-1V7a1 1 0 011-1h3a1 1 0 001-1V4z" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8"></path>
+</svg>
+<span>Tools &amp; Plugins</span>
+</div>
+<span class="text-[10px] font-mono text-cyan-400">10</span>
+</a>
+<!-- History (ACTIVE ROUTE) -->
+<a class="flex items-center justify-between px-3 py-2 rounded-lg bg-cyan-950/40 text-cyan-300 border border-cyan-500/30 shadow-[0_0_12px_rgba(0,229,255,0.12)]" href="#">
+<div class="flex items-center space-x-2.5">
+<svg class="w-4 h-4 text-[#00e5ff]" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+<path d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+</svg>
+<span class="font-medium text-white">History</span>
+</div>
+<div class="flex items-center space-x-1.5">
+<span class="w-1.5 h-1.5 rounded-full bg-[#00e5ff] shadow-[0_0_6px_#00e5ff]"></span>
+<span class="text-[10px] font-mono text-cyan-400">active</span>
+</div>
+</a>
+</nav>
+<!-- Workspaces Registry Switcher -->
+<div class="pt-4 border-t hairline-border">
+<div class="px-2 mb-2 flex items-center justify-between text-[10px] font-mono tracking-wider text-slate-500 uppercase">
+<span>Workspaces</span>
+<span>2 Bound</span>
+</div>
+<div class="space-y-1">
+<button class="w-full flex items-center justify-between px-3 py-1.5 rounded-md bg-[#0c121e] border border-cyan-500/20 text-xs text-white font-mono">
+<span class="flex items-center space-x-2 truncate">
+<span class="w-1.5 h-1.5 rounded-full bg-emerald-400 shadow-[0_0_6px_#34d399]"></span>
+<span class="truncate">boss-core-engine</span>
+</span>
+<span class="text-[9px] text-emerald-400">active</span>
+</button>
+<button class="w-full flex items-center justify-between px-3 py-1.5 rounded-md hover:bg-slate-800/30 text-xs text-slate-400 font-mono transition-colors">
+<span class="flex items-center space-x-2 truncate">
+<span class="w-1.5 h-1.5 rounded-full bg-slate-600"></span>
+<span class="truncate">arm-cortex-firmware</span>
+</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Bottom User Profile & Enclave Telemetry Dock -->
+<div class="p-3 border-t hairline-border bg-[#080b12]">
+<div class="flex items-center justify-between mb-2">
+<div class="flex items-center space-x-2">
+<div class="w-7 h-7 rounded-full bg-gradient-to-tr from-cyan-600 to-blue-600 flex items-center justify-center font-bold text-xs text-white shadow-md">
+              B
+            </div>
+<div>
+<div class="flex items-center space-x-1.5 leading-none">
+<span class="text-xs font-semibold text-white">Bhanu DEV</span>
+<span class="text-[9px] px-1 rounded bg-cyan-950 text-cyan-400 border border-cyan-800/50 font-mono">DEV</span>
+</div>
+<div class="text-[10px] text-emerald-400 font-mono mt-0.5 flex items-center space-x-1">
+<span class="w-1 h-1 rounded-full bg-emerald-400"></span>
+<span>Local Enclave Active</span>
+</div>
+</div>
+</div>
+<button class="text-slate-500 hover:text-slate-300">
+<svg class="w-4 h-4" fill="currentColor" viewbox="0 0 20 20">
+<path d="M6 10a2 2 0 11-4 0 2 2 0 014 0zM12 10a2 2 0 11-4 0 2 2 0 014 0zM16 12a2 2 0 100-4 2 2 0 000 4z"></path>
+</svg>
+</button>
+</div>
+<div class="bg-[#05070a] rounded p-2 text-[10px] font-mono border hairline-border space-y-1">
+<div class="flex justify-between text-slate-400">
+<span>LLM: <span class="text-slate-200">7B Q4_K_M</span></span>
+<span class="text-cyan-400">ONLINE</span>
+</div>
+<div class="flex justify-between text-slate-500">
+<span>VRAM: <span class="text-slate-300">4.2GB</span></span>
+<span>TEMP: <span class="text-slate-300">41°C</span></span>
+</div>
+</div>
+</div>
+</aside>
+<!-- END: LeftSidebarNavigation -->
+<!-- BEGIN: CenterWorkspaceTimeline -->
+<main class="flex-1 flex flex-col min-w-0 border-r hairline-border bg-[#0a0d14]/60 backdrop-blur-md overflow-hidden">
+<!-- Workspace Sub-Header & Action Controls -->
+<div class="p-4 border-b hairline-border bg-[#080b11]/70 space-y-3">
+<div class="flex items-center justify-between">
+<div class="flex items-center space-x-3">
+<h1 class="text-lg font-bold font-mono tracking-tight text-white flex items-center space-x-2">
+<span>HISTORY &amp; AUDIT LOG</span>
+</h1>
+<span class="px-2 py-0.5 rounded-full text-[11px] font-mono bg-cyan-950/70 text-cyan-300 border border-cyan-500/30">
+              28 EVENTS INDEXED
+            </span>
+</div>
+<div class="flex items-center space-x-2 text-xs font-mono">
+<!-- Filter Dropdown: Workspace Scope -->
+<button class="px-2.5 py-1 rounded bg-[#0f1422] border hairline-border hover:border-slate-600 text-slate-300 flex items-center space-x-1.5 transition-colors">
+<span class="text-slate-400">Scope:</span>
+<span class="text-white">All Workspaces</span>
+<span class="text-slate-500 text-[10px]">▼</span>
+</button>
+<!-- Filter Dropdown: Sort -->
+<button class="px-2.5 py-1 rounded bg-[#0f1422] border hairline-border hover:border-slate-600 text-slate-300 flex items-center space-x-1.5 transition-colors">
+<span class="text-slate-400">Sort:</span>
+<span class="text-cyan-400">Newest First</span>
+<span class="text-slate-500 text-[10px]">▼</span>
+</button>
+</div>
+</div>
+<p class="text-xs text-slate-400">
+          Comprehensive neural record of queries, agent operations, code mutations, and shell executions.
+        </p>
+<!-- Search Bar & Filters -->
+<div class="pt-1 flex flex-col sm:flex-row items-center gap-2.5">
+<!-- Glass Omni-Search Input -->
+<div class="relative flex-1 w-full">
+<span class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-slate-500">
+<svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+<path d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+</svg>
+</span>
+<input class="w-full bg-[#0d121c] border hairline-border focus:border-cyan-500/60 rounded-lg pl-9 pr-14 py-1.5 text-xs text-slate-200 placeholder-slate-500 focus:outline-none focus:ring-1 focus:ring-cyan-500/50 transition-all font-mono" placeholder="Search history by prompt, file, commit, command... (⌘F)" type="text"/>
+<div class="absolute inset-y-0 right-0 pr-2.5 flex items-center pointer-events-none">
+<kbd class="px-1.5 py-0.5 text-[10px] font-mono bg-slate-800 text-slate-400 rounded border border-slate-700">⌘F</kbd>
+</div>
+</div>
+<!-- Category Filter Pills -->
+<div class="flex items-center space-x-1.5 overflow-x-auto max-w-full pb-0.5 text-xs font-mono">
+<button class="px-2.5 py-1 rounded-md bg-cyan-950/60 text-cyan-300 border border-cyan-500/40 text-[11px] whitespace-nowrap">
+              All Activity (28)
+            </button>
+<button class="px-2.5 py-1 rounded-md bg-[#0e131e] text-slate-400 hover:text-slate-200 border hairline-border text-[11px] whitespace-nowrap">
+              Agent Tasks (12)
+            </button>
+<button class="px-2.5 py-1 rounded-md bg-[#0e131e] text-slate-400 hover:text-slate-200 border hairline-border text-[11px] whitespace-nowrap">
+              Code Patches (8)
+            </button>
+<button class="px-2.5 py-1 rounded-md bg-[#0e131e] text-slate-400 hover:text-slate-200 border hairline-border text-[11px] whitespace-nowrap">
+              Terminal Runs (5)
+            </button>
+<button class="px-2.5 py-1 rounded-md bg-[#0e131e] text-slate-400 hover:text-slate-200 border hairline-border text-[11px] whitespace-nowrap">
+              Neural Chats (3)
+            </button>
+</div>
+</div>
+</div>
+<!-- Chronological Feed Area -->
+<div class="flex-1 overflow-y-auto p-4 space-y-6">
+<!-- TIMELINE GROUP: TODAY -->
+<section class="space-y-3" data-purpose="timeline-group-today">
+<div class="flex items-center space-x-2">
+<span class="text-[11px] font-mono font-bold tracking-wider text-cyan-400 uppercase">TODAY</span>
+<div class="flex-1 h-px bg-gradient-to-r from-cyan-500/20 via-slate-800 to-transparent"></div>
+<span class="text-[10px] font-mono text-slate-500">3 events recorded</span>
+</div>
+<!-- Card 1: ACTIVELY SELECTED EVENT -->
+<article class="relative group rounded-xl bg-[#0f1523]/80 border-2 border-[#00e5ff]/50 p-4 glow-cyan-strong cursor-pointer specular-highlight transition-all" data-purpose="timeline-card-selected">
+<!-- Selected Indicator Beacon -->
+<div class="absolute -top-2.5 right-4 px-2 py-0.5 rounded bg-[#00e5ff] text-[#07090e] font-mono text-[9px] font-bold uppercase tracking-wider shadow-[0_0_10px_#00e5ff]">
+              Actively Inspected
+            </div>
+<div class="flex items-start justify-between">
+<div class="flex items-center space-x-2">
+<span class="px-2 py-0.5 rounded text-[10px] font-mono bg-cyan-950/80 text-cyan-300 border border-cyan-500/40">
+                  AGENT TASK // ATOMIC PATCH
+                </span>
+<span class="text-[11px] font-mono text-slate-400">10:42 AM <span class="text-slate-500">(12m ago)</span></span>
+</div>
+<div class="flex items-center space-x-2 font-mono text-[10px] text-slate-400">
+<span class="flex items-center space-x-1">
+<span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span>
+<span class="text-slate-300">boss-core-engine</span>
+</span>
+<span class="text-slate-600">•</span>
+<span class="text-slate-400">main</span>
+</div>
+</div>
+<!-- Intent & Prompt Title -->
+<div class="mt-2.5">
+<h3 class="text-sm font-semibold text-white tracking-normal font-sans">
+                "Optimize JWT expiry calculation in auth middleware to prevent premature clock-skew logouts."
+              </h3>
+</div>
+<!-- Metrics / Execution Summary -->
+<div class="mt-3 flex flex-wrap items-center gap-3 font-mono text-xs text-slate-300">
+<div class="flex items-center space-x-1.5 bg-black/40 px-2 py-1 rounded border hairline-border">
+<svg class="w-3.5 h-3.5 text-cyan-400" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+<path d="M13 10V3L4 14h7v7l9-11h-7z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+</svg>
+<span>3 actions taken</span>
+</div>
+<div class="flex items-center space-x-1.5 bg-black/40 px-2 py-1 rounded border hairline-border">
+<span class="text-emerald-400 font-semibold">+24</span>
+<span class="text-slate-500">/</span>
+<span class="text-rose-400 font-semibold">-8</span>
+<span class="text-slate-400 text-[11px]">(2 files mutated)</span>
+</div>
+<div class="flex items-center space-x-1.5 bg-emerald-950/30 text-emerald-300 px-2 py-1 rounded border border-emerald-500/30 text-[11px]">
+<svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+<path d="M5 13l4 4L19 7" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+</svg>
+<span>bun test: 14 passed</span>
+</div>
+</div>
+<!-- Quick Action Bar -->
+<div class="mt-3.5 pt-3 border-t border-cyan-500/20 flex items-center justify-between">
+<div class="flex items-center space-x-2">
+<button class="px-2.5 py-1 rounded bg-[#00e5ff] text-[#07090e] hover:bg-cyan-300 font-mono text-[11px] font-semibold flex items-center space-x-1.5 shadow-[0_0_12px_rgba(0,229,255,0.3)] transition-all">
+<span>Continue in Studio</span>
+<kbd class="text-[9px] bg-black/20 px-1 py-0.2 rounded">⌘↵</kbd>
+</button>
+<button class="px-2.5 py-1 rounded bg-[#131b2e] hover:bg-slate-800 text-slate-200 border hairline-border font-mono text-[11px] flex items-center space-x-1 transition-colors">
+<span>Inspect Diff</span>
+</button>
+</div>
+<button class="text-slate-400 hover:text-white p-1" title="More options">
+<svg class="w-4 h-4" fill="currentColor" viewbox="0 0 20 20">
+<path d="M10 6a2 2 0 110-4 2 2 0 010 4zM10 12a2 2 0 110-4 2 2 0 010 4zM10 18a2 2 0 110-4 2 2 0 010 4z"></path>
+</svg>
+</button>
+</div>
+</article>
+<!-- Card 2: TERMINAL RUN -->
+<article class="rounded-xl bg-[#0b1019]/70 border hairline-border hover:border-slate-700 p-4 transition-all" data-purpose="timeline-card">
+<div class="flex items-start justify-between">
+<div class="flex items-center space-x-2">
+<span class="px-2 py-0.5 rounded text-[10px] font-mono bg-amber-950/40 text-amber-300 border border-amber-500/30">
+                  TERMINAL RUN // RESOLVED DEPENDENCY
+                </span>
+<span class="text-[11px] font-mono text-slate-400">09:35 AM</span>
+</div>
+<div class="flex items-center space-x-2 font-mono text-[10px] text-slate-400">
+<span class="flex items-center space-x-1">
+<span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span>
+<span class="text-slate-300">boss-core-engine</span>
+</span>
+</div>
+</div>
+<!-- Shell Command Line -->
+<div class="mt-2.5">
+<div class="bg-black/50 border hairline-border rounded-lg px-3 py-1.5 font-mono text-xs text-amber-200 flex items-center space-x-2">
+<span class="text-slate-500">$</span>
+<span class="font-medium truncate">bun link ../packages/metal-bridge &amp;&amp; bun run build:native</span>
+</div>
+</div>
+<!-- Result & Verification -->
+<div class="mt-3 flex items-center space-x-3 font-mono text-[11px]">
+<span class="flex items-center space-x-1 text-emerald-400">
+<svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+<path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+</svg>
+<span>Exit Code 0 (Success)</span>
+</span>
+<span class="text-slate-600">•</span>
+<span class="text-slate-400">AST link verified</span>
+<span class="text-slate-600">•</span>
+<span class="text-slate-500">Duration: 1.84s</span>
+</div>
+</article>
+<!-- Card 3: NEURAL CHAT QUERY -->
+<article class="rounded-xl bg-[#0b1019]/70 border hairline-border hover:border-slate-700 p-4 transition-all" data-purpose="timeline-card">
+<div class="flex items-start justify-between">
+<div class="flex items-center space-x-2">
+<span class="px-2 py-0.5 rounded text-[10px] font-mono bg-purple-950/40 text-purple-300 border border-purple-500/30">
+                  NEURAL CHAT // INQUIRY
+                </span>
+<span class="text-[11px] font-mono text-slate-400">08:14 AM</span>
+</div>
+<div class="flex items-center space-x-2 font-mono text-[10px] text-slate-400">
+<span class="text-slate-300">boss-core-engine</span>
+</div>
+</div>
+<div class="mt-2.5">
+<h3 class="text-sm font-normal text-slate-200">
+                "Explain clock-skew edge cases and draft JWT token verification logic."
+              </h3>
+</div>
+<div class="mt-3 flex items-center space-x-3 font-mono text-[11px] text-slate-400">
+<span class="text-slate-300">3 files referenced</span>
+<span class="text-slate-600">•</span>
+<span>Tokens: <strong class="text-slate-200 font-normal">2,840</strong></span>
+<span class="text-slate-600">•</span>
+<span class="text-slate-500">Session ID: #nc-4921</span>
+</div>
+</article>
+</section>
+<!-- TIMELINE GROUP: YESTERDAY -->
+<section class="space-y-3 pt-2" data-purpose="timeline-group-yesterday">
+<div class="flex items-center space-x-2">
+<span class="text-[11px] font-mono font-bold tracking-wider text-slate-400 uppercase">YESTERDAY</span>
+<div class="flex-1 h-px bg-gradient-to-r from-slate-700/50 via-slate-800 to-transparent"></div>
+<span class="text-[10px] font-mono text-slate-500">2 events recorded</span>
+</div>
+<!-- Card 4: PROJECT SCAFFOLD -->
+<article class="rounded-xl bg-[#0b1019]/70 border hairline-border hover:border-slate-700 p-4 transition-all" data-purpose="timeline-card">
+<div class="flex items-start justify-between">
+<div class="flex items-center space-x-2">
+<span class="px-2 py-0.5 rounded text-[10px] font-mono bg-blue-950/40 text-blue-300 border border-blue-500/30">
+                  PROJECT SCAFFOLD // THREEJS
+                </span>
+<span class="text-[11px] font-mono text-slate-400">4:20 PM</span>
+</div>
+<div class="flex items-center space-x-2 font-mono text-[10px] text-slate-400">
+<span class="w-1.5 h-1.5 rounded-full bg-blue-400"></span>
+<span class="text-slate-300">portfolio-web</span>
+</div>
+</div>
+<div class="mt-2.5">
+<h3 class="text-sm font-normal text-slate-200">
+                "Scaffold bloom pass shader and dynamic Three.js canvas in Vite workspace."
+              </h3>
+</div>
+<div class="mt-3 flex items-center space-x-3 font-mono text-[11px]">
+<span class="text-cyan-400">4 files created</span>
+<span class="text-slate-600">•</span>
+<span class="text-emerald-400">Vite dev server validated</span>
+<span class="text-slate-600">•</span>
+<span class="text-slate-500">GLSL syntax clean</span>
+</div>
+</article>
+<!-- Card 5: FIRMWARE AUDIT -->
+<article class="rounded-xl bg-[#0b1019]/70 border hairline-border hover:border-slate-700 p-4 transition-all" data-purpose="timeline-card">
+<div class="flex items-start justify-between">
+<div class="flex items-center space-x-2">
+<span class="px-2 py-0.5 rounded text-[10px] font-mono bg-emerald-950/40 text-emerald-300 border border-emerald-500/30">
+                  FIRMWARE AUDIT // BARE-METAL
+                </span>
+<span class="text-[11px] font-mono text-slate-400">11:05 AM</span>
+</div>
+<div class="flex items-center space-x-2 font-mono text-[10px] text-slate-400">
+<span class="w-1.5 h-1.5 rounded-full bg-slate-500"></span>
+<span class="text-slate-300">arm-cortex-firmware</span>
+</div>
+</div>
+<div class="mt-2.5">
+<h3 class="text-sm font-normal text-slate-200">
+                "Analyze LPC1788 UART interrupt routines and DMA memory register overlap."
+              </h3>
+</div>
+<div class="mt-3 flex items-center space-x-3 font-mono text-[11px]">
+<span class="text-emerald-400">Zero race conditions detected</span>
+<span class="text-slate-600">•</span>
+<span class="text-slate-400">AST Register Map: OK</span>
+</div>
+</article>
+</section>
+</div>
+</main>
+<!-- END: CenterWorkspaceTimeline -->
+<!-- BEGIN: RightDetailPanel (Selected Event Inspector) -->
+<aside class="w-96 flex-none bg-[#090d15]/95 border-l hairline-border flex flex-col justify-between overflow-hidden">
+<!-- Top Inspector Header with Orbital Radar -->
+<div class="p-4 border-b hairline-border bg-[#080b12]">
+<div class="flex items-center justify-between pb-2">
+<div class="flex items-center space-x-2">
+<!-- Breathing Orbital Graphic -->
+<div class="relative w-5 h-5 flex items-center justify-center">
+<div class="absolute inset-0 rounded-full border border-cyan-400/30 animate-ping opacity-75"></div>
+<div class="w-3.5 h-3.5 rounded-full border border-cyan-400 flex items-center justify-center">
+<div class="w-1.5 h-1.5 rounded-full bg-[#00e5ff] shadow-[0_0_8px_#00e5ff]"></div>
+</div>
+</div>
+<span class="font-mono text-[10px] font-bold text-cyan-400 tracking-wider uppercase">
+              BOSS AUDIT ENCLAVE
+            </span>
+</div>
+<span class="text-[10px] font-mono text-emerald-400 bg-emerald-950/50 px-1.5 py-0.5 rounded border border-emerald-500/30">
+            VERIFIED LOCAL
+          </span>
+</div>
+<h2 class="text-sm font-bold font-mono text-white tracking-tight">TASK EXECUTION INSPECTOR</h2>
+<div class="text-[10px] font-mono text-slate-500 mt-0.5 truncate">
+          UUID: <span class="text-slate-400">evt_8849f2b1</span> • HASH: <span class="text-cyan-400">7f001a</span>
+</div>
+</div>
+<!-- Scrollable Event Details Body -->
+<div class="flex-1 overflow-y-auto p-4 space-y-5 text-xs">
+<!-- Metadata Overview Box -->
+<div class="bg-[#0c121e] rounded-lg p-3 border hairline-border space-y-2">
+<div class="text-[10px] font-mono text-slate-400 uppercase tracking-wide">Captured Intent</div>
+<p class="text-xs text-slate-200 leading-relaxed font-sans">
+            "Optimize JWT expiry calculation in auth middleware to prevent premature clock-skew logouts."
+          </p>
+<div class="pt-2 border-t hairline-border grid grid-cols-2 gap-2 text-[10px] font-mono">
+<div>
+<span class="text-slate-500">TIMESTAMP:</span>
+<div class="text-slate-300">Today · 10:42:18 AM</div>
+</div>
+<div>
+<span class="text-slate-500">LATENCY:</span>
+<div class="text-emerald-400">240ms (Neural AST)</div>
+</div>
+<div class="col-span-2">
+<span class="text-slate-500">WORKSPACE:</span>
+<div class="text-cyan-300">boss-core-engine (main)</div>
+</div>
+</div>
+</div>
+<!-- Granular Agent Execution Trail -->
+<div class="space-y-2">
+<div class="flex items-center justify-between text-[11px] font-mono">
+<span class="font-semibold text-slate-300">AI EXECUTION TRAIL</span>
+<span class="text-[10px] text-cyan-400">5 steps</span>
+</div>
+<div class="bg-[#05080f] rounded-lg p-3 border hairline-border space-y-2.5 font-mono text-[11px]">
+<div class="flex items-start space-x-2 text-slate-300">
+<span class="text-emerald-400 mt-0.5">✓</span>
+<div>
+<div>AST Index lookup: <span class="text-cyan-300">src/auth/jwt-middleware.ts</span></div>
+<div class="text-[10px] text-slate-500">Resolved in 38ms</div>
+</div>
+</div>
+<div class="flex items-start space-x-2 text-slate-300">
+<span class="text-emerald-400 mt-0.5">✓</span>
+<div>Boundary delta analysis: ±60s clock skew window</div>
+</div>
+<div class="flex items-start space-x-2 text-slate-300">
+<span class="text-emerald-400 mt-0.5">✓</span>
+<div>Generated atomic diff (+24, -8 lines)</div>
+</div>
+<div class="flex items-start space-x-2 text-slate-300">
+<span class="text-emerald-400 mt-0.5">✓</span>
+<div>Sandboxed test execution: <span class="text-amber-300">bun test</span></div>
+</div>
+<div class="flex items-start space-x-2 text-slate-300">
+<span class="text-emerald-400 mt-0.5">✓</span>
+<div class="text-emerald-400 font-medium">Verified 14/14 assertions passed (0 errors)</div>
+</div>
+</div>
+</div>
+<!-- Mutated Files & Inline Mini Diff -->
+<div class="space-y-2">
+<div class="flex items-center justify-between text-[11px] font-mono">
+<span class="font-semibold text-slate-300">MUTATED FILES (2)</span>
+<span class="text-slate-400 text-[10px]">Net: +16 lines</span>
+</div>
+<div class="space-y-1.5 font-mono text-xs">
+<div class="bg-[#0b101c] p-2 rounded border hairline-border flex items-center justify-between">
+<div class="flex items-center space-x-2 truncate">
+<span class="text-slate-400">📄</span>
+<span class="text-slate-200 text-[11px] truncate">src/auth/jwt-middleware.ts</span>
+</div>
+<span class="text-[10px] text-emerald-400 font-mono">+18 / -6</span>
+</div>
+<div class="bg-[#0b101c] p-2 rounded border hairline-border flex items-center justify-between">
+<div class="flex items-center space-x-2 truncate">
+<span class="text-slate-400">📄</span>
+<span class="text-slate-200 text-[11px] truncate">src/auth/auth.test.ts</span>
+</div>
+<span class="text-[10px] text-emerald-400 font-mono">+6 / -2</span>
+</div>
+</div>
+<!-- Inline Diff Preview Snippet -->
+<div class="mt-2 bg-[#05070d] rounded-lg border hairline-border p-2.5 font-mono text-[10px] overflow-x-auto leading-relaxed">
+<div class="text-slate-500 pb-1 border-b border-slate-800 mb-1">@@ src/auth/jwt-middleware.ts:42,8 @@</div>
+<div class="text-rose-400/80 bg-rose-950/20 px-1 rounded-sm">- const isExpired = token.exp &lt; (Date.now() / 1000);</div>
+<div class="text-emerald-400 bg-emerald-950/30 px-1 rounded-sm font-semibold">+ const driftWindow = opts.maxSkewSeconds || 60;</div>
+<div class="text-emerald-400 bg-emerald-950/30 px-1 rounded-sm font-semibold">+ const isExpired = token.exp &lt; ((Date.now() / 1000) - driftWindow);</div>
+<div class="text-slate-400 px-1">  if (isExpired) throw new TokenExpiredError();</div>
+</div>
+</div>
+</div>
+<!-- Detail Panel Actions & Security Guarantee -->
+<div class="p-3.5 border-t hairline-border bg-[#080b12] space-y-2">
+<button class="w-full py-2 px-3 rounded-lg bg-[#00e5ff] hover:bg-cyan-300 text-[#07090e] font-mono text-xs font-bold flex items-center justify-center space-x-2 shadow-[0_0_15px_rgba(0,229,255,0.25)] transition-all">
+<svg class="w-4 h-4" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+<path d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+</svg>
+<span>CONTINUE IN CODING STUDIO</span>
+<kbd class="text-[9px] bg-black/20 px-1.5 py-0.5 rounded">⌘↵</kbd>
+</button>
+<div class="grid grid-cols-2 gap-2 font-mono text-[11px]">
+<button class="py-1.5 px-2 rounded bg-[#111726] hover:bg-slate-800 text-slate-300 border hairline-border flex items-center justify-center space-x-1 transition-colors">
+<span>Restore Chat</span>
+<kbd class="text-[9px] text-slate-500">⌘L</kbd>
+</button>
+<button class="py-1.5 px-2 rounded bg-[#1c1117] hover:bg-rose-950/60 text-rose-300 border border-rose-900/40 flex items-center justify-center transition-colors">
+<span>Revert Patch</span>
+</button>
+</div>
+<div class="pt-1 text-center font-mono text-[9px] text-slate-500 flex items-center justify-center space-x-1.5">
+<svg class="w-3 h-3 text-cyan-400" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+<path d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+</svg>
+<span>STORED LOCALLY IN SQLITE ENCLAVE • ZERO CLOUD TELEMETRY</span>
+</div>
+</div>
+</aside>
+<!-- END: RightDetailPanel -->
+</div>
+<!-- END: MainInterfaceLayout -->
+<!-- BEGIN: GlobalSystemFooter -->
+<footer class="h-7 w-full flex-none border-t hairline-border bg-[#05070a] px-3.5 flex items-center justify-between text-[10px] font-mono text-slate-400 z-30 select-none">
+<div class="flex items-center space-x-2">
+<span class="text-slate-300 font-semibold tracking-wide">BHANU OPEN SOURCE SYSTEM</span>
+<span class="text-slate-600">•</span>
+<span class="text-cyan-400">PHASE 2.10 - HISTORY &amp; REPOSITORY AUDIT WORKSPACE</span>
+</div>
+<div class="flex items-center space-x-4">
+<div class="flex items-center space-x-1.5 text-emerald-400">
+<span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span>
+<span>LOCAL FIRST</span>
+</div>
+<span class="text-slate-700">•</span>
+<span class="text-slate-400">PRIVATE</span>
+<span class="text-slate-700">•</span>
+<span class="text-slate-300">TAMPER-EVIDENT REPOSITORY MEMORY</span>
+<span class="text-slate-700">•</span>
+<span class="text-cyan-400 font-medium">100% OFFLINE CAPABLE</span>
+</div>
+</footer>
+<!-- END: GlobalSystemFooter -->
+</body></html>

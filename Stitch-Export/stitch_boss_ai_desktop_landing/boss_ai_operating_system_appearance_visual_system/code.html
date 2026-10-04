@@ -1,0 +1,1017 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>BOSS AI Operating System - Appearance & Visual System</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['"Plus Jakarta Sans"', 'sans-serif'],
+            mono: ['"JetBrains Mono"', 'monospace'],
+          },
+          colors: {
+            boss: {
+              bg: '#020408',
+              surface: '#060a12',
+              card: '#0a101d',
+              border: 'rgba(255, 255, 255, 0.07)',
+              cyan: '#00f2fe',
+              violet: '#7928ca',
+              purple: '#9d4edd',
+              text: '#f3f4f6',
+              muted: '#7e8b9b'
+            }
+          },
+          animation: {
+            'orbit-slow': 'spin 22s linear infinite',
+            'orbit-reverse': 'spin 16s linear infinite reverse',
+            'pulse-glow': 'pulseGlow 4s ease-in-out infinite',
+            'radar-sweep': 'radarSweep 8s linear infinite',
+          },
+          keyframes: {
+            pulseGlow: {
+              '0%, 100%': { opacity: '0.4', transform: 'scale(1)' },
+              '50%': { opacity: '0.8', transform: 'scale(1.05)' },
+            },
+            radarSweep: {
+              '0%': { transform: 'rotate(0deg)' },
+              '100%': { transform: 'rotate(360deg)' }
+            }
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    /* Specular glass & atmospheric effects */
+    .glass-panel {
+      background: rgba(8, 14, 26, 0.68);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      box-shadow: 0 20px 40px -15px rgba(0, 0, 0, 0.7), inset 0 1px 0 rgba(255, 255, 255, 0.08);
+    }
+    .glass-panel-subtle {
+      background: rgba(10, 18, 32, 0.45);
+      backdrop-filter: blur(14px);
+      border: 1px solid rgba(255, 255, 255, 0.05);
+    }
+    .glass-card-active {
+      background: linear-gradient(135deg, rgba(0, 242, 254, 0.08) 0%, rgba(121, 40, 202, 0.06) 100%), rgba(9, 17, 30, 0.75);
+      border: 1px solid rgba(0, 242, 254, 0.35);
+      box-shadow: 0 0 25px -5px rgba(0, 242, 254, 0.22), inset 0 1px 1px rgba(255, 255, 255, 0.15);
+    }
+    .glass-card-inactive {
+      background: rgba(9, 15, 27, 0.5);
+      border: 1px solid rgba(255, 255, 255, 0.06);
+    }
+    .glass-card-inactive:hover {
+      background: rgba(14, 23, 42, 0.65);
+      border-color: rgba(255, 255, 255, 0.14);
+      transform: translateY(-2px);
+    }
+
+    /* Custom thin scrollbar */
+    ::-webkit-scrollbar {
+      width: 5px;
+      height: 5px;
+    }
+    ::-webkit-scrollbar-track {
+      background: rgba(2, 4, 8, 0.3);
+    }
+    ::-webkit-scrollbar-thumb {
+      background: rgba(255, 255, 255, 0.12);
+      border-radius: 4px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: rgba(0, 242, 254, 0.35);
+    }
+
+    /* Interactive state toggles simulated visually */
+    .theme-active-indicator {
+      box-shadow: 0 0 12px #00f2fe;
+    }
+  </style>
+</head>
+<body class="bg-[#020408] text-gray-200 font-sans antialiased h-screen overflow-hidden flex flex-col select-none selection:bg-cyan-500/30">
+
+  <!-- TOP PERSISTENT SYSTEM CHROME -->
+  <header class="h-10 border-b border-white/[0.06] bg-[#020408]/90 backdrop-blur-md px-4 flex items-center justify-between z-50 text-[11px] font-mono tracking-tight text-gray-400 shrink-0">
+    <!-- Window Traffic Lights & Breadcrumb -->
+    <div class="flex items-center space-x-4">
+      <div class="flex items-center space-x-1.5">
+        <div class="w-3 h-3 rounded-full bg-[#ff5f56] border border-[#e0443e]/50 cursor-pointer shadow-sm hover:opacity-80 transition-opacity"></div>
+        <div class="w-3 h-3 rounded-full bg-[#ffbd2e] border border-[#dea123]/50 cursor-pointer shadow-sm hover:opacity-80 transition-opacity"></div>
+        <div class="w-3 h-3 rounded-full bg-[#27c93f] border border-[#1aab29]/50 cursor-pointer shadow-sm hover:opacity-80 transition-opacity"></div>
+      </div>
+      <div class="h-3 w-px bg-white/10"></div>
+      <div class="flex items-center space-x-2 text-gray-300">
+        <span class="inline-flex items-center justify-center w-2 h-2 rounded-full bg-cyan-400 animate-ping opacity-75"></span>
+        <span class="font-bold tracking-wider text-white">BOSS</span>
+        <span class="text-gray-500 font-mono text-[10px]">v0.1.0-preview</span>
+        <span class="text-gray-600">//</span>
+        <span class="text-gray-400">BHANU_WORKSPACE</span>
+        <span class="text-gray-600">//</span>
+        <span class="px-1.5 py-0.5 rounded bg-cyan-950/40 text-cyan-400 border border-cyan-500/30 text-[10px] font-semibold">PROD</span>
+        <span class="text-gray-600">//</span>
+        <span class="text-gray-400">LOCATION:</span>
+        <span class="text-white font-medium">SETTINGS // APPEARANCE // VISUAL_SYSTEM</span>
+      </div>
+    </div>
+
+    <!-- Enclave & System Telemetry Status -->
+    <div class="flex items-center space-x-4 text-[10px]">
+      <div class="flex items-center space-x-1.5 px-2 py-0.5 rounded-full bg-emerald-950/30 border border-emerald-500/30 text-emerald-400">
+        <span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span>
+        <span class="font-semibold tracking-wide">ENCLAVE: ISOLATED ZERO-CLOUD</span>
+      </div>
+      <div class="text-gray-500">TTFT: <span class="text-gray-300 font-mono">12ms</span></div>
+      <div class="text-gray-500">MEMORY: <span class="text-gray-300 font-mono">4.2 / 16 GB</span></div>
+      <div class="w-6 h-6 rounded flex items-center justify-center text-gray-400 hover:text-white cursor-pointer hover:bg-white/5 transition-colors">
+        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+      </div>
+    </div>
+  </header>
+
+  <!-- MAIN 3-COLUMN WORKSPACE FRAME -->
+  <div class="flex-1 flex overflow-hidden relative">
+
+    <!-- Ambient Subtle Atmosphere Glows -->
+    <div class="absolute top-1/4 -left-32 w-96 h-96 bg-cyan-600/10 rounded-full blur-[140px] pointer-events-none"></div>
+    <div class="absolute bottom-10 right-1/4 w-[32rem] h-[32rem] bg-violet-600/10 rounded-full blur-[160px] pointer-events-none"></div>
+
+    <!-- COLUMN 1: PERSISTENT BOSS NAVIGATION (Preserved from Phases 2.1 - 2.11) -->
+    <nav class="w-64 border-r border-white/[0.06] bg-[#03060c]/80 backdrop-blur-xl flex flex-col justify-between p-3 shrink-0 z-20">
+      <div class="space-y-4">
+        <!-- BOSS Header Block -->
+        <div class="flex items-center space-x-3 px-2 py-2">
+          <div class="w-9 h-9 rounded-xl bg-gradient-to-br from-cyan-400 via-blue-600 to-violet-600 p-[1px] flex items-center justify-center shadow-lg shadow-cyan-500/20">
+            <div class="w-full h-full bg-[#030712] rounded-[11px] flex items-center justify-center">
+              <span class="font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-violet-400 text-sm tracking-wider">B</span>
+            </div>
+          </div>
+          <div>
+            <div class="flex items-center space-x-1.5">
+              <span class="font-bold text-sm text-white tracking-wide">BOSS</span>
+              <span class="text-[9px] px-1 py-0.2 rounded bg-cyan-950/60 text-cyan-400 border border-cyan-500/30 font-mono">CORE</span>
+            </div>
+            <p class="text-[10px] text-gray-500 font-mono">Bhanu OS • v0.1.0</p>
+          </div>
+        </div>
+
+        <!-- Omni-search quick input -->
+        <div class="relative px-1">
+          <div class="w-full h-8 rounded-lg bg-white/[0.03] border border-white/[0.06] px-2.5 flex items-center justify-between text-xs text-gray-400 hover:border-white/15 transition-colors cursor-pointer">
+            <div class="flex items-center space-x-2">
+              <svg class="w-3.5 h-3.5 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+              <span class="text-[11px] text-gray-500">Omni-search system...</span>
+            </div>
+            <kbd class="text-[9px] font-mono bg-white/[0.06] px-1 py-0.5 rounded text-gray-400 border border-white/[0.08]">⌘K</kbd>
+          </div>
+        </div>
+
+        <!-- Primary Navigation List -->
+        <div class="space-y-1 px-1 text-xs">
+          <a href="#" class="flex items-center space-x-3 px-3 py-2 rounded-lg text-gray-400 hover:text-white hover:bg-white/[0.04] transition-colors">
+            <svg class="w-4 h-4 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/></svg>
+            <span>Workspace Home</span>
+          </a>
+
+          <a href="#" class="flex items-center justify-between px-3 py-2 rounded-lg text-gray-400 hover:text-white hover:bg-white/[0.04] transition-colors">
+            <div class="flex items-center space-x-3">
+              <svg class="w-4 h-4 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/></svg>
+              <span>Neural Chat</span>
+            </div>
+            <span class="text-[10px] font-mono text-gray-600">⌘1</span>
+          </a>
+
+          <a href="#" class="flex items-center justify-between px-3 py-2 rounded-lg text-gray-400 hover:text-white hover:bg-white/[0.04] transition-colors">
+            <div class="flex items-center space-x-3">
+              <svg class="w-4 h-4 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-6l-2-2H5a2 2 0 00-2 2z"/></svg>
+              <span>Projects</span>
+            </div>
+            <span class="text-[10px] font-mono text-gray-600">⌘2</span>
+          </a>
+
+          <a href="#" class="flex items-center justify-between px-3 py-2 rounded-lg text-gray-400 hover:text-white hover:bg-white/[0.04] transition-colors">
+            <div class="flex items-center space-x-3">
+              <svg class="w-4 h-4 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4"/></svg>
+              <span>Coding Studio</span>
+            </div>
+            <span class="text-[9px] font-mono px-1.5 py-0.2 rounded bg-emerald-950/50 text-emerald-400 border border-emerald-500/30">LIVE</span>
+          </a>
+
+          <a href="#" class="flex items-center justify-between px-3 py-2 rounded-lg text-gray-400 hover:text-white hover:bg-white/[0.04] transition-colors">
+            <div class="flex items-center space-x-3">
+              <svg class="w-4 h-4 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M8 9l3 3-3 3m5 0h3M5 20h14a2 2 0 002-2V6a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
+              <span>Terminal Session</span>
+            </div>
+            <span class="text-[10px] font-mono text-gray-600">zsh</span>
+          </a>
+
+          <a href="#" class="flex items-center justify-between px-3 py-2 rounded-lg text-gray-400 hover:text-white hover:bg-white/[0.04] transition-colors">
+            <div class="flex items-center space-x-3">
+              <svg class="w-4 h-4 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z"/></svg>
+              <span>Tools & Plugins</span>
+            </div>
+            <span class="text-[10px] font-mono text-gray-600">10</span>
+          </a>
+
+          <a href="#" class="flex items-center space-x-3 px-3 py-2 rounded-lg text-gray-400 hover:text-white hover:bg-white/[0.04] transition-colors">
+            <svg class="w-4 h-4 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+            <span>History</span>
+          </a>
+
+          <!-- System Section -->
+          <div class="pt-3 pb-1">
+            <div class="text-[9px] font-mono text-gray-600 uppercase tracking-widest px-3">SYSTEM CONTROL</div>
+          </div>
+
+          <!-- Active Settings Link with Illuminated Cyan Pill -->
+          <a href="#" class="flex items-center justify-between px-3 py-2 rounded-lg bg-cyan-950/40 text-cyan-400 border border-cyan-500/30 shadow-[0_0_15px_rgba(0,242,254,0.12)] transition-all">
+            <div class="flex items-center space-x-3">
+              <svg class="w-4 h-4 text-cyan-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+              <span class="font-medium text-white">Settings</span>
+            </div>
+            <span class="flex items-center space-x-1 text-[9px] font-mono text-cyan-400">
+              <span class="w-1.5 h-1.5 rounded-full bg-cyan-400 animate-pulse"></span>
+              <span>active</span>
+            </span>
+          </a>
+        </div>
+
+        <!-- Workspaces list -->
+        <div class="pt-2 px-1 text-xs">
+          <div class="flex items-center justify-between text-[9px] font-mono text-gray-600 uppercase tracking-widest px-3 mb-1.5">
+            <span>Workspaces</span>
+            <span>2 BOUND</span>
+          </div>
+          <div class="space-y-0.5">
+            <div class="flex items-center justify-between px-3 py-1.5 rounded text-gray-400 hover:text-white hover:bg-white/[0.03] transition-colors cursor-pointer text-[11px]">
+              <div class="flex items-center space-x-2">
+                <span class="w-1.5 h-1.5 rounded-full bg-cyan-400"></span>
+                <span class="font-mono text-gray-300">boss-core-engine</span>
+              </div>
+              <span class="text-[9px] text-gray-600 font-mono">active</span>
+            </div>
+            <div class="flex items-center space-x-2 px-3 py-1.5 rounded text-gray-500 hover:text-gray-300 hover:bg-white/[0.03] transition-colors cursor-pointer text-[11px]">
+              <span class="w-1.5 h-1.5 rounded-full bg-gray-600"></span>
+              <span class="font-mono text-gray-500">arm-cortex-firmware</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Developer Profile & Local Enclave Telemetry (Signature footer dock) -->
+      <div class="p-2 rounded-xl bg-white/[0.02] border border-white/[0.06] space-y-2">
+        <div class="flex items-center justify-between">
+          <div class="flex items-center space-x-2.5">
+            <div class="w-7 h-7 rounded-lg bg-gradient-to-tr from-cyan-600 to-violet-600 flex items-center justify-center font-bold text-xs text-white shadow-sm">
+              B
+            </div>
+            <div>
+              <div class="flex items-center space-x-1.5">
+                <span class="text-xs font-semibold text-white">Bhanu DEV</span>
+                <span class="text-[9px] px-1 rounded bg-blue-900/40 text-blue-300 font-mono">DEV</span>
+              </div>
+              <div class="flex items-center space-x-1 text-[9px] text-emerald-400 font-mono">
+                <span class="w-1 h-1 rounded-full bg-emerald-400"></span>
+                <span>Local Enclave Active</span>
+              </div>
+            </div>
+          </div>
+          <button class="text-gray-500 hover:text-white transition-colors">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 12h.01M12 12h.01M19 12h.01M6 12a1 1 0 11-2 0 1 1 0 012 0zm7 0a1 1 0 11-2 0 1 1 0 012 0zm7 0a1 1 0 11-2 0 1 1 0 012 0z"/></svg>
+          </button>
+        </div>
+
+        <div class="pt-1.5 border-t border-white/[0.05] flex items-center justify-between text-[9px] font-mono text-gray-500">
+          <div>LLM: <span class="text-cyan-400 font-semibold">7B Q4_K_M</span></div>
+          <span class="text-emerald-400">ONLINE</span>
+        </div>
+        <div class="flex items-center justify-between text-[9px] font-mono text-gray-500">
+          <div>VRAM: <span class="text-gray-300">4.2GB</span></div>
+          <div>TEMP: <span class="text-gray-300">41°C</span></div>
+        </div>
+      </div>
+    </nav>
+
+    <!-- COLUMN 2: SETTINGS SUITE CATEGORIES (Preserved from Phase 2.11) -->
+    <aside class="w-72 border-r border-white/[0.06] bg-[#040810]/70 backdrop-blur-xl flex flex-col justify-between shrink-0 z-10">
+      <div class="p-4 space-y-4">
+        <!-- Settings Header with Mini BOSS Core -->
+        <div class="flex items-center justify-between pb-3 border-b border-white/[0.06]">
+          <div>
+            <div class="flex items-center space-x-2">
+              <h2 class="text-base font-bold text-white tracking-wide">SETTINGS</h2>
+              <span class="text-[9px] px-1.5 py-0.5 rounded bg-cyan-950/60 text-cyan-400 border border-cyan-500/30 font-mono">CONFIG</span>
+            </div>
+            <p class="text-[11px] text-gray-500 mt-0.5">Configure your workspace.</p>
+          </div>
+
+          <!-- Established Mini BOSS Core visual (Synchronized pulse) -->
+          <div class="relative w-8 h-8 flex items-center justify-center">
+            <div class="absolute inset-0 rounded-full bg-cyan-500/20 blur-md animate-pulse"></div>
+            <div class="w-7 h-7 rounded-full border border-cyan-400/50 flex items-center justify-center bg-black/60 shadow-[0_0_10px_rgba(0,242,254,0.4)]">
+              <div class="w-4 h-4 rounded-full border border-violet-400/70 border-dashed animate-spin" style="animation-duration: 8s;"></div>
+              <div class="absolute w-2 h-2 rounded-full bg-gradient-to-r from-cyan-300 to-white shadow-[0_0_8px_#00f2fe]"></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Search Settings Omni-box -->
+        <div class="relative">
+          <svg class="w-3.5 h-3.5 text-gray-500 absolute left-3 top-2.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+          <input type="text" placeholder="Search settings..." value="appearance" class="w-full h-8 pl-8 pr-3 bg-white/[0.03] border border-white/[0.08] rounded-lg text-xs text-gray-300 placeholder-gray-500 focus:outline-none focus:border-cyan-500/40 font-mono transition-colors">
+        </div>
+
+        <!-- Settings Category Navigation Menu -->
+        <div class="space-y-1 text-xs">
+          <!-- 1. General -->
+          <div class="flex items-center justify-between px-3 py-2 rounded-lg text-gray-400 hover:text-white hover:bg-white/[0.04] transition-colors cursor-pointer">
+            <div class="flex items-center space-x-2.5">
+              <svg class="w-4 h-4 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4"/></svg>
+              <span>General</span>
+            </div>
+            <span class="text-[9px] font-mono text-gray-600">PREV</span>
+          </div>
+
+          <!-- 2. APPEARANCE (CURRENT ACTIVE TAB) -->
+          <div class="flex items-center justify-between px-3 py-2 rounded-lg bg-cyan-950/40 text-cyan-300 border border-cyan-500/30 shadow-[0_0_15px_rgba(0,242,254,0.12)] cursor-pointer">
+            <div class="flex items-center space-x-2.5">
+              <svg class="w-4 h-4 text-cyan-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M7 21a4 4 0 01-4-4V5a2 2 0 012-2h4a2 2 0 012 2v12a4 4 0 01-4 4zm0 0h12a2 2 0 002-2v-4a2 2 0 00-2-2h-2.343M11 7.343l1.657-1.657a2 2 0 012.828 0l2.829 2.829a2 2 0 010 2.828l-8.486 8.485M7 17h.01"/></svg>
+              <span class="font-semibold text-white">Appearance</span>
+            </div>
+            <span class="flex items-center space-x-1.5 text-[10px] font-mono text-cyan-400">
+              <span class="w-1.5 h-1.5 rounded-full bg-cyan-400 theme-active-indicator"></span>
+              <span class="font-bold">Dark</span>
+            </span>
+          </div>
+
+          <!-- 3. Voice Settings -->
+          <div class="flex items-center justify-between px-3 py-2 rounded-lg text-gray-400 hover:text-white hover:bg-white/[0.04] transition-colors cursor-pointer">
+            <div class="flex items-center space-x-2.5">
+              <svg class="w-4 h-4 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 01-3-3V5a3 3 0 116 0v6a3 3 0 01-3 3z"/></svg>
+              <span>Voice</span>
+            </div>
+            <span class="text-[9px] font-mono px-1 py-0.2 rounded bg-emerald-950/40 text-emerald-400 border border-emerald-500/20">READY</span>
+          </div>
+
+          <!-- 4. Models -->
+          <div class="flex items-center justify-between px-3 py-2 rounded-lg text-gray-400 hover:text-white hover:bg-white/[0.04] transition-colors cursor-pointer">
+            <div class="flex items-center space-x-2.5">
+              <svg class="w-4 h-4 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M9 3v2m6-2v2M9 19v2m6-2v2M5 9H3m2 6H3m18-6h-2m2 6h-2M7 19h10a2 2 0 002-2V7a2 2 0 00-2-2H7a2 2 0 00-2 2v10a2 2 0 002 2zM9 9h6v6H9V9z"/></svg>
+              <span>Models</span>
+            </div>
+            <span class="text-[10px] font-mono text-gray-600">7B Local</span>
+          </div>
+
+          <!-- 5. Memory -->
+          <div class="flex items-center justify-between px-3 py-2 rounded-lg text-gray-400 hover:text-white hover:bg-white/[0.04] transition-colors cursor-pointer">
+            <div class="flex items-center space-x-2.5">
+              <svg class="w-4 h-4 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M4 7v10c0 2.21 3.582 4 8 4s8-1.79 8-4V7M4 7c0 2.21 3.582 4 8 4s8-1.79 8-4M4 7c0-2.21 3.582-4 8-4s8 1.79 8 4m0 5c0 2.21-3.582 4-8 4s-8-1.79-8-4"/></svg>
+              <span>Memory</span>
+            </div>
+            <span class="text-[9px] font-mono text-cyan-400">ENCLAVE</span>
+          </div>
+
+          <!-- 6. Profile -->
+          <div class="flex items-center justify-between px-3 py-2 rounded-lg text-gray-400 hover:text-white hover:bg-white/[0.04] transition-colors cursor-pointer">
+            <div class="flex items-center space-x-2.5">
+              <svg class="w-4 h-4 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/></svg>
+              <span>Profile</span>
+            </div>
+            <span class="text-[10px] font-mono text-gray-600">Bhanu</span>
+          </div>
+
+          <!-- 7. Permissions & Security -->
+          <div class="flex items-center justify-between px-3 py-2 rounded-lg text-gray-400 hover:text-white hover:bg-white/[0.04] transition-colors cursor-pointer">
+            <div class="flex items-center space-x-2.5">
+              <svg class="w-4 h-4 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg>
+              <span>Permissions</span>
+            </div>
+            <span class="text-[9px] font-mono px-1 py-0.2 rounded bg-cyan-950/40 text-cyan-400 border border-cyan-500/20">STRICT</span>
+          </div>
+
+          <!-- 8. About BOSS -->
+          <div class="flex items-center justify-between px-3 py-2 rounded-lg text-gray-400 hover:text-white hover:bg-white/[0.04] transition-colors cursor-pointer">
+            <div class="flex items-center space-x-2.5">
+              <svg class="w-4 h-4 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+              <span>About BOSS</span>
+            </div>
+            <span class="text-[10px] font-mono text-gray-600">v0.1.0</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Local Preferences Persistence Note -->
+      <div class="p-3 m-3 rounded-xl bg-white/[0.02] border border-white/[0.06] text-[10px] text-gray-500 space-y-1">
+        <div class="flex items-center space-x-1.5 text-cyan-400 font-mono font-medium">
+          <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/></svg>
+          <span>VISUAL DESIGN ENGINE</span>
+        </div>
+        <p class="leading-relaxed">CSS variables and token themes are synced to your local zero-telemetry machine configuration.</p>
+      </div>
+    </aside>
+
+    <!-- COLUMN 3 & 4: MAIN APPEARANCE SHOWROOM & LIVE PREVIEW WORKSPACE -->
+    <main class="flex-1 flex flex-col overflow-y-auto bg-[#020408]/95 relative p-6 space-y-7">
+
+      <!-- Subsystem Header & Live Auto-save Banner -->
+      <div class="flex items-center justify-between border-b border-white/[0.06] pb-4">
+        <div>
+          <div class="flex items-center space-x-3">
+            <h1 class="text-xl font-bold text-white tracking-tight">Appearance & Visual System</h1>
+            <span class="text-xs font-mono text-gray-500">// PHASE 2.12 SHOWROOM</span>
+            <span class="px-2 py-0.5 rounded-full bg-cyan-950/60 text-cyan-300 border border-cyan-500/30 text-[10px] font-mono font-medium">CURRENT THEME · DARK</span>
+          </div>
+          <p class="text-xs text-gray-400 mt-1">Shape the way BOSS looks, from core contrast and glass refraction to motion ergonomics and visual density.</p>
+        </div>
+
+        <div class="flex items-center space-x-3">
+          <div class="flex items-center space-x-2 px-3 py-1 rounded-full bg-emerald-950/40 border border-emerald-500/30 text-emerald-400 text-xs font-mono">
+            <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
+            <span>AUTOSAVE ACTIVE: SAVED</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- SECTION 01: THE THREE PRIMARY THEME CARDS WITH LIVE MINIATURE INTERFACE PREVIEWS -->
+      <section class="space-y-3">
+        <div class="flex items-center justify-between">
+          <div class="text-[11px] font-mono uppercase tracking-wider text-cyan-400 flex items-center space-x-2">
+            <span class="text-gray-600">01 //</span>
+            <span class="font-bold">PRIMARY THEME ARCHITECTURE</span>
+          </div>
+          <span class="text-[11px] font-mono text-gray-500">Click to switch system appearance immediately</span>
+        </div>
+
+        <div class="grid grid-cols-3 gap-5">
+          <!-- THEME OPTION 1: DARK MODE (RECOMMENDED & ACTIVE) -->
+          <div class="group relative rounded-2xl glass-card-active p-4 transition-all duration-300 cursor-pointer overflow-hidden flex flex-col justify-between">
+            <div class="flex items-center justify-between mb-3">
+              <div class="flex items-center space-x-2">
+                <div class="w-2.5 h-2.5 rounded-full bg-cyan-400 theme-active-indicator"></div>
+                <span class="text-sm font-bold text-white tracking-wide">DARK</span>
+                <span class="text-[9px] font-mono px-2 py-0.5 rounded-full bg-cyan-500/20 text-cyan-300 border border-cyan-400/40 font-semibold">RECOMMENDED</span>
+              </div>
+              <span class="text-[10px] font-mono text-cyan-400 flex items-center space-x-1">
+                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+                <span>ACTIVE</span>
+              </span>
+            </div>
+
+            <!-- Miniature Live BOSS Interface Preview: Dark Obsidian -->
+            <div class="w-full h-36 rounded-xl bg-[#020408] border border-white/[0.12] p-2 flex flex-col justify-between relative shadow-inner overflow-hidden">
+              <!-- Mini atmospheric radial glow -->
+              <div class="absolute -right-6 -top-6 w-24 h-24 bg-cyan-500/20 rounded-full blur-xl pointer-events-none"></div>
+              <div class="absolute -left-6 -bottom-6 w-24 h-24 bg-violet-600/20 rounded-full blur-xl pointer-events-none"></div>
+
+              <!-- Mini Top Bar -->
+              <div class="flex items-center justify-between border-b border-white/[0.08] pb-1.5 text-[7px] font-mono text-gray-500">
+                <div class="flex items-center space-x-1">
+                  <span class="w-1.5 h-1.5 rounded-full bg-red-500/80"></span>
+                  <span class="w-1.5 h-1.5 rounded-full bg-yellow-500/80"></span>
+                  <span class="w-1.5 h-1.5 rounded-full bg-green-500/80"></span>
+                  <span class="text-gray-300 font-bold ml-1">BOSS</span>
+                </div>
+                <span class="text-emerald-400 text-[6px]">● LOCAL 7B</span>
+              </div>
+
+              <!-- Mini Body: Sidebar + Center Core + Command Deck -->
+              <div class="flex-1 flex items-center justify-between px-1 py-1 relative">
+                <!-- Mini Sidebar -->
+                <div class="w-12 flex flex-col space-y-1">
+                  <div class="h-1.5 w-8 rounded bg-cyan-400/40"></div>
+                  <div class="h-1.5 w-6 rounded bg-white/10"></div>
+                  <div class="h-1.5 w-7 rounded bg-white/10"></div>
+                  <div class="h-1.5 w-5 rounded bg-white/10"></div>
+                </div>
+
+                <!-- Mini Established BOSS Core in Dark Mode -->
+                <div class="relative w-12 h-12 flex items-center justify-center">
+                  <div class="absolute inset-0 rounded-full bg-cyan-500/20 blur-sm"></div>
+                  <div class="w-10 h-10 rounded-full border border-cyan-400/60 flex items-center justify-center bg-black/80">
+                    <div class="w-6 h-6 rounded-full border border-violet-400/80 border-dashed animate-spin" style="animation-duration: 10s;"></div>
+                    <div class="w-3.5 h-3.5 rounded-full bg-gradient-to-tr from-cyan-400 to-violet-500 shadow-[0_0_8px_#00f2fe] flex items-center justify-center">
+                      <div class="w-1 h-1 rounded-full bg-white"></div>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Mini Glass Card -->
+                <div class="w-20 p-1.5 rounded bg-white/[0.04] border border-white/[0.08] flex flex-col space-y-1">
+                  <div class="flex items-center space-x-1">
+                    <span class="w-1 h-1 rounded-full bg-cyan-400"></span>
+                    <span class="text-[6px] font-mono text-gray-400">auth.ts</span>
+                  </div>
+                  <div class="h-1 w-full rounded bg-emerald-500/30"></div>
+                  <div class="h-1 w-3/4 rounded bg-cyan-500/30"></div>
+                </div>
+              </div>
+
+              <!-- Mini Command Bar -->
+              <div class="h-5 rounded bg-white/[0.04] border border-white/[0.08] px-2 flex items-center justify-between text-[7px] font-mono text-gray-400">
+                <span class="text-gray-500">Ask BOSS anything...</span>
+                <span class="w-2 h-2 rounded-full bg-cyan-400/40"></span>
+              </div>
+            </div>
+
+            <p class="text-[11px] text-gray-400 mt-3 leading-relaxed">
+              Deep obsidian black foundation with smoked glass reflections and restrained cyan/violet electric accents. Designed for long, zero-fatigue engineering sessions.
+            </p>
+          </div>
+
+          <!-- THEME OPTION 2: LIGHT MODE (PREMIUM WARM GRAPHITE FOUNDATION) -->
+          <div class="group relative rounded-2xl glass-card-inactive p-4 transition-all duration-300 cursor-pointer overflow-hidden flex flex-col justify-between">
+            <div class="flex items-center justify-between mb-3">
+              <div class="flex items-center space-x-2">
+                <div class="w-2.5 h-2.5 rounded-full bg-gray-400"></div>
+                <span class="text-sm font-bold text-white tracking-wide">LIGHT</span>
+                <span class="text-[9px] font-mono px-2 py-0.5 rounded-full bg-white/10 text-gray-300 border border-white/20">PREMIUM</span>
+              </div>
+              <span class="text-[10px] font-mono text-gray-500 group-hover:text-gray-300 transition-colors">CLICK TO SELECT</span>
+            </div>
+
+            <!-- Miniature Live BOSS Interface Preview: Light Mode Warm Graphite -->
+            <div class="w-full h-36 rounded-xl bg-[#f0f2f5] border border-gray-300/80 p-2 flex flex-col justify-between relative shadow-sm overflow-hidden">
+              <!-- Mini Top Bar Light -->
+              <div class="flex items-center justify-between border-b border-gray-200 pb-1.5 text-[7px] font-mono text-gray-500">
+                <div class="flex items-center space-x-1">
+                  <span class="w-1.5 h-1.5 rounded-full bg-red-500/80"></span>
+                  <span class="w-1.5 h-1.5 rounded-full bg-yellow-500/80"></span>
+                  <span class="w-1.5 h-1.5 rounded-full bg-green-500/80"></span>
+                  <span class="text-gray-800 font-bold ml-1">BOSS</span>
+                </div>
+                <span class="text-emerald-600 text-[6px]">● LOCAL 7B</span>
+              </div>
+
+              <!-- Mini Body Light: Sidebar + Contrast Core + Card -->
+              <div class="flex-1 flex items-center justify-between px-1 py-1 relative">
+                <!-- Mini Sidebar Light -->
+                <div class="w-12 flex flex-col space-y-1">
+                  <div class="h-1.5 w-8 rounded bg-cyan-600/50"></div>
+                  <div class="h-1.5 w-6 rounded bg-gray-300"></div>
+                  <div class="h-1.5 w-7 rounded bg-gray-300"></div>
+                  <div class="h-1.5 w-5 rounded bg-gray-300"></div>
+                </div>
+
+                <!-- Mini Established BOSS Core adapted for Light Mode (Dark internal contrast ring) -->
+                <div class="relative w-12 h-12 flex items-center justify-center">
+                  <div class="absolute inset-0 rounded-full bg-cyan-500/10 blur-sm"></div>
+                  <div class="w-10 h-10 rounded-full border border-cyan-600/40 flex items-center justify-center bg-white shadow-md">
+                    <div class="w-6 h-6 rounded-full border border-violet-600/50 border-dashed animate-spin" style="animation-duration: 10s;"></div>
+                    <div class="w-3.5 h-3.5 rounded-full bg-gradient-to-tr from-cyan-600 to-violet-700 shadow-sm flex items-center justify-center">
+                      <div class="w-1 h-1 rounded-full bg-white"></div>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Mini Glass Card Light -->
+                <div class="w-20 p-1.5 rounded bg-white/80 border border-gray-200 shadow-sm flex flex-col space-y-1">
+                  <div class="flex items-center space-x-1">
+                    <span class="w-1 h-1 rounded-full bg-cyan-600"></span>
+                    <span class="text-[6px] font-mono text-gray-700">auth.ts</span>
+                  </div>
+                  <div class="h-1 w-full rounded bg-emerald-500/40"></div>
+                  <div class="h-1 w-3/4 rounded bg-cyan-600/30"></div>
+                </div>
+              </div>
+
+              <!-- Mini Command Bar Light -->
+              <div class="h-5 rounded bg-white border border-gray-300 px-2 flex items-center justify-between text-[7px] font-mono text-gray-600 shadow-sm">
+                <span>Ask BOSS anything...</span>
+                <span class="w-2 h-2 rounded-full bg-cyan-600/50"></span>
+              </div>
+            </div>
+
+            <p class="text-[11px] text-gray-400 mt-3 leading-relaxed">
+              Warm off-white foundation with high-contrast graphite typography and frosted glass surfaces. Not a simple color inversion—crafted as an authentic, high-elegance BOSS variant.
+            </p>
+          </div>
+
+          <!-- THEME OPTION 3: SYSTEM MODE (SPLIT DUAL PREVIEW) -->
+          <div class="group relative rounded-2xl glass-card-inactive p-4 transition-all duration-300 cursor-pointer overflow-hidden flex flex-col justify-between">
+            <div class="flex items-center justify-between mb-3">
+              <div class="flex items-center space-x-2">
+                <div class="w-2.5 h-2.5 rounded-full bg-violet-400"></div>
+                <span class="text-sm font-bold text-white tracking-wide">SYSTEM</span>
+                <span class="text-[9px] font-mono px-2 py-0.5 rounded-full bg-violet-500/20 text-violet-300 border border-violet-400/30">AUTO DYNAMIC</span>
+              </div>
+              <span class="text-[10px] font-mono text-gray-500 group-hover:text-gray-300 transition-colors">CLICK TO SELECT</span>
+            </div>
+
+            <!-- Miniature Live BOSS Interface Preview: Split Dark / Light Screen -->
+            <div class="w-full h-36 rounded-xl border border-white/[0.1] flex relative overflow-hidden shadow-inner">
+              <!-- Left Half: Dark Preview -->
+              <div class="w-1/2 h-full bg-[#020408] border-r border-white/15 p-2 flex flex-col justify-between relative">
+                <div class="flex items-center space-x-1 text-[7px] font-mono text-gray-400">
+                  <span class="w-1.5 h-1.5 rounded-full bg-red-500/80"></span>
+                  <span class="text-white font-bold">DARK</span>
+                </div>
+                <!-- Cut Core Left half -->
+                <div class="w-8 h-8 rounded-full border border-cyan-400/60 bg-black/90 self-end -mr-4 flex items-center justify-center">
+                  <div class="w-3 h-3 rounded-full bg-cyan-400 shadow-[0_0_6px_#00f2fe]"></div>
+                </div>
+                <div class="h-4 w-full bg-white/[0.05] rounded text-[6px] font-mono text-gray-400 px-1 flex items-center">
+                  OS = Dark
+                </div>
+              </div>
+
+              <!-- Right Half: Light Preview -->
+              <div class="w-1/2 h-full bg-[#edf0f4] p-2 flex flex-col justify-between relative">
+                <div class="flex items-center justify-end space-x-1 text-[7px] font-mono text-gray-600">
+                  <span class="text-gray-800 font-bold">LIGHT</span>
+                  <span class="w-1.5 h-1.5 rounded-full bg-emerald-500/80"></span>
+                </div>
+                <!-- Cut Core Right half -->
+                <div class="w-8 h-8 rounded-full border border-violet-600/40 bg-white self-start -ml-4 flex items-center justify-center">
+                  <div class="w-3 h-3 rounded-full bg-violet-600"></div>
+                </div>
+                <div class="h-4 w-full bg-white rounded text-[6px] font-mono text-gray-600 px-1 flex items-center justify-end">
+                  OS = Light
+                </div>
+              </div>
+
+              <!-- Split Divider line badge -->
+              <div class="absolute inset-y-0 left-1/2 -translate-x-1/2 flex items-center justify-center pointer-events-none">
+                <span class="px-1.5 py-0.5 rounded-full bg-black/80 border border-white/20 text-[8px] font-mono text-cyan-300">AUTO</span>
+              </div>
+            </div>
+
+            <p class="text-[11px] text-gray-400 mt-3 leading-relaxed">
+              Automatically follows macOS/Linux system appearance preferences. Seamlessly switches between Dark and Light mode as sunrise/sunset changes occur on your machine.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <!-- SECTION 02: BOSS LIVE DESIGN PREVIEW CONTAINER (Comprehensive Showcase) -->
+      <section class="space-y-3">
+        <div class="flex items-center justify-between">
+          <div class="text-[11px] font-mono uppercase tracking-wider text-cyan-400 flex items-center space-x-2">
+            <span class="text-gray-600">02 //</span>
+            <span class="font-bold">LIVE INTERFACE PREVIEW CONTAINER</span>
+          </div>
+          <div class="flex items-center space-x-2 text-[10px] font-mono text-gray-400">
+            <span>SHOWING:</span>
+            <span class="text-cyan-400 font-semibold">DARK + CYAN ACCENT + BALANCED GLASS</span>
+          </div>
+        </div>
+
+        <!-- High-Fidelity Mini BOSS Interface Showroom Frame -->
+        <div class="w-full rounded-2xl glass-panel p-5 relative overflow-hidden border border-white/[0.09] shadow-2xl">
+          <!-- Ambient lighting in preview -->
+          <div class="absolute -top-10 left-1/3 w-80 h-32 bg-cyan-500/15 rounded-full blur-3xl pointer-events-none"></div>
+
+          <!-- Preview Header Bar -->
+          <div class="flex items-center justify-between pb-3 border-b border-white/[0.06] mb-4 text-xs">
+            <div class="flex items-center space-x-3">
+              <span class="font-mono text-xs text-gray-300 font-semibold tracking-wider">BOSS PREVIEW ENVIRONMENT</span>
+              <span class="text-gray-600">•</span>
+              <span class="text-[10px] font-mono text-gray-400">WORKSPACE: boss-core-engine/main</span>
+            </div>
+            <div class="flex items-center space-x-3 text-[10px] font-mono text-gray-400">
+              <span class="px-2 py-0.5 rounded bg-white/[0.04] border border-white/[0.08] text-gray-300">INTERACTIVE SIMULATION</span>
+              <span class="text-emerald-400">● 60 FPS SYNCHRONIZED</span>
+            </div>
+          </div>
+
+          <!-- Preview 3-Pane Component Composite -->
+          <div class="grid grid-cols-12 gap-4 items-stretch">
+            
+            <!-- Preview Pane A: Mini Navigation Spine (3 Cols) -->
+            <div class="col-span-3 rounded-xl bg-black/40 border border-white/[0.06] p-3 flex flex-col justify-between space-y-3">
+              <div class="space-y-2.5">
+                <div class="flex items-center space-x-2">
+                  <div class="w-5 h-5 rounded-md bg-gradient-to-tr from-cyan-400 to-violet-500 flex items-center justify-center font-bold text-[10px] text-black">B</div>
+                  <span class="text-xs font-bold text-white tracking-wide">BOSS</span>
+                </div>
+                <div class="space-y-1 text-[11px]">
+                  <div class="px-2 py-1.5 rounded-lg bg-cyan-950/40 text-cyan-300 border border-cyan-500/30 flex items-center justify-between font-medium">
+                    <span>Neural Chat</span>
+                    <span class="w-1.5 h-1.5 rounded-full bg-cyan-400"></span>
+                  </div>
+                  <div class="px-2 py-1.5 rounded text-gray-400 hover:text-white transition-colors">Coding Studio</div>
+                  <div class="px-2 py-1.5 rounded text-gray-400 hover:text-white transition-colors">Terminal Session</div>
+                  <div class="px-2 py-1.5 rounded text-gray-400 hover:text-white transition-colors">Tools & Plugins</div>
+                </div>
+              </div>
+
+              <!-- Telemetry Stamp -->
+              <div class="p-2 rounded-lg bg-white/[0.02] border border-white/[0.04] text-[9px] font-mono text-gray-500">
+                <div class="flex justify-between"><span>AST CACHE</span><span class="text-cyan-400">100%</span></div>
+                <div class="flex justify-between"><span>VRAM LOAD</span><span class="text-gray-300">4.2GB</span></div>
+              </div>
+            </div>
+
+            <!-- Preview Pane B: Central Stage with Established BOSS Core & Conversation Snippet (5 Cols) -->
+            <div class="col-span-5 rounded-xl bg-black/60 border border-white/[0.06] p-4 flex flex-col justify-between relative overflow-hidden">
+              <div class="flex items-center justify-between pb-2 border-b border-white/[0.05] text-[10px] font-mono text-gray-400">
+                <span>CONVERSATION STREAM</span>
+                <span class="text-cyan-400">SESSION #4921</span>
+              </div>
+
+              <!-- Central Holographic Core Element with Active Orbitals -->
+              <div class="my-4 flex items-center justify-center space-x-4">
+                <div class="relative w-20 h-20 flex items-center justify-center">
+                  <!-- Outer Orbital Ring -->
+                  <div class="absolute inset-0 rounded-full border border-cyan-400/30 animate-spin" style="animation-duration: 20s;"></div>
+                  <div class="absolute -inset-1 rounded-full border border-dashed border-violet-500/30 animate-spin" style="animation-duration: 14s; animation-direction: reverse;"></div>
+                  <!-- Inner Core Sphere -->
+                  <div class="w-14 h-14 rounded-full bg-gradient-to-br from-cyan-500/20 via-purple-600/30 to-blue-900/40 border border-cyan-400/70 backdrop-blur-md flex items-center justify-center shadow-[0_0_20px_rgba(0,242,254,0.3)]">
+                    <!-- Central Frequency Waves -->
+                    <div class="flex items-center space-x-1">
+                      <span class="w-1 h-4 bg-cyan-300 rounded-full animate-pulse"></span>
+                      <span class="w-1 h-6 bg-cyan-400 rounded-full animate-pulse" style="animation-delay: 0.15s"></span>
+                      <span class="w-1 h-8 bg-white rounded-full animate-pulse" style="animation-delay: 0.3s"></span>
+                      <span class="w-1 h-6 bg-violet-400 rounded-full animate-pulse" style="animation-delay: 0.45s"></span>
+                      <span class="w-1 h-4 bg-violet-500 rounded-full animate-pulse" style="animation-delay: 0.6s"></span>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="space-y-1">
+                  <div class="text-xs font-bold text-white tracking-wide">BOSS CORE READY</div>
+                  <div class="text-[10px] text-cyan-400 font-mono">"A better developer, every day."</div>
+                  <div class="text-[9px] text-gray-500 font-mono">16kHz Whisper • Apple Metal FFI</div>
+                </div>
+              </div>
+
+              <!-- Streamed Dialogue Bubble -->
+              <div class="p-2.5 rounded-lg bg-white/[0.04] border border-white/[0.08] text-xs text-gray-300 space-y-1">
+                <div class="flex items-center justify-between text-[9px] font-mono text-gray-500">
+                  <span class="text-cyan-400 font-semibold">BOSS ASSISTANT</span>
+                  <span>10:42 AM</span>
+                </div>
+                <p class="text-[11px] leading-relaxed text-gray-300 font-sans">
+                  Scaffolded the authentication token verification logic with an isolated 60s clock-skew leeway. All 14 unit tests pass in 1.4ms.
+                </p>
+              </div>
+            </div>
+
+            <!-- Preview Pane C: Code Surface & Specular Glass Card (4 Cols) -->
+            <div class="col-span-4 rounded-xl bg-black/40 border border-white/[0.06] p-3 flex flex-col justify-between space-y-3">
+              <div class="space-y-2">
+                <div class="flex items-center justify-between text-[10px] font-mono text-gray-400 pb-1 border-b border-white/[0.05]">
+                  <span class="text-gray-300">src/auth/jwt-token.ts</span>
+                  <span class="text-emerald-400">+18 / -4</span>
+                </div>
+
+                <!-- Syntax Highlighted Snippet -->
+                <div class="p-2.5 rounded-lg bg-[#02050b] border border-white/[0.06] font-mono text-[10px] space-y-1 text-gray-300">
+                  <div><span class="text-violet-400">export</span> <span class="text-cyan-400">interface</span> <span class="text-yellow-300">AuthEnclave</span> {</div>
+                  <div class="pl-3 text-gray-400">token: <span class="text-cyan-300">string</span>;</div>
+                  <div class="pl-3 text-gray-400">maxSkewSeconds: <span class="text-emerald-400">60</span>;</div>
+                  <div>}</div>
+                  <div class="pt-1 text-emerald-400/90 bg-emerald-950/30 px-1 rounded border-l-2 border-emerald-400">+ verifySkewWindow(token);</div>
+                </div>
+              </div>
+
+              <!-- Interactive Glass Command Box Simulation -->
+              <div class="h-8 rounded-lg bg-white/[0.05] border border-cyan-500/30 px-2.5 flex items-center justify-between text-[10px] font-mono text-gray-300 shadow-[0_0_15px_rgba(0,242,254,0.08)]">
+                <div class="flex items-center space-x-1.5">
+                  <span class="text-cyan-400">❯</span>
+                  <span class="text-gray-400">Ask BOSS or run command...</span>
+                </div>
+                <div class="w-4 h-4 rounded-full bg-cyan-400/20 text-cyan-400 flex items-center justify-center text-[9px]">⌘</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- SECTION 03: DETAILED CONTROLS GRID (ACCENT, GLASS, MOTION, DENSITY, DEPTH, TYPOGRAPHY) -->
+      <section class="space-y-4">
+        <div class="text-[11px] font-mono uppercase tracking-wider text-cyan-400 flex items-center space-x-2">
+          <span class="text-gray-600">03 //</span>
+          <span class="font-bold">CURATED ERGONOMIC CONTROLS</span>
+        </div>
+
+        <div class="grid grid-cols-2 gap-5">
+          
+          <!-- CONTROL 1: ACCENT COLOR PALETTE (Strictly Curated, No RGB mess) -->
+          <div class="glass-panel p-4 rounded-2xl space-y-3">
+            <div class="flex items-center justify-between">
+              <div>
+                <h3 class="text-xs font-bold text-white tracking-wide">ACCENT COLOR</h3>
+                <p class="text-[11px] text-gray-400">Curated palette preserving the distinct BOSS brand identity.</p>
+              </div>
+              <span class="text-[10px] font-mono text-cyan-400 font-semibold">CYAN (DEFAULT)</span>
+            </div>
+
+            <div class="grid grid-cols-3 gap-2.5 pt-1">
+              <!-- Accent: Cyan (Selected) -->
+              <button class="px-3 py-2 rounded-xl bg-cyan-950/50 border border-cyan-400/60 shadow-[0_0_12px_rgba(0,242,254,0.2)] flex items-center space-x-2.5 text-left transition-all">
+                <span class="w-4 h-4 rounded-full bg-gradient-to-tr from-cyan-400 to-blue-500 shadow-sm"></span>
+                <div>
+                  <div class="text-xs font-bold text-white">Cyan</div>
+                  <div class="text-[9px] font-mono text-cyan-300">Primary Core</div>
+                </div>
+              </button>
+
+              <!-- Accent: Violet -->
+              <button class="px-3 py-2 rounded-xl bg-white/[0.03] border border-white/[0.07] hover:border-violet-400/40 hover:bg-violet-950/20 flex items-center space-x-2.5 text-left transition-all">
+                <span class="w-4 h-4 rounded-full bg-gradient-to-tr from-violet-400 to-purple-600 shadow-sm"></span>
+                <div>
+                  <div class="text-xs font-bold text-gray-300">Violet</div>
+                  <div class="text-[9px] font-mono text-gray-500">Electric Deep</div>
+                </div>
+              </button>
+
+              <!-- Accent: Neutral Monochrome -->
+              <button class="px-3 py-2 rounded-xl bg-white/[0.03] border border-white/[0.07] hover:border-gray-400/40 hover:bg-white/[0.05] flex items-center space-x-2.5 text-left transition-all">
+                <span class="w-4 h-4 rounded-full bg-gradient-to-tr from-gray-200 to-gray-500 shadow-sm"></span>
+                <div>
+                  <div class="text-xs font-bold text-gray-300">Neutral</div>
+                  <div class="text-[9px] font-mono text-gray-500">Pure Silver</div>
+                </div>
+              </button>
+            </div>
+          </div>
+
+          <!-- CONTROL 2: GLASS INTENSITY (Subtle / Balanced / Strong) -->
+          <div class="glass-panel p-4 rounded-2xl space-y-3">
+            <div class="flex items-center justify-between">
+              <div>
+                <h3 class="text-xs font-bold text-white tracking-wide">GLASS REFRACTION INTENSITY</h3>
+                <p class="text-[11px] text-gray-400">Controls specular border luminance and smoked blur depth.</p>
+              </div>
+              <span class="text-[10px] font-mono text-cyan-400 font-semibold">BALANCED (RECOMMENDED)</span>
+            </div>
+
+            <div class="grid grid-cols-3 gap-2.5 pt-1">
+              <button class="px-3 py-2 rounded-xl bg-white/[0.03] border border-white/[0.07] hover:bg-white/[0.06] text-left transition-all">
+                <div class="text-xs font-bold text-gray-300">Subtle</div>
+                <div class="text-[9px] font-mono text-gray-500">8px Blur • Low specular</div>
+              </button>
+
+              <button class="px-3 py-2 rounded-xl bg-cyan-950/50 border border-cyan-400/60 shadow-[0_0_12px_rgba(0,242,254,0.2)] text-left transition-all">
+                <div class="text-xs font-bold text-white">Balanced</div>
+                <div class="text-[9px] font-mono text-cyan-300">16px Blur • Specular edge</div>
+              </button>
+
+              <button class="px-3 py-2 rounded-xl bg-white/[0.03] border border-white/[0.07] hover:bg-white/[0.06] text-left transition-all">
+                <div class="text-xs font-bold text-gray-300">Strong</div>
+                <div class="text-[9px] font-mono text-gray-500">28px Blur • Deep sheen</div>
+              </button>
+            </div>
+          </div>
+
+          <!-- CONTROL 3: MOTION & PARTICLE ERGONOMICS -->
+          <div class="glass-panel p-4 rounded-2xl space-y-3">
+            <div class="flex items-center justify-between">
+              <div>
+                <h3 class="text-xs font-bold text-white tracking-wide">MOTION & ANIMATION DYNAMICS</h3>
+                <p class="text-[11px] text-gray-400">Controls orbital Core rotations, panel slides, and hover transitions.</p>
+              </div>
+              <span class="text-[10px] font-mono text-cyan-400 font-semibold">FULL MOTION</span>
+            </div>
+
+            <div class="grid grid-cols-2 gap-3 pt-1">
+              <button class="px-3 py-2.5 rounded-xl bg-cyan-950/50 border border-cyan-400/60 shadow-[0_0_12px_rgba(0,242,254,0.15)] flex items-center justify-between text-left transition-all">
+                <div>
+                  <div class="text-xs font-bold text-white">Full Motion</div>
+                  <div class="text-[9px] font-mono text-cyan-300">Fluid 60 FPS orbital physics</div>
+                </div>
+                <span class="w-2 h-2 rounded-full bg-cyan-400"></span>
+              </button>
+
+              <button class="px-3 py-2.5 rounded-xl bg-white/[0.03] border border-white/[0.07] hover:bg-white/[0.05] flex items-center justify-between text-left transition-all">
+                <div>
+                  <div class="text-xs font-bold text-gray-300">Reduced Motion</div>
+                  <div class="text-[9px] font-mono text-gray-500">Static Core • Instant cuts</div>
+                </div>
+                <span class="w-2 h-2 rounded-full bg-gray-600"></span>
+              </button>
+            </div>
+          </div>
+
+          <!-- CONTROL 4: INTERFACE DENSITY (Comfortable vs Compact) -->
+          <div class="glass-panel p-4 rounded-2xl space-y-3">
+            <div class="flex items-center justify-between">
+              <div>
+                <h3 class="text-xs font-bold text-white tracking-wide">INTERFACE DENSITY</h3>
+                <p class="text-[11px] text-gray-400">Adjust vertical rhythm, table padding, and file tree line spacing.</p>
+              </div>
+              <span class="text-[10px] font-mono text-cyan-400 font-semibold">COMFORTABLE</span>
+            </div>
+
+            <div class="grid grid-cols-2 gap-3 pt-1">
+              <button class="px-3 py-2.5 rounded-xl bg-cyan-950/50 border border-cyan-400/60 shadow-[0_0_12px_rgba(0,242,254,0.15)] flex items-center justify-between text-left transition-all">
+                <div>
+                  <div class="text-xs font-bold text-white">Comfortable</div>
+                  <div class="text-[9px] font-mono text-cyan-300">Spacious layout • Clear breathing room</div>
+                </div>
+                <span class="w-2 h-2 rounded-full bg-cyan-400"></span>
+              </button>
+
+              <button class="px-3 py-2.5 rounded-xl bg-white/[0.03] border border-white/[0.07] hover:bg-white/[0.05] flex items-center justify-between text-left transition-all">
+                <div>
+                  <div class="text-xs font-bold text-gray-300">Compact</div>
+                  <div class="text-[9px] font-mono text-gray-500">Condensed rows • Maximum info density</div>
+                </div>
+                <span class="w-2 h-2 rounded-full bg-gray-600"></span>
+              </button>
+            </div>
+          </div>
+
+          <!-- CONTROL 5: CORE AMBIENCE & DECORATIVE ATMOSPHERE -->
+          <div class="glass-panel p-4 rounded-2xl space-y-3">
+            <div class="flex items-center justify-between">
+              <div>
+                <h3 class="text-xs font-bold text-white tracking-wide">CORE AMBIENCE & ATMOSPHERE</h3>
+                <p class="text-[11px] text-gray-400">Maintain background cyan/violet volumetric lighting and subtle orbital dust.</p>
+              </div>
+              <!-- Simulated Glass Switch ON -->
+              <div class="w-10 h-5 bg-cyan-500/30 border border-cyan-400/60 rounded-full p-0.5 cursor-pointer flex items-center justify-end shadow-[0_0_10px_rgba(0,242,254,0.3)]">
+                <div class="w-4 h-4 bg-cyan-300 rounded-full shadow-sm"></div>
+              </div>
+            </div>
+
+            <div class="flex items-center justify-between pt-1 text-[11px] text-gray-400">
+              <span class="font-mono text-[10px]">ATMOSPHERIC PARTICLES: <span class="text-cyan-400">ACTIVE</span></span>
+              <span class="font-mono text-[10px] text-gray-500">GPU RENDER OVERHEAD: &lt;0.5%</span>
+            </div>
+          </div>
+
+          <!-- CONTROL 6: TYPOGRAPHY & FONT SYSTEM -->
+          <div class="glass-panel p-4 rounded-2xl space-y-3">
+            <div class="flex items-center justify-between">
+              <div>
+                <h3 class="text-xs font-bold text-white tracking-wide">TYPOGRAPHY HIERARCHY</h3>
+                <p class="text-[11px] text-gray-400">Dual-font architecture tuned for editorial clarity and monospace fidelity.</p>
+              </div>
+              <span class="text-[10px] font-mono text-cyan-400 font-semibold">BOSS DEFAULT</span>
+            </div>
+
+            <div class="p-2.5 rounded-xl bg-black/40 border border-white/[0.06] grid grid-cols-2 gap-3 text-[11px]">
+              <div>
+                <div class="text-[9px] font-mono text-gray-500 uppercase">UI Headings & Body</div>
+                <div class="font-sans font-semibold text-gray-200 mt-0.5">Plus Jakarta Sans</div>
+                <div class="text-[10px] text-gray-500">Geometric, calm, high legibility</div>
+              </div>
+              <div>
+                <div class="text-[9px] font-mono text-gray-500 uppercase">Code, Telemetry & Terminals</div>
+                <div class="font-mono font-medium text-cyan-300 mt-0.5">JetBrains Mono</div>
+                <div class="text-[10px] text-gray-500">Ligatures, zero ambiguities</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- SECTION 04: FOOTER ACTIONS & RESET CONFIRMATION DIALOG -->
+      <section class="pt-4 border-t border-white/[0.06] flex items-center justify-between pb-8">
+        <div class="flex items-center space-x-3">
+          <button class="px-4 py-2 rounded-xl bg-white/[0.03] border border-white/[0.08] hover:bg-white/[0.06] text-gray-400 hover:text-white text-xs font-mono transition-colors">
+            RESET APPEARANCE TO DEFAULTS
+          </button>
+          <span class="text-[10px] text-gray-500 font-mono">Restores Dark theme, Cyan accent, and Balanced glass.</span>
+        </div>
+
+        <div class="flex items-center space-x-3">
+          <div class="text-[11px] font-mono text-gray-500">
+            <span>PREFERENCES SYNCED: </span>
+            <span class="text-emerald-400 font-semibold">~/.boss/config/theme.json</span>
+          </div>
+          <button class="px-5 py-2 rounded-xl bg-gradient-to-r from-cyan-500/20 to-violet-500/20 hover:from-cyan-500/30 hover:to-violet-500/30 border border-cyan-400/40 text-cyan-300 text-xs font-bold font-mono tracking-wide shadow-[0_0_20px_rgba(0,242,254,0.15)] transition-all">
+            EXPORT THEME TOKEN (.JSON)
+          </button>
+        </div>
+      </section>
+
+    </main>
+  </div>
+
+  <!-- GLOBAL PERSISTENT ENCLAVE GUARANTEE FOOTER (Standard across all BOSS workspaces) -->
+  <footer class="h-7 border-t border-white/[0.06] bg-[#020408] px-4 flex items-center justify-between text-[10px] font-mono text-gray-500 shrink-0 z-50">
+    <div class="flex items-center space-x-3">
+      <span class="font-bold text-gray-400 tracking-wider">BHANU OPEN SOURCE SYSTEM</span>
+      <span>•</span>
+      <span class="text-cyan-400">PHASE 2.12 - APPEARANCE &amp; VISUAL SYSTEM SHOWROOM</span>
+    </div>
+    <div class="flex items-center space-x-4">
+      <div class="flex items-center space-x-1.5">
+        <span class="w-1.5 h-1.5 rounded-full bg-cyan-400"></span>
+        <span class="text-gray-400">LOCAL FIRST</span>
+      </div>
+      <span>•</span>
+      <span class="text-gray-400">PRIVATE ENCLAVE</span>
+      <span>•</span>
+      <span class="text-gray-400">ZERO SILENT PRIVILEGE ESCALATION</span>
+      <span>•</span>
+      <span class="text-emerald-400 font-semibold">100% OFFLINE CAPABLE</span>
+    </div>
+  </footer>
+
+</body>
+</html>
